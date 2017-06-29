@@ -93,4 +93,16 @@ public class Solver {
 		}
 		return count;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("ASize=" + ASize + "," );
+		sb.append("boardRow=" + boardRow + "," );
+		sb.append("boardCol=" + boardCol + "," );
+		sb.append("state=" + state);
+		sb.append("\n");
+		sb.append("A=\n" + A.toString());
+		return sb.toString();
+	}
 }

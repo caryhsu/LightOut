@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public final class Matrix<T> implements Cloneable {
 	
 	private Object[][] values;
@@ -133,5 +135,23 @@ public final class Matrix<T> implements Cloneable {
 	
 	public Object[][] getBVector() {
 		return bVector;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("values:\n" + toString(values));
+		sb.append("bVector:\n" + toString(bVector));
+		return sb.toString(); 
+	}
+	
+	public String toString(Object[][] array) {
+		String lineSeparator = System.lineSeparator();
+		StringBuilder sb = new StringBuilder();
+		for (Object[] row : array) {
+		    sb.append(Arrays.toString(row))
+		      .append(lineSeparator);
+		}
+		return sb.toString();
 	}
 }
