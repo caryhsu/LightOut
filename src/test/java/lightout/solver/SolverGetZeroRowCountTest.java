@@ -1,12 +1,6 @@
 package lightout.solver;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.Assert;
 import org.junit.Test;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
 public class SolverGetZeroRowCountTest {
 
@@ -166,30 +160,5 @@ public class SolverGetZeroRowCountTest {
 		percentSolvableCalculator.RowReduce();
 		System.out.println(percentSolvableCalculator);
 
-	}
-
-	// Code generator
-	public static Map<BoardConfig, Integer> ZERO_ROW_COUNT = new HashMap<>();
-	
-	@Test
-	public void codeGenerator() {
-		for(int size = 3; size < 30; size++) {
-			for(int state = 2; state < 7; state++) {
-				Solver percentSolvableCalculator = new Solver(size, size, state);
-				percentSolvableCalculator.setBVector(new int[size * size]);
-				percentSolvableCalculator.RowReduce();
-				int zeroRowCount = percentSolvableCalculator.zeroRowCount();
-				System.out.println("testGetZeroRowCount(" + size + ", " + state + ", " + zeroRowCount + ");");
-				ZERO_ROW_COUNT.put(new BoardConfig(size, state), zeroRowCount);
-			}
-		}
-	}
-	
-	@AllArgsConstructor
-	@Data
-	public static class BoardConfig {
-		private int size;
-		private int state;
-	}
-
+	}	
 }

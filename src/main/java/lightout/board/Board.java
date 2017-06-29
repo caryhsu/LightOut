@@ -1,18 +1,14 @@
 package lightout.board;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
-import java.util.Scanner;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -20,8 +16,8 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SpringLayout;
 
+import lightout.solver.PercentSolvableCalculator;
 import lightout.solver.Solver;
 
 public class Board extends JFrame {
@@ -254,10 +250,11 @@ public class Board extends JFrame {
 
 	public void createBoard() {
 		// Compute how unsolvable the current version of the puzzle is
-		Solver percentSolvableCalculator = new Solver(size, size, state);
-		percentSolvableCalculator.setBVector(new int[size * size]);
-		percentSolvableCalculator.RowReduce();
-		double percentSolvable = percentSolvableCalculator.percentSolvable()*100;
+		Solver solver = new Solver(size, size, state);
+		solver.setBVector(new int[size * size]);
+		solver.RowReduce();
+		PercentSolvableCalculator c = new PercentSolvableCalculator(solver);
+		double percentSolvable = c.calculate().doubleValue() * 100;
 		percentSolvableLabel.setText((new DecimalFormat("#0.00")).format(percentSolvable) + "% Solvable");
 		
 		numberOfClicks = 0;

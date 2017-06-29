@@ -81,9 +81,6 @@ public class Solver {
 		}
 	}
 	
-	public double percentSolvable() {
-		return 1 / Math.pow(state, zeroRowCount());
-	}
 	
 	public int zeroRowCount() {
 		int count = 0;
