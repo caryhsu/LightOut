@@ -1,4 +1,7 @@
+package lightout.solver;
 import org.junit.Test;
+
+import lightout.solver.Solver;
 
 public class SolverTest {
 

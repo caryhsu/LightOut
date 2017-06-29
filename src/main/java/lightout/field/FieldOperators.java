@@ -1,3 +1,4 @@
+package lightout.field;
 public interface FieldOperators<T> {
 	
 	public abstract T zero();

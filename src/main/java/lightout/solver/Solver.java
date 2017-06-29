@@ -1,3 +1,7 @@
+package lightout.solver;
+import lightout.field.Matrix;
+import lightout.field.Zn;
+
 public class Solver {
 	Matrix<Integer> A;
 	public int ASize;

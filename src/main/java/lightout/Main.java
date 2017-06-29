@@ -1,3 +1,6 @@
+package lightout;
+
+import lightout.board.Board;
 
 public class Main {
 

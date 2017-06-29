@@ -1,3 +1,4 @@
+package lightout.field;
 public class Zn implements FieldOperators<Integer> {
 
 	public int n;

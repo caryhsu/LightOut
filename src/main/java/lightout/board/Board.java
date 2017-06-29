@@ -1,3 +1,4 @@
+package lightout.board;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -20,6 +21,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
+
+import lightout.solver.Solver;
 
 public class Board extends JFrame {
 	// Fields that deals with the puzzle's logic
