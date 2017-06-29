@@ -2,21 +2,32 @@ package lightout.solver;
 
 public class PercentSolvableCalculator {
 
-	private int state;
+	private Solver solver;
 	private int zeroRowCount;
-
-	public PercentSolvableCalculator(Solver solver) {
-		this.state = solver.state;
+	
+	public PercentSolvableCalculator(int size, int state) {
+		this.solver = new Solver(size, size, state);
+		solver.setBVector(new int[size * size]);
+		solver.RowReduce();
+		
 		this.zeroRowCount = solver.zeroRowCount();
 	}
 
-	public PercentSolvableCalculator(int state, int zeroRowCount) {
-		this.state = state;
-		this.zeroRowCount = zeroRowCount;
+	public PercentSolvableCalculator(Solver solver) {
+		this.solver = solver;
+		this.zeroRowCount = solver.zeroRowCount();
 	}
 	
-	public PercentSolvable calculate() {
-		return new PercentSolvable(state, zeroRowCount);
+	public PercentSolvableValue calculate() {
+		int state = this.solver.state;
+		return new PercentSolvableValue(state, zeroRowCount);
 	}
 
+	public int getCol() {
+		return this.solver.boardCol;
+	}
+	
+	public int getRow() {
+		return this.solver.boardRow;
+	}
 }

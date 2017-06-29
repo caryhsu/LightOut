@@ -1,11 +1,13 @@
 package lightout.solver;
 
-public class PercentSolvable {
+import lombok.Getter;
 
-	private int based;
-	private int exponent;
+public class PercentSolvableValue {
+
+	@Getter private int based;
+	@Getter private int exponent;
 	
-	public PercentSolvable(int based, int exponent) {
+	public PercentSolvableValue(int based, int exponent) {
 		this.based = based;
 		this.exponent = exponent;
 	}

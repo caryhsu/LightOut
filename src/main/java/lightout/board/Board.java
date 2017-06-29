@@ -250,10 +250,7 @@ public class Board extends JFrame {
 
 	public void createBoard() {
 		// Compute how unsolvable the current version of the puzzle is
-		Solver solver = new Solver(size, size, state);
-		solver.setBVector(new int[size * size]);
-		solver.RowReduce();
-		PercentSolvableCalculator c = new PercentSolvableCalculator(solver);
+		PercentSolvableCalculator c = new PercentSolvableCalculator(size, state);
 		double percentSolvable = c.calculate().doubleValue() * 100;
 		percentSolvableLabel.setText((new DecimalFormat("#0.00")).format(percentSolvable) + "% Solvable");
 		
