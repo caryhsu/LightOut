@@ -263,7 +263,6 @@ public class Board extends JFrame {
 				buttons[i][j] = new JButton(valueTable[i][j] + "");
 				buttons[i][j].setFont(new Font("Dialog", Font.PLAIN, 30));
 				buttons[i][j].setOpaque(true);
-				changeColor(i, j);
 				/*
 				 * buttons[i][j].addActionListener(new ActionListener() {
 				 * 
@@ -315,13 +314,8 @@ public class Board extends JFrame {
 			}
 		}
 		solutionP.add(subSolutionP);
-	}
-
-	public void changeColor(int i, int j) {
-		int[][] valueTable = game.getValueTable();
-		GameTheme ch = new GameTheme(game.getState());
-		Color theColor = GameTheme.getColor(ch.colorHex(valueTable[i][j]));
-		buttons[i][j].setBackground(theColor);
+		
+		this.refreshModelBinding();
 	}
 	
 	private void refreshModelBinding() {
