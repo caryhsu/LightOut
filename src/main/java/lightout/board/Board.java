@@ -23,11 +23,7 @@ import lightout.solver.Solver;
 
 public class Board extends JFrame {
 	// Fields that deals with the puzzle's logic
-//	private int size = 5;
-//	private int state = 2;
-//	private int[][] valueTable;
 	private Game game;
-	private int numberOfClicks = 0;
 
 	// Fields that deals with GUI
 	// private JPanel m = new JPanel(new FlowLayout());
@@ -56,7 +52,6 @@ public class Board extends JFrame {
 	// combo Boxes
 
 	// boolean edit
-	private boolean editMode = false;
 	private int editOnOff = 0;
 
 	public Board(int size, int state) {
@@ -66,7 +61,8 @@ public class Board extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 		getContentPane().add(m);
-		m.setBackground(getColor("#E0E0E0"));
+
+		m.setBackground(GameTheme.getColor("#E0E0E0"));
 		m.add(p);
 		m.add(sideP);
 		sideP.setLayout(new FlowLayout());
@@ -97,7 +93,7 @@ public class Board extends JFrame {
 		// initialize GUI for side Panel
 		// need to add methods for these buttons
 		solveB.setText("Show Solution");
-		solveB.setBackground(getColor("#CCCCCC"));
+		solveB.setBackground(GameTheme.getColor("#CCCCCC"));
 		solveB.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -113,20 +109,20 @@ public class Board extends JFrame {
 				p.revalidate();
 			}
 		});
-		resetB.setBackground(getColor("#CCCCCC"));
+		resetB.setBackground(GameTheme.getColor("#CCCCCC"));
 		sideButtonP.add(resetB);
 		editB.setText("Edit Board");
-		editB.setBackground(getColor("#CCCCCC"));
+		editB.setBackground(GameTheme.getColor("#CCCCCC"));
 		editB.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				editOnOff = (editOnOff + 1) % 2;
 				if (editOnOff == 1) {
-					editMode = true;
-					editB.setBackground(getColor("#AAAAAA"));
+					game.setEditMode(true);
+					editB.setBackground(GameTheme.getColor("#AAAAAA"));
 				} else {
-					editMode = false;
-					editB.setBackground(getColor("#CCCCCC"));
+					game.setEditMode(false);
+					editB.setBackground(GameTheme.getColor("#CCCCCC"));
 				}
 			}
 		});
@@ -137,7 +133,7 @@ public class Board extends JFrame {
 		JLabel lightsOutHeader = new JLabel();
 		lightsOutHeader.setText("Lights Out");
 		// lightsOutHeader.setFont(new Font("Lights Out", Font.BOLD, 12));
-		currentL.setText("Current Moves: " + numberOfClicks);
+		currentL.setText("Current Moves: " + game.getNumberOfClicks());
 		sideLabelP.add(lightsOutHeader);
 		sideLabelP.add(currentL);
 
@@ -241,14 +237,6 @@ public class Board extends JFrame {
 		setVisible(true);
 	}
 
-//	public void setSize(int size) {
-//		this.size = size;
-//	}
-//
-//	public void setState(int state) {
-//		this.state = state;
-//	}
-
 	public void createBoard() {
 		int size = game.getSize();
 		int state = game.getState();
@@ -259,14 +247,14 @@ public class Board extends JFrame {
 		double percentSolvable = c.calculate().doubleValue() * 100;
 		percentSolvableLabel.setText((new DecimalFormat("#0.00")).format(percentSolvable) + "% Solvable");
 		
-		numberOfClicks = 0;
 		p.removeAll();
 		// initialize the values
-		game.randomize();
+		game.reset();
+		//game.randomize();
 		
 		p.setLayout(new GridLayout(size, size));
 		p.setPreferredSize(new Dimension(600, 600));
-		p.setBackground(getColor("#F0F0F0"));
+		p.setBackground(GameTheme.getColor("#F0F0F0"));
 		buttons = new JButton[size][size];
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
@@ -296,32 +284,20 @@ public class Board extends JFrame {
 
 					@Override
 					public void mouseEntered(MouseEvent arg0) {
-						// TODO Auto-generated method stub
-						highlightAdj(x, y);
+						game.setCursor(x, y);
+						refreshModelBinding();
 					}
 
 					@Override
 					public void mouseExited(MouseEvent arg0) {
-						// TODO Auto-generated method stub
-						changeColor(x, y);
-						if (x - 1 >= 0) { // cycle the left tile
-							changeColor(x - 1, y);
-						}
-						if (x + 1 <= size - 1) { // cycle the right tile
-							changeColor(x + 1, y);
-						}
-						if (y + 1 <= size - 1) { // cycle the bottom tile
-							changeColor(x, y + 1);
-						}
-						if (y - 1 >= 0) { // cycle the top tile
-							changeColor(x, y - 1);
-						}
-
+						game.clearCursor();
+						refreshModelBinding();
 					}
 
 					@Override
 					public void mouseReleased(MouseEvent arg0) {
-						press(x, y);
+						game.select(x, y);
+						refreshModelBinding();
 					}
 				});
 				p.add(buttons[i][j]);
@@ -329,7 +305,7 @@ public class Board extends JFrame {
 		}
 		subSolutionP.removeAll();
 		subSolutionP.setLayout(new GridLayout(size, size));
-		subSolutionP.setBackground(getColor("#F0F0F0"));
+		subSolutionP.setBackground(GameTheme.getColor("#F0F0F0"));
 
 		solutionGrid = new JLabel[size][size];
 		for (int i = 0; i < size; i++) {
@@ -342,63 +318,29 @@ public class Board extends JFrame {
 	}
 
 	public void changeColor(int i, int j) {
-		int state = game.getState();
 		int[][] valueTable = game.getValueTable();
-		valueTable[i][j] = (valueTable[i][j]) % state;
-		Color theColor = Color.WHITE;
-		theColor = getColor(colorHex(valueTable[i][j]));
+		GameTheme ch = new GameTheme(game.getState());
+		Color theColor = GameTheme.getColor(ch.colorHex(valueTable[i][j]));
 		buttons[i][j].setBackground(theColor);
 	}
 	
-	public Color getColor(String a) {
-		return Color.decode(a);
-	}
-
-	public void press(int x, int y) {
-		// System.out.println("you have pressed " + x + " " + y);
-		game.select(x, y);
+	private void refreshModelBinding() {
 		int size = game.getSize();
 		int[][] valueTable = game.getValueTable();
-		buttons[x][y].setText(valueTable[x][y] + "");
-		changeColor(x, y);
-		if (editMode == false) {
-			if (x - 1 >= 0) { // cycle the left tile
-				buttons[x - 1][y].setText(valueTable[x - 1][y] + "");
-				changeColor(x - 1, y);
+		
+		GameTheme ch = new GameTheme(game.getState());
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				if (game.isHighlight(i, j)) {
+					buttons[i][j].setBackground(Color.decode(ch.darkenColor(valueTable[i][j])));
+				}
+				else {
+					Color theColor = GameTheme.getColor(ch.colorHex(valueTable[i][j]));
+					buttons[i][j].setBackground(theColor);
+				}
 			}
-			if (x + 1 <= size - 1) { // cycle the right tile
-				buttons[x + 1][y].setText(valueTable[x + 1][y] + "");
-				changeColor(x + 1, y);
-			}
-			if (y + 1 <= size - 1) { // cycle the bottom tile
-				buttons[x][y + 1].setText(valueTable[x][y + 1] + "");
-				changeColor(x, y + 1);
-			}
-			if (y - 1 >= 0) { // cycle the top tile
-				buttons[x][y - 1].setText(valueTable[x][y - 1] + "");
-				changeColor(x, y - 1);
-			}
-			numberOfClicks++;
-			currentL.setText("Current Moves: " + numberOfClicks);
 		}
-	}
-
-	public void highlightAdj(int x, int y) {
-		int size = game.getSize();
-		int[][] valueTable = game.getValueTable();
-		buttons[x][y].setBackground(Color.decode(darkenColor(valueTable[x][y])));
-		if (x - 1 >= 0) { // cycle the left tile
-			buttons[x - 1][y].setBackground(Color.decode(darkenColor(valueTable[x - 1][y])));
-		}
-		if (x + 1 <= size - 1) { // cycle the right tile
-			buttons[x + 1][y].setBackground(Color.decode(darkenColor(valueTable[x + 1][y])));
-		}
-		if (y + 1 <= size - 1) { // cycle the bottom tile
-			buttons[x][y + 1].setBackground(Color.decode(darkenColor(valueTable[x][y + 1])));
-		}
-		if (y - 1 >= 0) { // cycle the top tile
-			buttons[x][y - 1].setBackground(Color.decode(darkenColor(valueTable[x][y - 1])));
-		}
+		currentL.setText("Current Moves: " + game.getNumberOfClicks());
 	}
 
 	public void publishSolution() {
@@ -423,9 +365,10 @@ public class Board extends JFrame {
 		einstein.RowReduce();
 		
 		// Count the row of zero
-		int zeroRow = einstein.zeroRowCount();
-		double percentSolvable = 1 / Math.pow(state, zeroRow);
-		
+		PercentSolvableCalculator c = new PercentSolvableCalculator(einstein);
+		double percentSolvable = c.calculate().doubleValue() * 100;
+		percentSolvableLabel.setText((new DecimalFormat("#0.00")).format(percentSolvable) + "% Solvable");
+
 		
 		// Check if a solution exists
 		if (einstein.hasSolution()) {
@@ -441,20 +384,6 @@ public class Board extends JFrame {
 			solutionHeader.setText("NO SOLUTION!");
 			solutionHeader.setForeground(Color.red);
 		}
-	}
-
-	public String toString() {
-		int size = game.getSize();
-		int[][] valueTable = game.getValueTable();
-		
-		String output = "";
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				output += valueTable[i][j] + " ";
-			}
-			output += "\n";
-		}
-		return output;
 	}
 
 	public int[] publishB() {
@@ -477,82 +406,5 @@ public class Board extends JFrame {
 		return valueTable;
 	}
 	
-	private String darkenColor(int currState) {
-		int size = game.getSize();
-		int state = game.getState();
-		int[][] valueTable = game.getValueTable();
-		int r, g, b;
-		String rHex, gHex, bHex;
-		int[] color1 = { 45, 117, 182 };
-		int[] color2 = { 255, 255, 255 };
-		double x = (double) (currState) / (state - 1); // Percentage of color1
-														// in the mixture
-		r = (int) ((x * color1[0] + (1 - x) * color2[0]) * 0.7);
-		g = (int) ((x * color1[1] + (1 - x) * color2[1]) * 0.7);
-		b = (int) ((x * color1[2] + (1 - x) * color2[2]) * 0.7);
-
-		rHex = Integer.toHexString(r);
-		gHex = Integer.toHexString(g);
-		bHex = Integer.toHexString(b);
-
-		if (rHex.length() == 1) {
-			rHex = "0" + rHex;
-		}
-		if (gHex.length() == 1) {
-			gHex = "0" + gHex;
-		}
-		if (bHex.length() == 1) {
-			bHex = "0" + bHex;
-		}
-
-		return "#" + rHex + gHex + bHex;
-	}
-
-	private String colorHex(int currState) {
-		int size = game.getSize();
-		int state = game.getState();
-		int[][] valueTable = game.getValueTable();
-		int r, g, b;
-		String rHex, gHex, bHex;
-		int[] color1 = { 45, 117, 182 };
-		int[] color2 = { 255, 255, 255 };
-		double x = (double) (currState) / (state - 1); // Percentage of color1
-														// in the mixture
-		r = (int) (x * color1[0] + (1 - x) * color2[0]);
-		g = (int) (x * color1[1] + (1 - x) * color2[1]);
-		b = (int) (x * color1[2] + (1 - x) * color2[2]);
-
-		rHex = Integer.toHexString(r);
-		gHex = Integer.toHexString(g);
-		bHex = Integer.toHexString(b);
-
-		if (rHex.length() == 1) {
-			rHex = "0" + rHex;
-		}
-		if (gHex.length() == 1) {
-			gHex = "0" + gHex;
-		}
-		if (bHex.length() == 1) {
-			bHex = "0" + bHex;
-		}
-
-		return "#" + rHex + gHex + bHex;
-	}
-
-	private boolean isSolved() {
-		int size = game.getSize();
-		int state = game.getState();
-		int[][] valueTable = game.getValueTable();
-		int n = valueTable[0][0]; // check the first tile
-		for (int i = 0; i < size; i++) { // as soon as we encounter a tile of
-											// different value
-			for (int j = 0; j < size; j++) {
-				if (valueTable[i][j] != n) {
-					return false; // return false
-				}
-			}
-		}
-		return true;
-	}
 
 }
