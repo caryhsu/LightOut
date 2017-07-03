@@ -252,7 +252,6 @@ public class Board extends JFrame {
 		p.removeAll();
 		// initialize the values
 		game.reset();
-		//game.randomize();
 		
 		int size = game.getSize();
 		int[][] valueTable = game.getValueTable();

@@ -75,6 +75,7 @@ public class Game {
 		this.reset(0);
 		this.clearCursor();
 		this.numberOfClicks = 0;
+		this.recalculatePercentSolvable();
 	}
 	
 	private void reset(int value) {
@@ -97,6 +98,7 @@ public class Game {
 		this.editMode = false;
 		this.clearCursor();
 		this.numberOfClicks = 0;
+		this.recalculatePercentSolvable();
 	}
 
 	public boolean isSolved() {
@@ -164,9 +166,17 @@ public class Game {
 		}
 	}
 
+	private Double _percentSolvable;
+	
 	public double getPercentSolvable() {
-		// Compute how unsolvable the current version of the puzzle is
+		if (this._percentSolvable == null) {
+			this.recalculatePercentSolvable();
+		}
+		return this._percentSolvable;
+	}
+	
+	public void recalculatePercentSolvable() {
 		PercentSolvableCalculator c = new PercentSolvableCalculator(size, state);
-		return c.calculate().doubleValue();
+		this._percentSolvable = c.calculate().doubleValue();
 	}	
 }
