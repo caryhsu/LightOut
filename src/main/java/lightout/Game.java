@@ -1,5 +1,6 @@
 package lightout;
 
+import lightout.solver.PercentSolvableCalculator;
 import lombok.Getter;
 
 public class Game {
@@ -10,6 +11,7 @@ public class Game {
 	@Getter private boolean editMode = false;
 	@Getter private int cursorX;
 	@Getter private int cursorY;
+	@Getter private boolean cursor;
 	@Getter private int numberOfClicks = 0;
 
 	public Game(int size, int state) {
@@ -31,12 +33,14 @@ public class Game {
 	}
 	
 	public void setCursor(int x, int y) {
+		System.out.println("setCursor:" + x + ", " + y);
 		this.cursorX = x;
 		this.cursorY = y;
+		this.cursor = true;
 	}
 
 	public void clearCursor() {
-		setCursor(-1, -1);
+		this.cursor = false;
 	}
 
 	public void setState(int state) {
@@ -67,6 +71,7 @@ public class Game {
 	}
 
 	public void reset() {
+		this.editMode = false;
 		this.reset(0);
 		this.clearCursor();
 		this.numberOfClicks = 0;
@@ -89,6 +94,9 @@ public class Game {
 				}
 			}
 		}
+		this.editMode = false;
+		this.clearCursor();
+		this.numberOfClicks = 0;
 	}
 
 	public boolean isSolved() {
@@ -131,6 +139,9 @@ public class Game {
 				return false;
 			}
 		}
+		else if (this.cursor == false) {
+			return false;
+		}
 		else { // (this.editMode == false) {
 			if (x == this.cursorX && y == this.cursorY) {
 				return true;
@@ -153,4 +164,9 @@ public class Game {
 		}
 	}
 
+	public double getPercentSolvable() {
+		// Compute how unsolvable the current version of the puzzle is
+		PercentSolvableCalculator c = new PercentSolvableCalculator(size, state);
+		return c.calculate().doubleValue();
+	}	
 }

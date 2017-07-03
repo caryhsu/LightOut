@@ -2,11 +2,11 @@ package lightout.board;
 
 import java.awt.Color;
 
-public class GameTheme {
+public class GameColorManager {
 
 	private int state;
 
-	public GameTheme(int state) {
+	public GameColorManager(int state) {
 		this.state = state;
 	}
 	

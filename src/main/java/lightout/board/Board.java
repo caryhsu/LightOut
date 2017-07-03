@@ -40,6 +40,7 @@ public class Board extends JFrame {
 	private JButton[][] buttons;
 	private JButton solveB = new JButton();
 	private JButton resetB = new JButton();
+	private JButton randomizeB = new JButton();
 	private JButton editB = new JButton();
 
 	// labels
@@ -62,12 +63,12 @@ public class Board extends JFrame {
 		setResizable(false);
 		getContentPane().add(m);
 
-		m.setBackground(GameTheme.getColor("#E0E0E0"));
+		m.setBackground(GameColorManager.getColor("#E0E0E0"));
 		m.add(p);
 		m.add(sideP);
 		sideP.setLayout(new FlowLayout());
 		// sideButtonP.setLayout(new BoxLayout(sideButtonP, BoxLayout.Y_AXIS));
-		sideButtonP.setLayout(new GridLayout(3, 1));
+		sideButtonP.setLayout(new GridLayout(5, 1));
 		sideLabelP.setLayout(new BoxLayout(sideLabelP, BoxLayout.Y_AXIS));
 		solutionP.setLayout(new BoxLayout(solutionP, BoxLayout.Y_AXIS));
 		dropDownP.setLayout(new BoxLayout(dropDownP, BoxLayout.Y_AXIS));
@@ -93,7 +94,7 @@ public class Board extends JFrame {
 		// initialize GUI for side Panel
 		// need to add methods for these buttons
 		solveB.setText("Show Solution");
-		solveB.setBackground(GameTheme.getColor("#CCCCCC"));
+		solveB.setBackground(GameColorManager.getColor("#CCCCCC"));
 		solveB.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -105,24 +106,34 @@ public class Board extends JFrame {
 		resetB.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				createBoard();
-				p.revalidate();
+				game.reset();
+				refreshModelBinding();
 			}
 		});
-		resetB.setBackground(GameTheme.getColor("#CCCCCC"));
+		resetB.setBackground(GameColorManager.getColor("#CCCCCC"));
 		sideButtonP.add(resetB);
+		randomizeB.setText("Randomize Board");
+		randomizeB.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				game.randomize();
+				refreshModelBinding();
+			}
+		});
+		randomizeB.setBackground(GameColorManager.getColor("#CCCCCC"));
+		sideButtonP.add(randomizeB);
 		editB.setText("Edit Board");
-		editB.setBackground(GameTheme.getColor("#CCCCCC"));
+		editB.setBackground(GameColorManager.getColor("#CCCCCC"));
 		editB.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				editOnOff = (editOnOff + 1) % 2;
 				if (editOnOff == 1) {
 					game.setEditMode(true);
-					editB.setBackground(GameTheme.getColor("#AAAAAA"));
+					editB.setBackground(GameColorManager.getColor("#AAAAAA"));
 				} else {
 					game.setEditMode(false);
-					editB.setBackground(GameTheme.getColor("#CCCCCC"));
+					editB.setBackground(GameColorManager.getColor("#CCCCCC"));
 				}
 			}
 		});
@@ -147,7 +158,7 @@ public class Board extends JFrame {
 		solutionP.add(percentSolvableLabel);
 
 		// initialize comboBoxes for dropDown Panel
-		String[] boardSizes = { " ", "3x3", "4x4", "5x5", "6x6", "7x7", "8x8" };
+		String[] boardSizes = { "3x3", "4x4", "5x5", "6x6", "7x7", "8x8" };
 		String[] numOfColors = { "2 colors", "3 colors", "5 colors", "7 colors" };
 		final JComboBox boardSizeCB = new JComboBox(boardSizes);
 		final int color = state;
@@ -158,8 +169,6 @@ public class Board extends JFrame {
 				// TODO Auto-generated method stub
 				String s = (String) boardSizeCB.getSelectedItem();
 				switch (s) {
-				case " ":
-					break;
 				case "3x3":
 					game.setSize(3);
 					createBoard();
@@ -238,23 +247,19 @@ public class Board extends JFrame {
 	}
 
 	public void createBoard() {
-		int size = game.getSize();
-		int state = game.getState();
-		int[][] valueTable = game.getValueTable();
-		
 		// Compute how unsolvable the current version of the puzzle is
-		PercentSolvableCalculator c = new PercentSolvableCalculator(size, state);
-		double percentSolvable = c.calculate().doubleValue() * 100;
-		percentSolvableLabel.setText((new DecimalFormat("#0.00")).format(percentSolvable) + "% Solvable");
 		
 		p.removeAll();
 		// initialize the values
 		game.reset();
 		//game.randomize();
 		
+		int size = game.getSize();
+		int[][] valueTable = game.getValueTable();
+		
 		p.setLayout(new GridLayout(size, size));
 		p.setPreferredSize(new Dimension(600, 600));
-		p.setBackground(GameTheme.getColor("#F0F0F0"));
+		p.setBackground(GameColorManager.getColor("#F0F0F0"));
 		buttons = new JButton[size][size];
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
@@ -302,9 +307,10 @@ public class Board extends JFrame {
 				p.add(buttons[i][j]);
 			}
 		}
+				
 		subSolutionP.removeAll();
 		subSolutionP.setLayout(new GridLayout(size, size));
-		subSolutionP.setBackground(GameTheme.getColor("#F0F0F0"));
+		subSolutionP.setBackground(GameColorManager.getColor("#F0F0F0"));
 
 		solutionGrid = new JLabel[size][size];
 		for (int i = 0; i < size; i++) {
@@ -322,19 +328,24 @@ public class Board extends JFrame {
 		int size = game.getSize();
 		int[][] valueTable = game.getValueTable();
 		
-		GameTheme ch = new GameTheme(game.getState());
+		GameColorManager cm = new GameColorManager(game.getState());
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				if (game.isHighlight(i, j)) {
-					buttons[i][j].setBackground(Color.decode(ch.darkenColor(valueTable[i][j])));
+					buttons[i][j].setBackground(Color.decode(cm.darkenColor(valueTable[i][j])));
 				}
 				else {
-					Color theColor = GameTheme.getColor(ch.colorHex(valueTable[i][j]));
+					Color theColor = GameColorManager.getColor(cm.colorHex(valueTable[i][j]));
 					buttons[i][j].setBackground(theColor);
 				}
+				buttons[i][j].setText("" + valueTable[i][j]);
 			}
 		}
 		currentL.setText("Current Moves: " + game.getNumberOfClicks());
+		
+		double percentSolvable = game.getPercentSolvable() * 100;
+		percentSolvableLabel.setText((new DecimalFormat("#0.000000")).format(percentSolvable) + "% Solvable");
+		
 	}
 
 	public void publishSolution() {
