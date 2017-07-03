@@ -17,14 +17,16 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import lightout.Game;
 import lightout.solver.PercentSolvableCalculator;
 import lightout.solver.Solver;
 
 public class Board extends JFrame {
 	// Fields that deals with the puzzle's logic
-	private int size = 5;
-	private int state = 2;
-	private int[][] valueTable;
+//	private int size = 5;
+//	private int state = 2;
+//	private int[][] valueTable;
+	private Game game;
 	private int numberOfClicks = 0;
 
 	// Fields that deals with GUI
@@ -90,8 +92,7 @@ public class Board extends JFrame {
 		sideP.setPreferredSize(new Dimension(200, 600));
 
 		// Set puzzle's parameter
-		this.size = size;
-		this.state = state;
+		this.game = new Game(size, state);
 
 		// initialize GUI for side Panel
 		// need to add methods for these buttons
@@ -164,37 +165,37 @@ public class Board extends JFrame {
 				case " ":
 					break;
 				case "3x3":
-					setSize(3);
+					game.setSize(3);
 					createBoard();
 					p.revalidate();
 					subSolutionP.revalidate();
 					break;
 				case "4x4":
-					setSize(4);
+					game.setSize(4);
 					createBoard();
 					p.revalidate();
 					subSolutionP.revalidate();
 					break;
 				case "5x5":
-					setSize(5);
+					game.setSize(5);
 					createBoard();
 					p.revalidate();
 					subSolutionP.revalidate();
 					break;
 				case "6x6":
-					setSize(6);
+					game.setSize(6);
 					createBoard();
 					p.revalidate();
 					subSolutionP.revalidate();
 					break;
 				case "7x7":
-					setSize(7);
+					game.setSize(7);
 					createBoard();
 					p.revalidate();
 					subSolutionP.revalidate();
 					break;
 				case "8x8":
-					setSize(8);
+					game.setSize(8);
 					createBoard();
 					p.revalidate();
 					subSolutionP.revalidate();
@@ -240,15 +241,19 @@ public class Board extends JFrame {
 		setVisible(true);
 	}
 
-	public void setSize(int size) {
-		this.size = size;
-	}
-
-	public void setState(int state) {
-		this.state = state;
-	}
+//	public void setSize(int size) {
+//		this.size = size;
+//	}
+//
+//	public void setState(int state) {
+//		this.state = state;
+//	}
 
 	public void createBoard() {
+		int size = game.getSize();
+		int state = game.getState();
+		int[][] valueTable = game.getValueTable();
+		
 		// Compute how unsolvable the current version of the puzzle is
 		PercentSolvableCalculator c = new PercentSolvableCalculator(size, state);
 		double percentSolvable = c.calculate().doubleValue() * 100;
@@ -257,14 +262,8 @@ public class Board extends JFrame {
 		numberOfClicks = 0;
 		p.removeAll();
 		// initialize the values
-		valueTable = new int[size][size];
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				for (int times = 0; times < (int) (Math.random() * size); times++) {
-					select(i, j);
-				}
-			}
-		}
+		game.randomize();
+		
 		p.setLayout(new GridLayout(size, size));
 		p.setPreferredSize(new Dimension(600, 600));
 		p.setBackground(getColor("#F0F0F0"));
@@ -343,6 +342,8 @@ public class Board extends JFrame {
 	}
 
 	public void changeColor(int i, int j) {
+		int state = game.getState();
+		int[][] valueTable = game.getValueTable();
 		valueTable[i][j] = (valueTable[i][j]) % state;
 		Color theColor = Color.WHITE;
 		theColor = getColor(colorHex(valueTable[i][j]));
@@ -355,7 +356,9 @@ public class Board extends JFrame {
 
 	public void press(int x, int y) {
 		// System.out.println("you have pressed " + x + " " + y);
-		select(x, y);
+		game.select(x, y);
+		int size = game.getSize();
+		int[][] valueTable = game.getValueTable();
 		buttons[x][y].setText(valueTable[x][y] + "");
 		changeColor(x, y);
 		if (editMode == false) {
@@ -380,28 +383,9 @@ public class Board extends JFrame {
 		}
 	}
 
-	public void select(int x, int y) {
-		valueTable[x][y] = (valueTable[x][y] + 1) % state; // cycle the
-															// selected
-		if (editMode == false) {
-			// tile
-			if (x - 1 >= 0) { // cycle the left tile
-				valueTable[x - 1][y] = (valueTable[x - 1][y] + 1) % state;
-				// System.out.println("you have cycled " + (x-1) + " " + y);
-			}
-			if (x + 1 <= size - 1) { // cycle the right tile
-				valueTable[x + 1][y] = (valueTable[x + 1][y] + 1) % state;
-			}
-			if (y + 1 <= size - 1) { // cycle the bottom tile
-				valueTable[x][y + 1] = (valueTable[x][y + 1] + 1) % state;
-			}
-			if (y - 1 >= 0) { // cycle the top tile
-				valueTable[x][y - 1] = (valueTable[x][y - 1] + 1) % state;
-			}
-		}
-	}
-
 	public void highlightAdj(int x, int y) {
+		int size = game.getSize();
+		int[][] valueTable = game.getValueTable();
 		buttons[x][y].setBackground(Color.decode(darkenColor(valueTable[x][y])));
 		if (x - 1 >= 0) { // cycle the left tile
 			buttons[x - 1][y].setBackground(Color.decode(darkenColor(valueTable[x - 1][y])));
@@ -418,6 +402,9 @@ public class Board extends JFrame {
 	}
 
 	public void publishSolution() {
+		int size = game.getSize();
+		int state = game.getState();
+		int[][] valueTable = game.getValueTable();
 		// Create a solver
 		Solver einstein = new Solver(size, size, state);
 		
@@ -457,6 +444,9 @@ public class Board extends JFrame {
 	}
 
 	public String toString() {
+		int size = game.getSize();
+		int[][] valueTable = game.getValueTable();
+		
 		String output = "";
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
@@ -468,6 +458,9 @@ public class Board extends JFrame {
 	}
 
 	public int[] publishB() {
+		int size = game.getSize();
+		int state = game.getState();
+		int[][] valueTable = game.getValueTable();
 		int[] b = new int[size * size];
 		int count = 0;
 		for (int i = 0; i < size; i++) {
@@ -480,10 +473,14 @@ public class Board extends JFrame {
 	}
 
 	public int[][] solve() {
+		int[][] valueTable = game.getValueTable();
 		return valueTable;
 	}
 	
 	private String darkenColor(int currState) {
+		int size = game.getSize();
+		int state = game.getState();
+		int[][] valueTable = game.getValueTable();
 		int r, g, b;
 		String rHex, gHex, bHex;
 		int[] color1 = { 45, 117, 182 };
@@ -512,6 +509,9 @@ public class Board extends JFrame {
 	}
 
 	private String colorHex(int currState) {
+		int size = game.getSize();
+		int state = game.getState();
+		int[][] valueTable = game.getValueTable();
 		int r, g, b;
 		String rHex, gHex, bHex;
 		int[] color1 = { 45, 117, 182 };
@@ -540,6 +540,9 @@ public class Board extends JFrame {
 	}
 
 	private boolean isSolved() {
+		int size = game.getSize();
+		int state = game.getState();
+		int[][] valueTable = game.getValueTable();
 		int n = valueTable[0][0]; // check the first tile
 		for (int i = 0; i < size; i++) { // as soon as we encounter a tile of
 											// different value

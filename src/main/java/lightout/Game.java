@@ -12,7 +12,18 @@ public class Game {
 		this.size = size;
 		this.state = state;
 		this.valueTable = new int[size][size];
+		this.reset();
 	}
+	
+	public void setSize(int size) {
+		this.size = size;
+		this.valueTable = new int[size][size];
+		this.reset();
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}	
 	
 	public void select(int x, int y) {
 		this.valueTable[x][y] = (this.valueTable[x][y] + 1) % state; // cycle the selected
