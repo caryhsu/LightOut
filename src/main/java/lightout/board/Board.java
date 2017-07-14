@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -159,54 +161,30 @@ public class Board extends JFrame {
 		solutionP.add(percentSolvableLabel);
 
 		// initialize comboBoxes for dropDown Panel
-		String[] boardSizes = { "3x3", "4x4", "5x5", "6x6", "7x7", "8x8" };
-		String[] numOfColors = { "2 colors", "3 colors", "5 colors", "7 colors" };
+		List<String> boardSizesList = new ArrayList<String>();
+		for(int i = 3; i <= 20; i++) {
+			boardSizesList.add("" + i + "x" + i);
+		}
+		String[] boardSizes = boardSizesList.toArray(new String[] {});
+		List<String> numOfColorsList = new ArrayList<String>();
+		for(int i = 2; i <= 20; i++) {
+			numOfColorsList.add("" + i + " colors");
+		}
+		String[] numOfColors = numOfColorsList.toArray(new String[] {});
 		final JComboBox boardSizeCB = new JComboBox(boardSizes);
 		final int color = state;
 		boardSizeCB.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				String s = (String) boardSizeCB.getSelectedItem();
-				switch (s) {
-				case "3x3":
-					game.setSize(3, 3);
-					createBoard();
-					p.revalidate();
-					subSolutionP.revalidate();
-					break;
-				case "4x4":
-					game.setSize(4, 4);
-					createBoard();
-					p.revalidate();
-					subSolutionP.revalidate();
-					break;
-				case "5x5":
-					game.setSize(5, 5);
-					createBoard();
-					p.revalidate();
-					subSolutionP.revalidate();
-					break;
-				case "6x6":
-					game.setSize(6, 6);
-					createBoard();
-					p.revalidate();
-					subSolutionP.revalidate();
-					break;
-				case "7x7":
-					game.setSize(7, 7);
-					createBoard();
-					p.revalidate();
-					subSolutionP.revalidate();
-					break;
-				case "8x8":
-					game.setSize(8, 8);
-					createBoard();
-					p.revalidate();
-					subSolutionP.revalidate();
-					break;
-				}
+				String[] ss = s.split("x");
+				int width = Integer.parseInt(ss[0]);
+				int height = Integer.parseInt(ss[1]);
+				game.setSize(width, height);
+				createBoard();
+				p.revalidate();
+				subSolutionP.revalidate();
 			}
 
 		});
@@ -215,28 +193,11 @@ public class Board extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String s = (String) colorsCB.getSelectedItem();
-				switch (s) {
-				case "2 colors":
-					setState(2);
-					createBoard();
-					p.revalidate();
-					break;
-				case "3 colors":
-					setState(3);
-					createBoard();
-					p.revalidate();
-					break;
-				case "5 colors":
-					setState(5);
-					createBoard();
-					p.revalidate();
-					break;
-				case "7 colors":
-					setState(7);
-					createBoard();
-					p.revalidate();
-					break;
-				}
+				Integer colors = Integer.parseInt(s = s.split(" ")[0]);
+				game.setState(colors);
+				createBoard();
+				p.revalidate();
+				subSolutionP.revalidate();
 			}
 
 		});
@@ -267,7 +228,7 @@ public class Board extends JFrame {
 				final int x = i;
 				final int y = j;
 				buttons[i][j] = new JButton(valueTable[i][j] + "");
-				buttons[i][j].setFont(new Font("Dialog", Font.PLAIN, 30));
+				buttons[i][j].setFont(new Font("Dialog", Font.PLAIN, 60 - 3 * game.getWidth()));
 				buttons[i][j].setOpaque(true);
 				/*
 				 * buttons[i][j].addActionListener(new ActionListener() {
