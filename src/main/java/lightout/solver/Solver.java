@@ -3,6 +3,7 @@ import lightout.field.Matrix;
 import lightout.field.Zn;
 
 public class Solver {
+	
 	Matrix<Integer> A;
 	public int ASize;
 	public int boardRow;
@@ -15,6 +16,10 @@ public class Solver {
 		ASize = boardRow * boardCol;
 		state = s;
 		A = new Matrix<Integer>(ASize, ASize, new Zn(state));
+		initMatrixA(boardCol);
+	}
+
+	private void initMatrixA(int boardCol) {
 		for (int Arow = 0; Arow < ASize; Arow++) {
 			for (int Acol = 0; Acol < ASize; Acol++) {
 				int i, j, i_, j_ = 0;

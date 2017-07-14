@@ -2,6 +2,7 @@ package lightout;
 
 import lightout.solver.PercentSolvableCalculator;
 import lombok.Getter;
+import lombok.Setter;
 
 public class Game {
 
@@ -67,7 +68,8 @@ public class Game {
 			numberOfClicks++;
 			for (int i = 0; i < this.width; i++) {
 				for (int j = 0; j < this.height; j++) {
-					this.valueTable[i][j] = (this.valueTable[i][j] + getDeltaValue(i, j)) % state;
+					this.valueTable[i][j] += getDeltaValue(i, j);
+					this.valueTable[i][j] %= state;
 				}
 			}
 		}
@@ -84,7 +86,7 @@ public class Game {
 	private void reset(int value) {
 		for (int i = 0; i < this.width; i++) {
 			for (int j = 0; j < this.height; j++) {
-				valueTable[i][j] = value;
+				this.valueTable[i][j] = value;
 			}
 		}
 	}
@@ -135,39 +137,6 @@ public class Game {
 		return output.toString();
 	}
 
-	public int getDeltaValue(int x, int y) {
-		if (this.editMode == true) {
-			if (x == this.cursorX && y == this.cursorY) {
-				return 1;
-			}
-			else {
-				return 0;
-			}
-		}
-		else if (this.cursor == false) {
-			return 0;
-		}
-		else { // (this.editMode == false) {
-			if (x == this.cursorX && y == this.cursorY) {
-				return 1;
-			}
-			else if (x-1 >= 0 && x-1 == this.cursorX && y == this.cursorY) {
-				return 1;
-			}
-			else if (x+1 < width && x+1 == this.cursorX && y == this.cursorY) {
-				return 1;
-			}
-			else if (x == this.cursorX && y-1 >= 0 && y-1 == this.cursorY) {
-				return 1;
-			}
-			else if (x == this.cursorX && y+1 < width && y+1 == this.cursorY) {
-				return 1;
-			}
-			else {
-				return 0;
-			}
-		}
-	}
 
 	private Double _percentSolvable;
 	
@@ -182,6 +151,24 @@ public class Game {
 		int min = Math.min(this.width, this.height);
 		PercentSolvableCalculator c = new PercentSolvableCalculator(min, state);
 		this._percentSolvable = c.calculate().doubleValue();
+	}
+
+	public int getDeltaValue(int x, int y) {
+		if (this.editMode == true) {
+			if (x == this.cursorX && y == this.cursorY) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+		}
+		else if (this.cursor == false) {
+			return 0;
+		}
+		else { // (this.editMode == false) {
+			Delta delta = new Delta(this.width, this.height);
+			return delta.getDeltaValue(this.cursorX, this.cursorY, x, y);
+		}
 	}
 	
 }
