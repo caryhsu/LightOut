@@ -149,7 +149,8 @@ public class Game {
 	
 	public void recalculatePercentSolvable() {
 		int min = Math.min(this.width, this.height);
-		PercentSolvableCalculator c = new PercentSolvableCalculator(min, state);
+		Delta delta = new Delta(this.width, this.height);
+		PercentSolvableCalculator c = new PercentSolvableCalculator(min, state, delta);
 		this._percentSolvable = c.calculate().doubleValue();
 	}
 

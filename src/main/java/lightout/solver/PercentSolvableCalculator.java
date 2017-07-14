@@ -5,8 +5,8 @@ public class PercentSolvableCalculator {
 	private Solver solver;
 	private int zeroRowCount;
 	
-	public PercentSolvableCalculator(int size, int state) {
-		this.solver = new Solver(size, size, state);
+	public PercentSolvableCalculator(int size, int state, IDelta delta) {
+		this.solver = new Solver(size, size, state, delta);
 		solver.setBVector(new int[size * size]);
 		solver.RowReduce();
 		

@@ -2,6 +2,8 @@ package lightout.solver;
 import org.junit.Assert;
 import org.junit.Test;
 
+import lightout.Delta;
+
 public class SolverGetZeroRowCountTest {
 
 	@Test
@@ -144,7 +146,8 @@ public class SolverGetZeroRowCountTest {
 	}
 	
 	public void testGetZeroRowCount(int size, int state, int assetResult) {
-		Solver percentSolvableCalculator = new Solver(size, size, state);
+		Delta delta = new Delta(size, size);
+		Solver percentSolvableCalculator = new Solver(size, size, state, delta);
 		percentSolvableCalculator.setBVector(new int[size * size]);
 		percentSolvableCalculator.RowReduce();
 		int zeroRowCount = percentSolvableCalculator.zeroRowCount();
@@ -154,7 +157,8 @@ public class SolverGetZeroRowCountTest {
 	@Test
 	public void test1() {
 		int size = 5; int state = 2;
-		Solver percentSolvableCalculator = new Solver(size, size, state);
+		Delta delta = new Delta(5, 5);
+		Solver percentSolvableCalculator = new Solver(size, size, state, delta);
 		percentSolvableCalculator.setBVector(new int[size * size]);
 		System.out.println(percentSolvableCalculator);
 		percentSolvableCalculator.RowReduce();

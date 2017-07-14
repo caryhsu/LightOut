@@ -1,11 +1,12 @@
 package lightout;
 
+import lightout.solver.IDelta;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @AllArgsConstructor
-public class Delta {
+public class Delta implements IDelta {
 
 	@Getter @Setter private int width;
 	@Getter @Setter private int height;
@@ -17,13 +18,13 @@ public class Delta {
 		else if (x-1 >= 0 && x-1 == cursorX && y == cursorY) {
 			return 1;
 		}
-		else if (x+1 < width && x+1 == cursorX && y == cursorY) {
+		else if (x+1 < this.width && x+1 == cursorX && y == cursorY) {
 			return 1;
 		}
 		else if (x == cursorX && y-1 >= 0 && y-1 == cursorY) {
 			return 1;
 		}
-		else if (x == cursorX && y+1 < width && y+1 == cursorY) {
+		else if (x == cursorX && y+1 < this.height && y+1 == cursorY) {
 			return 1;
 		}
 		else {

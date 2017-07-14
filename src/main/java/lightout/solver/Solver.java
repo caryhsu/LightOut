@@ -1,41 +1,39 @@
 package lightout.solver;
+import lightout.Delta;
 import lightout.field.Matrix;
 import lightout.field.Zn;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Solver {
 	
-	Matrix<Integer> A;
-	public int ASize;
-	public int boardRow;
-	public int boardCol;
-	public int state;
+	private Matrix<Integer> A;
+	private int ASize;
+	int boardRow;
+	int boardCol;
+	int state;
+	
+	@Getter @Setter private IDelta delta;
 
-	public Solver(int boardRow, int boardCol, int s) {
+	public Solver(int boardRow, int boardCol, int state, IDelta delta) {
 		this.boardRow = boardRow;
 		this.boardCol = boardCol;
-		ASize = boardRow * boardCol;
-		state = s;
-		A = new Matrix<Integer>(ASize, ASize, new Zn(state));
-		initMatrixA(boardCol);
+		this.delta = delta;
+		this.ASize = boardRow * boardCol;
+		this.state = state;
+		this.A = new Matrix<Integer>(ASize, ASize, new Zn(this.state));
+		initMatrixA();
 	}
 
-	private void initMatrixA(int boardCol) {
+	private void initMatrixA() {
 		for (int Arow = 0; Arow < ASize; Arow++) {
 			for (int Acol = 0; Acol < ASize; Acol++) {
 				int i, j, i_, j_ = 0;
-				i = Arow / boardCol; // index (i, j) is the tile that you're setting
-								// the equation up for
-				j = Arow % boardCol;
-				i_ = Acol / boardCol; // index (i_, j_) is the index of where you are
-									// pressing
-				j_ = Acol % boardCol;
-				if (i_ >= 0 && i_ <= ASize && j_ >= 0 && j_ <= ASize) {
-					if (Math.abs(i - i_) + Math.abs(j - j_) <= 1) {
-						A.set(Arow, Acol, (Integer) 1);
-					} else {
-						A.set(Arow, Acol, (Integer) 0);
-					}
-				}
+				i = Arow / this.boardCol; // index (i, j) is the tile that you're setting the equation up for
+				j = Arow % this.boardCol;
+				i_ = Acol / this.boardCol; // index (i_, j_) is the index of where you are pressing
+				j_ = Acol % this.boardCol;
+				this.A.set(Arow, Acol, delta.getDeltaValue(i, j, i_, j_));
 			}
 		}
 	}
