@@ -9,12 +9,15 @@ public class Game {
 	@Getter private int height;
 	@Getter private int state;
 	@Getter private int[][] valueTable;
+	
 	@Getter private boolean editMode = false;
 	@Getter private int cursorX;
 	@Getter private int cursorY;
 	@Getter private boolean cursor;
+	
 	@Getter private int numberOfClicks = 0;
-
+	
+	
 	public Game(int width, int height, int state) {
 		this.width = width;
 		this.height = height;
@@ -64,9 +67,7 @@ public class Game {
 			numberOfClicks++;
 			for (int i = 0; i < this.width; i++) {
 				for (int j = 0; j < this.height; j++) {
-					if (isHighlight(i, j)) {
-						this.valueTable[i][j] = (this.valueTable[i][j] + 1) % state;
-					}
+					this.valueTable[i][j] = (this.valueTable[i][j] + getDeltaValue(i, j)) % state;
 				}
 			}
 		}
@@ -121,7 +122,7 @@ public class Game {
 		for (int i = 0; i < this.width; i++) {
 			for (int j = 0; j < this.height; j++) {
 				output.append(this.valueTable[i][j]);
-				if (this.isHighlight(i, j)) {
+				if (this.getDeltaValue(i, j)>0) {
 					output.append("*");
 				}
 				else {
@@ -134,36 +135,36 @@ public class Game {
 		return output.toString();
 	}
 
-	public boolean isHighlight(int x, int y) {
+	public int getDeltaValue(int x, int y) {
 		if (this.editMode == true) {
-			if (x == this.cursorX && y == this.cursorX) {
-				return true;
+			if (x == this.cursorX && y == this.cursorY) {
+				return 1;
 			}
 			else {
-				return false;
+				return 0;
 			}
 		}
 		else if (this.cursor == false) {
-			return false;
+			return 0;
 		}
 		else { // (this.editMode == false) {
 			if (x == this.cursorX && y == this.cursorY) {
-				return true;
+				return 1;
 			}
 			else if (x-1 >= 0 && x-1 == this.cursorX && y == this.cursorY) {
-				return true;
+				return 1;
 			}
 			else if (x+1 < width && x+1 == this.cursorX && y == this.cursorY) {
-				return true;
+				return 1;
 			}
 			else if (x == this.cursorX && y-1 >= 0 && y-1 == this.cursorY) {
-				return true;
+				return 1;
 			}
 			else if (x == this.cursorX && y+1 < width && y+1 == this.cursorY) {
-				return true;
+				return 1;
 			}
 			else {
-				return false;
+				return 0;
 			}
 		}
 	}
@@ -181,5 +182,6 @@ public class Game {
 		int min = Math.min(this.width, this.height);
 		PercentSolvableCalculator c = new PercentSolvableCalculator(min, state);
 		this._percentSolvable = c.calculate().doubleValue();
-	}	
+	}
+	
 }

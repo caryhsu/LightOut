@@ -332,7 +332,7 @@ public class Board extends JFrame {
 		GameColorManager cm = new GameColorManager(game.getState());
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				if (game.isHighlight(i, j)) {
+				if (game.getDeltaValue(i, j) > 0) {
 					buttons[i][j].setBackground(Color.decode(cm.darkenColor(valueTable[i][j])));
 				}
 				else {
