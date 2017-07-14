@@ -89,7 +89,7 @@ public class Board extends JFrame {
 		sideP.setPreferredSize(new Dimension(200, 600));
 
 		// Set puzzle's parameter
-		this.game = new Game(size, state);
+		this.game = new Game(size, size, state);
 
 		// initialize GUI for side Panel
 		// need to add methods for these buttons
@@ -170,37 +170,37 @@ public class Board extends JFrame {
 				String s = (String) boardSizeCB.getSelectedItem();
 				switch (s) {
 				case "3x3":
-					game.setSize(3);
+					game.setSize(3, 3);
 					createBoard();
 					p.revalidate();
 					subSolutionP.revalidate();
 					break;
 				case "4x4":
-					game.setSize(4);
+					game.setSize(4, 4);
 					createBoard();
 					p.revalidate();
 					subSolutionP.revalidate();
 					break;
 				case "5x5":
-					game.setSize(5);
+					game.setSize(5, 5);
 					createBoard();
 					p.revalidate();
 					subSolutionP.revalidate();
 					break;
 				case "6x6":
-					game.setSize(6);
+					game.setSize(6, 6);
 					createBoard();
 					p.revalidate();
 					subSolutionP.revalidate();
 					break;
 				case "7x7":
-					game.setSize(7);
+					game.setSize(7, 7);
 					createBoard();
 					p.revalidate();
 					subSolutionP.revalidate();
 					break;
 				case "8x8":
-					game.setSize(8);
+					game.setSize(8, 8);
 					createBoard();
 					p.revalidate();
 					subSolutionP.revalidate();
@@ -253,15 +253,16 @@ public class Board extends JFrame {
 		// initialize the values
 		game.reset();
 		
-		int size = game.getSize();
+		int width = game.getWidth();
+		int height = game.getHeight();
 		int[][] valueTable = game.getValueTable();
 		
-		p.setLayout(new GridLayout(size, size));
+		p.setLayout(new GridLayout(width, height));
 		p.setPreferredSize(new Dimension(600, 600));
 		p.setBackground(GameColorManager.getColor("#F0F0F0"));
-		buttons = new JButton[size][size];
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
+		buttons = new JButton[width][height];
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
 				final int x = i;
 				final int y = j;
 				buttons[i][j] = new JButton(valueTable[i][j] + "");
@@ -308,12 +309,12 @@ public class Board extends JFrame {
 		}
 				
 		subSolutionP.removeAll();
-		subSolutionP.setLayout(new GridLayout(size, size));
+		subSolutionP.setLayout(new GridLayout(width, height));
 		subSolutionP.setBackground(GameColorManager.getColor("#F0F0F0"));
 
-		solutionGrid = new JLabel[size][size];
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
+		solutionGrid = new JLabel[width][height];
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
 				solutionGrid[i][j] = new JLabel("0");
 				subSolutionP.add(solutionGrid[i][j]);
 			}
@@ -324,12 +325,13 @@ public class Board extends JFrame {
 	}
 	
 	private void refreshModelBinding() {
-		int size = game.getSize();
+		int width = game.getWidth();
+		int height = game.getHeight();
 		int[][] valueTable = game.getValueTable();
 		
 		GameColorManager cm = new GameColorManager(game.getState());
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
 				if (game.isHighlight(i, j)) {
 					buttons[i][j].setBackground(Color.decode(cm.darkenColor(valueTable[i][j])));
 				}
@@ -348,17 +350,18 @@ public class Board extends JFrame {
 	}
 
 	public void publishSolution() {
-		int size = game.getSize();
+		int width = game.getWidth();
+		int height = game.getHeight();
 		int state = game.getState();
 		int[][] valueTable = game.getValueTable();
 		// Create a solver
-		Solver einstein = new Solver(size, size, state);
+		Solver einstein = new Solver(width, height, state);
 		
 		// Build the b vector
-		int[] b = new int[size*size];
+		int[] b = new int[width*height];
 		int index = 0;
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
 				b[index] = state - valueTable[i][j];
 				index++;
 			}
@@ -379,8 +382,8 @@ public class Board extends JFrame {
 			solutionHeader.setText("Solution");
 			solutionHeader.setForeground(Color.black);
 			int[][] solution = einstein.publishSolution();
-			for (int i = 0; i < size; i++){
-				for (int j = 0; j < size; j++) {
+			for (int i = 0; i < width; i++){
+				for (int j = 0; j < height; j++) {
 					solutionGrid[i][j].setText("" + solution[i][j]);
 				}
 			} 
@@ -391,13 +394,14 @@ public class Board extends JFrame {
 	}
 
 	public int[] publishB() {
-		int size = game.getSize();
+		int width = game.getWidth();
+		int height = game.getHeight();
 		int state = game.getState();
 		int[][] valueTable = game.getValueTable();
-		int[] b = new int[size * size];
+		int[] b = new int[width * height];
 		int count = 0;
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
 				b[count] = (state - valueTable[i][j]) % state;
 				count++;
 			}

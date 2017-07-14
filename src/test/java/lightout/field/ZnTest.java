@@ -1,8 +1,6 @@
 package lightout.field;
 import org.junit.Test;
 
-import lightout.field.Zn;
-
 public class ZnTest {
 
 	@Test

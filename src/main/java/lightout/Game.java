@@ -5,7 +5,8 @@ import lombok.Getter;
 
 public class Game {
 
-	@Getter private int size;
+	@Getter private int width;
+	@Getter private int height;
 	@Getter private int state;
 	@Getter private int[][] valueTable;
 	@Getter private boolean editMode = false;
@@ -14,10 +15,11 @@ public class Game {
 	@Getter private boolean cursor;
 	@Getter private int numberOfClicks = 0;
 
-	public Game(int size, int state) {
-		this.size = size;
+	public Game(int width, int height, int state) {
+		this.width = width;
+		this.height = height;
 		this.state = state;
-		this.valueTable = new int[size][size];
+		this.valueTable = new int[this.width][this.height];
 		this.reset();
 	}
 
@@ -26,14 +28,14 @@ public class Game {
 		this.numberOfClicks = 0;
 	}
 
-	public void setSize(int size) {
-		this.size = size;
-		this.valueTable = new int[size][size];
+	public void setSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+		this.valueTable = new int[this.width][this.height];
 		this.reset();
 	}
 	
 	public void setCursor(int x, int y) {
-		System.out.println("setCursor:" + x + ", " + y);
 		this.cursorX = x;
 		this.cursorY = y;
 		this.cursor = true;
@@ -60,10 +62,10 @@ public class Game {
 		}
 		else { // if (this.editMode == false)
 			numberOfClicks++;
-			for (int i = 0; i < size; i++) {
-				for (int j = 0; j < size; j++) {
+			for (int i = 0; i < this.width; i++) {
+				for (int j = 0; j < this.height; j++) {
 					if (isHighlight(i, j)) {
-						valueTable[i][j] = (valueTable[i][j] + 1) % state;
+						this.valueTable[i][j] = (this.valueTable[i][j] + 1) % state;
 					}
 				}
 			}
@@ -79,8 +81,8 @@ public class Game {
 	}
 	
 	private void reset(int value) {
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
+		for (int i = 0; i < this.width; i++) {
+			for (int j = 0; j < this.height; j++) {
 				valueTable[i][j] = value;
 			}
 		}
@@ -88,9 +90,9 @@ public class Game {
 
 	public void randomize() {
 		reset();
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				for (int times = 0; times < (int) (Math.random() * size); times++) {
+		for (int i = 0; i < this.width; i++) {
+			for (int j = 0; j < this.height; j++) {
+				for (int times = 0; times < (int) (Math.random() * (this.width * this.height)); times++) {
 					select(i, j);
 				}
 			}
@@ -102,10 +104,10 @@ public class Game {
 	}
 
 	public boolean isSolved() {
-		int n = valueTable[0][0]; // check the first tile
-		for (int i = 0; i < size; i++) { // as soon as we encounter a tile of different value
-			for (int j = 0; j < size; j++) {
-				if (valueTable[i][j] != n) {
+		int n = this.valueTable[0][0]; // check the first tile
+		for (int i = 0; i < this.width; i++) { // as soon as we encounter a tile of different value
+			for (int j = 0; j < this.height; j++) {
+				if (this.valueTable[i][j] != n) {
 					return false; // return false
 				}
 			}
@@ -116,9 +118,9 @@ public class Game {
 	@Override
 	public String toString() {
 		StringBuffer output = new StringBuffer();
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				output.append(valueTable[i][j]);
+		for (int i = 0; i < this.width; i++) {
+			for (int j = 0; j < this.height; j++) {
+				output.append(this.valueTable[i][j]);
 				if (this.isHighlight(i, j)) {
 					output.append("*");
 				}
@@ -151,13 +153,13 @@ public class Game {
 			else if (x-1 >= 0 && x-1 == this.cursorX && y == this.cursorY) {
 				return true;
 			}
-			else if (x+1 < size && x+1 == this.cursorX && y == this.cursorY) {
+			else if (x+1 < width && x+1 == this.cursorX && y == this.cursorY) {
 				return true;
 			}
 			else if (x == this.cursorX && y-1 >= 0 && y-1 == this.cursorY) {
 				return true;
 			}
-			else if (x == this.cursorX && y+1 < size && y+1 == this.cursorY) {
+			else if (x == this.cursorX && y+1 < width && y+1 == this.cursorY) {
 				return true;
 			}
 			else {
@@ -176,7 +178,8 @@ public class Game {
 	}
 	
 	public void recalculatePercentSolvable() {
-		PercentSolvableCalculator c = new PercentSolvableCalculator(size, state);
+		int min = Math.min(this.width, this.height);
+		PercentSolvableCalculator c = new PercentSolvableCalculator(min, state);
 		this._percentSolvable = c.calculate().doubleValue();
 	}	
 }
