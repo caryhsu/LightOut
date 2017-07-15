@@ -1,4 +1,4 @@
-package lightout;
+package lightout.game;
 
 import lightout.solver.IDelta;
 import lombok.AllArgsConstructor;

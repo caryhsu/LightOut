@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import lightout.Delta;
+import lightout.game.Delta;
 import lightout.solver.Solver;
 import lombok.AllArgsConstructor;
 import lombok.Data;

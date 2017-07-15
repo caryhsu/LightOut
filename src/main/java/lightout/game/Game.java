@@ -1,4 +1,4 @@
-package lightout;
+package lightout.game;
 
 import lightout.solver.PercentSolvableCalculator;
 import lombok.Getter;

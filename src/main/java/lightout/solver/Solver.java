@@ -1,7 +1,7 @@
 package lightout.solver;
-import lightout.Delta;
 import lightout.field.Matrix;
 import lightout.field.Zn;
+import lightout.game.Delta;
 import lombok.Getter;
 import lombok.Setter;
 

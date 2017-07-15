@@ -2,7 +2,7 @@ package lightout.solver;
 import org.junit.Assert;
 import org.junit.Test;
 
-import lightout.Delta;
+import lightout.game.Delta;
 
 public class SolverTest {
 	@Test

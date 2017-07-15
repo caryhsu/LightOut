@@ -19,14 +19,16 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import lightout.Delta;
-import lightout.Game;
+import lightout.game.Delta;
+import lightout.game.Game;
 import lightout.solver.PercentSolvableCalculator;
 import lightout.solver.Solver;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Board extends JFrame {
 	// Fields that deals with the puzzle's logic
-	private Game game;
+	@Getter @Setter private Game game;
 
 	// Fields that deals with GUI
 	// private JPanel m = new JPanel(new FlowLayout());
