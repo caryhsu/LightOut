@@ -2,7 +2,6 @@ package lightout.game;
 
 import lightout.solver.PercentSolvableCalculator;
 import lombok.Getter;
-import lombok.Setter;
 
 public class Game {
 
