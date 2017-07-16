@@ -5,11 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@AllArgsConstructor
 public class Delta implements IDelta {
 
 	@Getter @Setter private int width;
 	@Getter @Setter private int height;
+	
+	public Delta(int width, int height) {
+		this.width = width;
+		this.height = height;
+	}
+	
 	
 	public int getDeltaValue(int x, int y, int cursorX, int cursorY) {
 		if (x == cursorX && y == cursorY) {

@@ -320,6 +320,7 @@ public class Board extends JFrame {
 		int[][] valueTable = game.getValueTable();
 		// Create a solver
 		Delta delta = new Delta(width, height);
+		
 		Solver einstein = new Solver(width, height, state, delta);
 		
 		// Build the b vector
