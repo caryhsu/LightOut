@@ -300,7 +300,7 @@ public class Board extends JFrame {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				Array2DPosition position = new Array2DPosition(i, j);
-				if (game.getDeltaValue(i, j) > 0) {
+				if (game.getDeltaValue(position) > 0) {
 					buttons[i][j].setBackground(Color.decode(cm.darkenColor(values.get(position))));
 				}
 				else {

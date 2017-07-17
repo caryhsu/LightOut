@@ -20,6 +20,7 @@ public class CrossDelta implements Delta<Array2DPosition> {
 		int y = targetPosition.getY();
 		int cursorX = cursorPosition.getX();
 		int cursorY = cursorPosition.getY();
+		
 		if (x == cursorX && y == cursorY) {
 			return 1;
 		}

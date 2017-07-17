@@ -14,9 +14,7 @@ public class Game {
 	@Getter private Graph<Array2DPosition> values;
 	
 	@Getter private boolean editMode = false;
-	@Getter private int cursorX;
-	@Getter private int cursorY;
-	@Getter private boolean cursor;
+	@Getter private Array2DPosition cursor;
 	
 	@Getter private int numberOfClicks = 0;
 	
@@ -29,6 +27,12 @@ public class Game {
 		this.reset();
 	}
 
+	public void setState(int state) {
+		this.state = state;
+		this.values = new Array2DGraph(this.width, this.height, this.state);
+		this.reset();
+	}	
+		
 	public void setEditMode(boolean editMode) {
 		this.editMode = editMode;
 		this.numberOfClicks = 0;
@@ -42,36 +46,28 @@ public class Game {
 	}
 	
 	public void setCursor(int x, int y) {
-		this.cursorX = x;
-		this.cursorY = y;
-		this.cursor = true;
+		this.cursor = new Array2DPosition(x, y);
 	}
 
 	public void clearCursor() {
-		this.cursor = false;
+		this.cursor = null;
 	}
 
-	public void setState(int state) {
-		this.state = state;
-	}	
-	
 	public void select(int x, int y) {
 		this.setCursor(x, y);
 		this.select();
 	}
 	
 	public void select() {
-		int x = this.cursorX;
-		int y = this.cursorY;
 		if (this.editMode == true) {
-			this.values.increase(new Array2DPosition(x, y));
+			this.values.increase(this.cursor);
 		}
 		else { // if (this.editMode == false)
 			numberOfClicks++;
 			for (int i = 0; i < this.width; i++) {
 				for (int j = 0; j < this.height; j++) {
 					Array2DPosition position = new Array2DPosition(i, j);
-					this.values.increase(position, getDeltaValue(i, j));
+					this.values.increase(position, getDeltaValue(this.cursor));
 				}
 			}
 		}
@@ -111,7 +107,7 @@ public class Game {
 			for (int j = 0; j < this.height; j++) {
 				Array2DPosition position = new Array2DPosition(i, j);
 				output.append(this.values.get(position));
-				if (this.getDeltaValue(i, j)>0) {
+				if (this.getDeltaValue(position)>0) {
 					output.append("*");
 				}
 				else {
@@ -141,23 +137,21 @@ public class Game {
 		this._percentSolvable = c.calculate().doubleValue();
 	}
 
-	public int getDeltaValue(int x, int y) {
-		if (this.editMode == true) {
-			if (x == this.cursorX && y == this.cursorY) {
+	public int getDeltaValue(Array2DPosition target) {
+		if (this.cursor == null) {
+			return 0;
+		}
+		else if (this.editMode == true) {
+			if (target.equals(this.cursor)) {
 				return 1;
 			}
 			else {
 				return 0;
 			}
 		}
-		else if (this.cursor == false) {
-			return 0;
-		}
 		else { // (this.editMode == false) {
 			CrossDelta delta = new CrossDelta(this.width, this.height);
-			Array2DPosition target = new Array2DPosition(x, y);
-			Array2DPosition cursor = new Array2DPosition(this.cursorX, this.cursorY);
-			return delta.getDeltaValue(target, cursor);
+			return delta.getDeltaValue(target, this.cursor);
 		}
 	}
 	
