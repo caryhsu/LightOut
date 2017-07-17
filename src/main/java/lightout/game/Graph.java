@@ -1,16 +1,18 @@
 package lightout.game;
 
-public interface Graph {
+public interface Graph<P extends Position> {
 
-	public void increase(int x, int y);
+	default public void increase(P position) {
+		increase(position, 1);
+	};
 
-	public void increase(int i, int j, int deltaValue);
+	public void increase(P position, int deltaValue);
 
 	public void reset(int value);
 
 	public boolean isAllEquals(int i);
 
-	public int get(int i, int j);
+	public int get(P position);
 
 	public int[][] getValues();
 	

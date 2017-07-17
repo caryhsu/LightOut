@@ -11,7 +11,7 @@ public class Game {
 	@Getter private int width;
 	@Getter private int height;
 	@Getter private int state;
-	@Getter private Graph values;
+	@Getter private Graph<Array2DPosition> values;
 	
 	@Getter private boolean editMode = false;
 	@Getter private int cursorX;
@@ -64,13 +64,14 @@ public class Game {
 		int x = this.cursorX;
 		int y = this.cursorY;
 		if (this.editMode == true) {
-			this.values.increase(x, y);
+			this.values.increase(new Array2DPosition(x, y));
 		}
 		else { // if (this.editMode == false)
 			numberOfClicks++;
 			for (int i = 0; i < this.width; i++) {
 				for (int j = 0; j < this.height; j++) {
-					this.values.increase(i, j, getDeltaValue(i, j));
+					Array2DPosition position = new Array2DPosition(i, j);
+					this.values.increase(position, getDeltaValue(i, j));
 				}
 			}
 		}
@@ -108,7 +109,8 @@ public class Game {
 		StringBuffer output = new StringBuffer();
 		for (int i = 0; i < this.width; i++) {
 			for (int j = 0; j < this.height; j++) {
-				output.append(this.values.get(i, j));
+				Array2DPosition position = new Array2DPosition(i, j);
+				output.append(this.values.get(position));
 				if (this.getDeltaValue(i, j)>0) {
 					output.append("*");
 				}

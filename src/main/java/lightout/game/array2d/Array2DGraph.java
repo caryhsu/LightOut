@@ -3,7 +3,7 @@ package lightout.game.array2d;
 import lightout.game.Graph;
 import lombok.Getter;
 
-public class Array2DGraph implements Graph {
+public class Array2DGraph implements Graph<Array2DPosition> {
 
 	@Getter private int width;
 	@Getter private int height;
@@ -25,15 +25,13 @@ public class Array2DGraph implements Graph {
 		}
 	}
 	
-	public int get(int x, int y) {
-		return this.values[x][y];
-	}
-
-	public void increase(int x, int y) {
-		increase(x, y, 1);
+	public int get(Array2DPosition position) {
+		return this.values[position.getX()][position.getY()];
 	}
 	
-	public void increase(int x, int y, int delta) {
+	public void increase(Array2DPosition position, int delta) {
+		int x = position.getX();
+		int y = position.getY();
 		this.values[x][y] += delta;
 		this.values[x][y] %= this.state;
 	}
