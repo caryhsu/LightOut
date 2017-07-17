@@ -1,5 +1,6 @@
 package lightout.game;
 
+import lightout.game.array2d.Array2DGraph;
 import lightout.game.array2d.Array2DPosition;
 import lightout.game.array2d.CrossDelta;
 import lightout.solver.PercentSolvableCalculator;
@@ -24,7 +25,7 @@ public class Game {
 		this.width = width;
 		this.height = height;
 		this.state = state;
-		this.values = new Graph(this.width, this.height, this.state);
+		this.values = new Array2DGraph(this.width, this.height, this.state);
 		this.reset();
 	}
 
@@ -36,7 +37,7 @@ public class Game {
 	public void setSize(int width, int height) {
 		this.width = width;
 		this.height = height;
-		this.values = new Graph(this.width, this.height, this.state);
+		this.values = new Array2DGraph(this.width, this.height, this.state);
 		this.reset();
 	}
 	
