@@ -2,7 +2,7 @@ package lightout.solver;
 import org.junit.Assert;
 import org.junit.Test;
 
-import lightout.game.CrossDelta;
+import lightout.game.array2d.CrossDelta;
 
 public class SolverTest {
 	@Test

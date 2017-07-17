@@ -1,11 +1,13 @@
 package lightout.solver;
 
+import lightout.game.array2d.CrossDelta;
+
 public class PercentSolvableCalculator {
 
 	private Solver solver;
 	private int zeroRowCount;
 	
-	public PercentSolvableCalculator(int size, int state, Delta delta) {
+	public PercentSolvableCalculator(int size, int state, CrossDelta delta) {
 		this.solver = new Solver(size, size, state, delta);
 		solver.setBVector(new int[size * size]);
 		solver.RowReduce();

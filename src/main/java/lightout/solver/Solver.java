@@ -1,7 +1,8 @@
 package lightout.solver;
 import lightout.field.Matrix;
 import lightout.field.Zn;
-import lightout.game.CrossDelta;
+import lightout.game.array2d.Array2DPosition;
+import lightout.game.array2d.CrossDelta;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,9 +14,9 @@ public class Solver {
 	int boardCol;
 	int state;
 	
-	@Getter @Setter private Delta delta;
+	@Getter @Setter private CrossDelta delta;
 
-	public Solver(int boardRow, int boardCol, int state, Delta delta) {
+	public Solver(int boardRow, int boardCol, int state, CrossDelta delta) {
 		this.boardRow = boardRow;
 		this.boardCol = boardCol;
 		this.delta = delta;
@@ -33,7 +34,9 @@ public class Solver {
 				j = Arow % this.boardCol;
 				i_ = Acol / this.boardCol; // index (i_, j_) is the index of where you are pressing
 				j_ = Acol % this.boardCol;
-				this.A.set(Arow, Acol, delta.getDeltaValue(i, j, i_, j_));
+				Array2DPosition p1 = new Array2DPosition(i, j);
+				Array2DPosition p2 = new Array2DPosition(i_, j_);
+				this.A.set(Arow, Acol, delta.getDeltaValue(p1, p2));
 			}
 		}
 	}

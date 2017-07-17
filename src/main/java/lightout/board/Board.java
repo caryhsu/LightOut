@@ -19,8 +19,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import lightout.game.CrossDelta;
 import lightout.game.Game;
+import lightout.game.array2d.CrossDelta;
 import lightout.solver.PercentSolvableCalculator;
 import lightout.solver.Solver;
 import lombok.Getter;

@@ -1,5 +1,7 @@
 package lightout.game;
 
+import lightout.game.array2d.Array2DPosition;
+import lightout.game.array2d.CrossDelta;
 import lightout.solver.PercentSolvableCalculator;
 import lombok.Getter;
 
@@ -167,7 +169,9 @@ public class Game {
 		}
 		else { // (this.editMode == false) {
 			CrossDelta delta = new CrossDelta(this.width, this.height);
-			return delta.getDeltaValue(this.cursorX, this.cursorY, x, y);
+			Array2DPosition target = new Array2DPosition(x, y);
+			Array2DPosition cursor = new Array2DPosition(this.cursorX, this.cursorY);
+			return delta.getDeltaValue(target, cursor);
 		}
 	}
 	
