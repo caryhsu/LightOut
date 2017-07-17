@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import lightout.game.Game;
+import lightout.game.Graph;
 import lightout.game.array2d.CrossDelta;
 import lightout.solver.PercentSolvableCalculator;
 import lightout.solver.Solver;
@@ -219,7 +220,7 @@ public class Board extends JFrame {
 		
 		int width = game.getWidth();
 		int height = game.getHeight();
-		int[][] valueTable = game.getValueTable();
+		Graph values = game.getValues();
 		
 		p.setLayout(new GridLayout(width, height));
 		p.setPreferredSize(new Dimension(600, 600));
@@ -229,7 +230,7 @@ public class Board extends JFrame {
 			for (int j = 0; j < height; j++) {
 				final int x = i;
 				final int y = j;
-				buttons[i][j] = new JButton(valueTable[i][j] + "");
+				buttons[i][j] = new JButton(values.get(i, j) + "");
 				buttons[i][j].setFont(new Font("Dialog", Font.PLAIN, 60 - 3 * game.getWidth()));
 				buttons[i][j].setOpaque(true);
 				/*
@@ -291,19 +292,19 @@ public class Board extends JFrame {
 	private void refreshModelBinding() {
 		int width = game.getWidth();
 		int height = game.getHeight();
-		int[][] valueTable = game.getValueTable();
+		Graph values = game.getValues();
 		
 		GameColorManager cm = new GameColorManager(game.getState());
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				if (game.getDeltaValue(i, j) > 0) {
-					buttons[i][j].setBackground(Color.decode(cm.darkenColor(valueTable[i][j])));
+					buttons[i][j].setBackground(Color.decode(cm.darkenColor(values.get(i, j))));
 				}
 				else {
-					Color theColor = GameColorManager.getColor(cm.colorHex(valueTable[i][j]));
+					Color theColor = GameColorManager.getColor(cm.colorHex(values.get(i, j)));
 					buttons[i][j].setBackground(theColor);
 				}
-				buttons[i][j].setText("" + valueTable[i][j]);
+				buttons[i][j].setText("" + values.get(i, j));
 			}
 		}
 		currentL.setText("Current Moves: " + game.getNumberOfClicks());
@@ -317,7 +318,7 @@ public class Board extends JFrame {
 		int width = game.getWidth();
 		int height = game.getHeight();
 		int state = game.getState();
-		int[][] valueTable = game.getValueTable();
+		Graph values = game.getValues();
 		// Create a solver
 		CrossDelta delta = new CrossDelta(width, height);
 		
@@ -328,7 +329,7 @@ public class Board extends JFrame {
 		int index = 0;
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				b[index] = state - valueTable[i][j];
+				b[index] = state - values.get(i, j);
 				index++;
 			}
 		}
@@ -363,12 +364,12 @@ public class Board extends JFrame {
 		int width = game.getWidth();
 		int height = game.getHeight();
 		int state = game.getState();
-		int[][] valueTable = game.getValueTable();
+		Graph values = game.getValues();
 		int[] b = new int[width * height];
 		int count = 0;
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				b[count] = (state - valueTable[i][j]) % state;
+				b[count] = (state - values.get(i, j)) % state;
 				count++;
 			}
 		}
@@ -376,8 +377,8 @@ public class Board extends JFrame {
 	}
 
 	public int[][] solve() {
-		int[][] valueTable = game.getValueTable();
-		return valueTable;
+		Graph values = game.getValues();
+		return values.getValues();
 	}
 	
 

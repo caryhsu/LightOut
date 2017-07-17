@@ -10,7 +10,7 @@ public class Game {
 	@Getter private int width;
 	@Getter private int height;
 	@Getter private int state;
-	@Getter private int[][] valueTable;
+	@Getter private Graph values;
 	
 	@Getter private boolean editMode = false;
 	@Getter private int cursorX;
@@ -24,7 +24,7 @@ public class Game {
 		this.width = width;
 		this.height = height;
 		this.state = state;
-		this.valueTable = new int[this.width][this.height];
+		this.values = new Graph(this.width, this.height, this.state);
 		this.reset();
 	}
 
@@ -36,7 +36,7 @@ public class Game {
 	public void setSize(int width, int height) {
 		this.width = width;
 		this.height = height;
-		this.valueTable = new int[this.width][this.height];
+		this.values = new Graph(this.width, this.height, this.state);
 		this.reset();
 	}
 	
@@ -63,14 +63,13 @@ public class Game {
 		int x = this.cursorX;
 		int y = this.cursorY;
 		if (this.editMode == true) {
-			this.valueTable[x][y] = (this.valueTable[x][y] + 1) % state; // cycle the selected	
+			this.values.increase(x, y);
 		}
 		else { // if (this.editMode == false)
 			numberOfClicks++;
 			for (int i = 0; i < this.width; i++) {
 				for (int j = 0; j < this.height; j++) {
-					this.valueTable[i][j] += getDeltaValue(i, j);
-					this.valueTable[i][j] %= state;
+					this.values.increase(i, j, getDeltaValue(i, j));
 				}
 			}
 		}
@@ -78,20 +77,12 @@ public class Game {
 
 	public void reset() {
 		this.editMode = false;
-		this.reset(0);
+		this.values.reset(0);
 		this.clearCursor();
 		this.numberOfClicks = 0;
 		this.recalculatePercentSolvable();
 	}
 	
-	private void reset(int value) {
-		for (int i = 0; i < this.width; i++) {
-			for (int j = 0; j < this.height; j++) {
-				this.valueTable[i][j] = value;
-			}
-		}
-	}
-
 	public void randomize() {
 		reset();
 		for (int i = 0; i < this.width; i++) {
@@ -108,15 +99,7 @@ public class Game {
 	}
 
 	public boolean isSolved() {
-		int n = this.valueTable[0][0]; // check the first tile
-		for (int i = 0; i < this.width; i++) { // as soon as we encounter a tile of different value
-			for (int j = 0; j < this.height; j++) {
-				if (this.valueTable[i][j] != n) {
-					return false; // return false
-				}
-			}
-		}
-		return true;
+		return this.values.isAllEquals(this.state - 1);
 	}
 
 	@Override
@@ -124,7 +107,7 @@ public class Game {
 		StringBuffer output = new StringBuffer();
 		for (int i = 0; i < this.width; i++) {
 			for (int j = 0; j < this.height; j++) {
-				output.append(this.valueTable[i][j]);
+				output.append(this.values.get(i, j));
 				if (this.getDeltaValue(i, j)>0) {
 					output.append("*");
 				}

@@ -2,9 +2,10 @@ package lightout.game.array2d;
 
 import lightout.game.Graph;
 
-public class Array2DGraph implements Graph {
+public class Array2DGraph extends Graph {
 
-//	public int[] to1DArray() {
-//		return null;
-//	}
+	public Array2DGraph(int width, int height, int state) {
+		super(width, height, state);
+	}
+
 }
