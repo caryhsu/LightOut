@@ -1,16 +1,16 @@
 package lightout.game;
 
-import lightout.solver.IDelta;
+import lightout.solver.Delta;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Delta implements IDelta {
+public class CrossDelta implements Delta {
 
 	@Getter @Setter private int width;
 	@Getter @Setter private int height;
 	
-	public Delta(int width, int height) {
+	public CrossDelta(int width, int height) {
 		this.width = width;
 		this.height = height;
 	}

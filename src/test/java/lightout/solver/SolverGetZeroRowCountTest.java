@@ -2,7 +2,7 @@ package lightout.solver;
 import org.junit.Assert;
 import org.junit.Test;
 
-import lightout.game.Delta;
+import lightout.game.CrossDelta;
 
 public class SolverGetZeroRowCountTest {
 
@@ -146,7 +146,7 @@ public class SolverGetZeroRowCountTest {
 	}
 	
 	public void testGetZeroRowCount(int size, int state, int assetResult) {
-		Delta delta = new Delta(size, size);
+		CrossDelta delta = new CrossDelta(size, size);
 		Solver percentSolvableCalculator = new Solver(size, size, state, delta);
 		percentSolvableCalculator.setBVector(new int[size * size]);
 		percentSolvableCalculator.RowReduce();
@@ -157,7 +157,7 @@ public class SolverGetZeroRowCountTest {
 	@Test
 	public void test1() {
 		int size = 5; int state = 2;
-		Delta delta = new Delta(5, 5);
+		CrossDelta delta = new CrossDelta(5, 5);
 		Solver percentSolvableCalculator = new Solver(size, size, state, delta);
 		percentSolvableCalculator.setBVector(new int[size * size]);
 		System.out.println(percentSolvableCalculator);

@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import lightout.game.Delta;
+import lightout.game.CrossDelta;
 import lightout.solver.Solver;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +18,7 @@ public class SolverGetZeroRowCountTest {
 	public void generateGetZeroCount() {
 		for(int size = 3; size < 30; size++) {
 			for(int state = 2; state < 7; state++) {
-				Delta delta = new Delta(size, size);
+				CrossDelta delta = new CrossDelta(size, size);
 				Solver percentSolvableCalculator = new Solver(size, size, state, delta);
 				percentSolvableCalculator.setBVector(new int[size * size]);
 				percentSolvableCalculator.RowReduce();

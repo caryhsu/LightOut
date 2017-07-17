@@ -19,7 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import lightout.game.Delta;
+import lightout.game.CrossDelta;
 import lightout.game.Game;
 import lightout.solver.PercentSolvableCalculator;
 import lightout.solver.Solver;
@@ -319,7 +319,7 @@ public class Board extends JFrame {
 		int state = game.getState();
 		int[][] valueTable = game.getValueTable();
 		// Create a solver
-		Delta delta = new Delta(width, height);
+		CrossDelta delta = new CrossDelta(width, height);
 		
 		Solver einstein = new Solver(width, height, state, delta);
 		

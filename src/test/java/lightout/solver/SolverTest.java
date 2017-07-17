@@ -2,14 +2,14 @@ package lightout.solver;
 import org.junit.Assert;
 import org.junit.Test;
 
-import lightout.game.Delta;
+import lightout.game.CrossDelta;
 
 public class SolverTest {
 	@Test
 	public void test1() {
 		
 		int size = 5; int state = 2;
-		Delta delta = new Delta(5, 5);
+		CrossDelta delta = new CrossDelta(5, 5);
 		Solver solver = new Solver(size, size, state, delta);
 		System.out.println(solver);
 //		solver.setBVector(new int[size * size]);

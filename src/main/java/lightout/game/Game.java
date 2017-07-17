@@ -148,7 +148,7 @@ public class Game {
 	
 	public void recalculatePercentSolvable() {
 		int min = Math.min(this.width, this.height);
-		Delta delta = new Delta(this.width, this.height);
+		CrossDelta delta = new CrossDelta(this.width, this.height);
 		PercentSolvableCalculator c = new PercentSolvableCalculator(min, state, delta);
 		this._percentSolvable = c.calculate().doubleValue();
 	}
@@ -166,7 +166,7 @@ public class Game {
 			return 0;
 		}
 		else { // (this.editMode == false) {
-			Delta delta = new Delta(this.width, this.height);
+			CrossDelta delta = new CrossDelta(this.width, this.height);
 			return delta.getDeltaValue(this.cursorX, this.cursorY, x, y);
 		}
 	}
