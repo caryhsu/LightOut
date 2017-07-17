@@ -17,6 +17,10 @@ public class Array2DGraph implements Graph<Array2DPosition> {
 		this.values = new int[this.width][this.height];
 	}
 
+	public void reset() {
+		reset(0);
+	}
+	
 	public void reset(int value) {
 		for (int i = 0; i < this.width; i++) {
 			for (int j = 0; j < this.height; j++) {
