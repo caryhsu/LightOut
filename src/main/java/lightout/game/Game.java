@@ -8,9 +8,9 @@ import lombok.Getter;
 
 public class Game {
 
-	@Getter private int width;
-	@Getter private int height;
-	@Getter private int state;
+//	@Getter private int width;
+//	@Getter private int height;
+//	@Getter private int state;
 	@Getter private Graph<Array2DPosition> values;
 	
 	@Getter private boolean editMode = false;
@@ -22,11 +22,26 @@ public class Game {
 	
 	
 	public Game(int width, int height, int state) {
-		this.width = width;
-		this.height = height;
-		this.state = state;
-		this.values = new Array2DGraph(this.width, this.height, this.state);
+//		this.width = width;
+//		this.height = height;
+//		this.state = state;
+		this.values = new Array2DGraph(width, height, state);
 		this.reset();
+	}
+
+	public int getWidth() {
+		int width = ((Array2DGraph) this.values).getWidth();
+		return width;
+	}
+	
+	public int getHeight() {
+		int height = ((Array2DGraph) this.values).getHeight();
+		return height;
+	}
+	
+	public int getState() {
+		int state = ((Array2DGraph) this.values).getState();
+		return state;
 	}
 
 	public void setEditMode(boolean editMode) {
@@ -35,9 +50,7 @@ public class Game {
 	}
 
 	public void setSize(int width, int height) {
-		this.width = width;
-		this.height = height;
-		this.values = new Array2DGraph(this.width, this.height, this.state);
+		this.values = new Array2DGraph(width, height, ((Array2DGraph) this.values).getState());
 		this.reset();
 	}
 	
@@ -52,7 +65,10 @@ public class Game {
 	}
 
 	public void setState(int state) {
-		this.state = state;
+		int width = ((Array2DGraph) this.values).getWidth();
+		int height = ((Array2DGraph) this.values).getHeight();
+		this.values = new Array2DGraph(width, height, ((Array2DGraph) this.values).getState());
+		this.reset();
 	}	
 	
 	public void select(int x, int y) {
@@ -67,9 +83,11 @@ public class Game {
 			this.values.increase(new Array2DPosition(x, y));
 		}
 		else { // if (this.editMode == false)
+			int width = ((Array2DGraph) this.values).getWidth();
+			int height = ((Array2DGraph) this.values).getHeight();
 			numberOfClicks++;
-			for (int i = 0; i < this.width; i++) {
-				for (int j = 0; j < this.height; j++) {
+			for (int i = 0; i < width; i++) {
+				for (int j = 0; j < height; j++) {
 					Array2DPosition position = new Array2DPosition(i, j);
 					this.values.increase(position, getDeltaValue(i, j));
 				}
@@ -87,9 +105,11 @@ public class Game {
 	
 	public void randomize() {
 		reset();
-		for (int i = 0; i < this.width; i++) {
-			for (int j = 0; j < this.height; j++) {
-				for (int times = 0; times < (int) (Math.random() * (this.width * this.height)); times++) {
+		int width = ((Array2DGraph) this.values).getWidth();
+		int height = ((Array2DGraph) this.values).getHeight();
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				for (int times = 0; times < (int) (Math.random() * (width * height)); times++) {
 					select(i, j);
 				}
 			}
@@ -101,14 +121,17 @@ public class Game {
 	}
 
 	public boolean isSolved() {
-		return this.values.isAllEquals(this.state - 1);
+		int state = ((Array2DGraph) this.values).getState();
+		return this.values.isAllEquals(state - 1);
 	}
 
 	@Override
 	public String toString() {
 		StringBuffer output = new StringBuffer();
-		for (int i = 0; i < this.width; i++) {
-			for (int j = 0; j < this.height; j++) {
+		int width = ((Array2DGraph) this.values).getWidth();
+		int height = ((Array2DGraph) this.values).getHeight();
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
 				Array2DPosition position = new Array2DPosition(i, j);
 				output.append(this.values.get(position));
 				if (this.getDeltaValue(i, j)>0) {
@@ -135,8 +158,12 @@ public class Game {
 	}
 	
 	public void recalculatePercentSolvable() {
-		int min = Math.min(this.width, this.height);
-		CrossDelta delta = new CrossDelta(this.width, this.height);
+		int width = ((Array2DGraph) this.values).getWidth();
+		int height = ((Array2DGraph) this.values).getHeight();
+		int state= ((Array2DGraph) this.values).getState();
+		
+		int min = Math.min(width, height);
+		CrossDelta delta = new CrossDelta(width, height);
 		PercentSolvableCalculator c = new PercentSolvableCalculator(min, state, delta);
 		this._percentSolvable = c.calculate().doubleValue();
 	}
@@ -154,7 +181,9 @@ public class Game {
 			return 0;
 		}
 		else { // (this.editMode == false) {
-			CrossDelta delta = new CrossDelta(this.width, this.height);
+			int width = ((Array2DGraph) this.values).getWidth();
+			int height = ((Array2DGraph) this.values).getHeight();
+			CrossDelta delta = new CrossDelta(width, height);
 			Array2DPosition target = new Array2DPosition(x, y);
 			Array2DPosition cursor = new Array2DPosition(this.cursorX, this.cursorY);
 			return delta.getDeltaValue(target, cursor);
