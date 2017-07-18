@@ -44,7 +44,7 @@ public class Game {
 	}
 
 	public void setSize(int width, int height) {
-		this.values = new Array2DGraph(width, height, ((Array2DGraph) this.values).getState());
+		this.values = new Array2DGraph(width, height, this.values.getState());
 		this.reset();
 	}
 	
@@ -61,7 +61,7 @@ public class Game {
 	public void setState(int state) {
 		int width = ((Array2DGraph) this.values).getWidth();
 		int height = ((Array2DGraph) this.values).getHeight();
-		this.values = new Array2DGraph(width, height, ((Array2DGraph) this.values).getState());
+		this.values = new Array2DGraph(width, height, this.values.getState());
 		this.reset();
 	}	
 	
@@ -101,9 +101,11 @@ public class Game {
 		reset();
 		int width = ((Array2DGraph) this.values).getWidth();
 		int height = ((Array2DGraph) this.values).getHeight();
+		int state = this.values.getState();
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				for (int times = 0; times < (int) (Math.random() * (width * height)); times++) {
+				int tt = (int) (Math.random() * state);
+				for (int times = 0; times < state; times++) {
 					select(i, j);
 				}
 			}
