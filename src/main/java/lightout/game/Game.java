@@ -8,9 +8,6 @@ import lombok.Getter;
 
 public class Game {
 
-//	@Getter private int width;
-//	@Getter private int height;
-//	@Getter private int state;
 	@Getter private Graph<Array2DPosition> values;
 	
 	@Getter private boolean editMode = false;
@@ -22,9 +19,6 @@ public class Game {
 	
 	
 	public Game(int width, int height, int state) {
-//		this.width = width;
-//		this.height = height;
-//		this.state = state;
 		this.values = new Array2DGraph(width, height, state);
 		this.reset();
 	}
@@ -40,7 +34,7 @@ public class Game {
 	}
 	
 	public int getState() {
-		int state = ((Array2DGraph) this.values).getState();
+		int state = this.values.getState();
 		return state;
 	}
 
