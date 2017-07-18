@@ -12,13 +12,11 @@ public class Array2DGraph implements Graph<Array2DPosition> {
 
 	@Getter private int width;
 	@Getter private int height;
-	@Getter private int state;
 	private int[][] values;
 	
-	public Array2DGraph(int width, int height, int state) {
+	public Array2DGraph(int width, int height) {
 		this.width = width;
 		this.height = height;
-		this.state = state;
 		this.values = new int[this.width][this.height];
 	}
 
@@ -51,17 +49,21 @@ public class Array2DGraph implements Graph<Array2DPosition> {
 	}
 
 	public int get(Array2DPosition position) {
-		return this.values[position.getX()][position.getY()];
+		int x = position.getX();
+		int y = position.getY();
+		return this.values[x][y];
 	}
 	
+	public void set(Array2DPosition position, int value) {
+		int x = position.getX();
+		int y = position.getY();
+		this.values[x][y] = value;
+	}
+
 	public void increase(Array2DPosition position, int delta) {
 		int x = position.getX();
 		int y = position.getY();
 		this.values[x][y] += delta;
-		while(this.values[x][y] < 0) {
-			this.values[x][y] += this.state;
-		}
-		this.values[x][y] %= this.state;
 	}
 
 	public boolean isAllEquals(int n) {

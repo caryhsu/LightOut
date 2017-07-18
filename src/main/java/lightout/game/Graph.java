@@ -4,23 +4,17 @@ import java.util.function.Consumer;
 
 public interface Graph<P extends Position> {
 
-	public int getState();
-
-	default public void increase(P position) {
-		increase(position, 1);
-	};
-
-	public void increase(P position, int deltaValue);
-
 	default public void reset() {
 		reset(0);
 	};
 	
 	public void reset(int value);
 
-	public boolean isAllEquals(int i);
+	public boolean isAllEquals(int n);
 
 	public int get(P position);
+	
+	public void set(P position, int value);
 
 	public int[][] getValues();
 	
