@@ -7,40 +7,40 @@ import lightout.game.array2d.Array2DPosition;
 
 public interface Graph {
 
-	default public void reset() {
+	default void reset() {
 		reset(0);
 	};
 	
-	public void reset(int value);
+	void reset(int value);
 
-	public boolean checkAllPositions(Predicate<Integer> predicate);
+	boolean checkAllPositions(Predicate<Integer> predicate);
 
-	public int get(Position position);
+	int get(Position position);
 	
-	public void set(Position position, int value);
+	void set(Position position, int value);
 
-	default public void increase(Position position) {
+	default void increase(Position position) {
 		increase(position, 1);
 	}
 	
-	default public void increase(Position position, int value) {
+	default void increase(Position position, int value) {
 		set(position, get(position) + value);
 	}
 	
-	public int[][] getValues();
+	int[][] getValues();
 	
-	public Position[] getPositions();
+	Position[] getPositions();
 	
-	public Vertex[] getVertexes();
+	Vertex[] getVertexes();
+	Vertex getVertex(Position position);
+	
+	void forEachPosition(Consumer<Position> action);
+	void forEachVertex(Consumer<Vertex> action);
+	
+	Position[] getNeighberhood(Position position);
 
-	public Vertex getVertex(Position position);
-	
-	public void forEachPosition(Consumer<Position> action);
-	public void forEachVertex(Consumer<Vertex> action);
-	
-	public Position[] getNeighberhood(Position position);
+	Position move(Position position, String direction);
 
-	public Position move(Position position, char direction);
-
+	boolean inScope(Position position);
 	
 }

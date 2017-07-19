@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 import lightout.game.Game;
 import lightout.game.Graph;
 import lightout.game.array2d.Array2DPosition;
-import lightout.game.array2d.CrossDelta;
+import lightout.game.array2d.NeighberhoodDelta;
 import lightout.solver.PercentSolvableCalculator;
 import lightout.solver.Solver;
 import lombok.Getter;
@@ -323,7 +323,7 @@ public class Board extends JFrame {
 		int state = game.getState();
 		Graph values = game.getValues();
 		// Create a solver
-		CrossDelta delta = new CrossDelta(width, height);
+		NeighberhoodDelta delta = new NeighberhoodDelta(values);
 		
 		Solver einstein = new Solver(width, height, state, delta);
 		

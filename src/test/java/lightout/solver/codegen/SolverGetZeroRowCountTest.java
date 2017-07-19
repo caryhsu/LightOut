@@ -4,7 +4,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import lightout.game.array2d.CrossDelta;
+import lightout.game.array2d.Array2DGraph;
+import lightout.game.array2d.NeighberhoodDelta;
 import lightout.solver.Solver;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +19,9 @@ public class SolverGetZeroRowCountTest {
 	public void generateGetZeroCount() {
 		for(int size = 3; size < 30; size++) {
 			for(int state = 2; state < 7; state++) {
-				CrossDelta delta = new CrossDelta(size, size);
+				Array2DGraph g = new Array2DGraph(size, size);
+				g.setModularNumber(state);
+				NeighberhoodDelta delta = new NeighberhoodDelta(g);
 				Solver percentSolvableCalculator = new Solver(size, size, state, delta);
 				percentSolvableCalculator.setBVector(new int[size * size]);
 				percentSolvableCalculator.RowReduce();

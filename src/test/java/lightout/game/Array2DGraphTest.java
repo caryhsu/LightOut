@@ -1,6 +1,7 @@
 package lightout.game;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
@@ -62,6 +63,37 @@ public class Array2DGraphTest {
 				.filter(v -> v.getValue() == 10)
 				.collect(Collectors.toList());
 		assertThat(vertexes2.size(), is(1));
+	}
+
+	@Test
+	public void testGetSetWithModularNumber() {
+		Array2DGraph g = new Array2DGraph(4, 5);
+		assertNull(g.getModularNumber());
+		g.setModularNumber(7);
+		assertThat(g.getModularNumber(), is(7));
+
+		g.set(new Array2DPosition(2, 1), 6);
+		assertThat(g.get(new Array2DPosition(2, 1)), is(6));
+
+		g.set(new Array2DPosition(2, 3), 8);
+		assertThat(g.get(new Array2DPosition(2, 3)), is(1));
+	}
+	
+	@Test
+	public void testMovePosition() {
+		Array2DGraph g = new Array2DGraph(4, 5);
+		Array2DPosition position = new Array2DPosition(1, 2);
+		{
+			Array2DPosition pos2 = new Array2DPosition(1, 3);
+			assertThat(g.moveDown(position), is(pos2));
+		}
+		{
+			Array2DPosition pos2 = new Array2DPosition(1, 4);
+			assertThat(g.moveDown(position, 2), is(pos2));
+		}
+		{
+			assertNull(g.moveDown(position, 3));
+		}
 	}
 
 	@Test

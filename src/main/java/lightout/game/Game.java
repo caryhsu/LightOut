@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import lightout.game.array2d.Array2DGraph;
 import lightout.game.array2d.Array2DPosition;
-import lightout.game.array2d.CrossDelta;
+import lightout.game.array2d.NeighberhoodDelta;
 import lightout.solver.PercentSolvableCalculator;
 import lombok.Getter;
 
@@ -12,7 +12,7 @@ public class Game {
 
 	@Getter private int state;
 	@Getter private Array2DGraph values;
-	@Getter private CrossDelta delta;
+	@Getter private NeighberhoodDelta delta;
 	
 	@Getter private boolean editMode = false;
 	@Getter private Position cursor;
@@ -20,7 +20,7 @@ public class Game {
 	
 	public Game(int width, int height, int state) {
 		this.values = new Array2DGraph(width, height);
-		this.delta = new CrossDelta(width, height);
+		this.delta = new NeighberhoodDelta(this.values);
 		this.state = state;
 		this.reset();
 	}
@@ -42,7 +42,7 @@ public class Game {
 
 	public void setSize(int width, int height) {
 		this.values = new Array2DGraph(width, height);
-		this.delta = new CrossDelta(width, height);
+		this.delta = new NeighberhoodDelta(this.values);
 		this.reset();
 	}
 	

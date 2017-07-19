@@ -2,7 +2,7 @@ package lightout.solver;
 import lightout.field.Matrix;
 import lightout.field.Zn;
 import lightout.game.array2d.Array2DPosition;
-import lightout.game.array2d.CrossDelta;
+import lightout.game.array2d.NeighberhoodDelta;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,9 +14,9 @@ public class Solver {
 	int boardCol;
 	int state;
 	
-	@Getter @Setter private CrossDelta delta;
+	@Getter @Setter private NeighberhoodDelta delta;
 
-	public Solver(int boardRow, int boardCol, int state, CrossDelta delta) {
+	public Solver(int boardRow, int boardCol, int state, NeighberhoodDelta delta) {
 		this.boardRow = boardRow;
 		this.boardCol = boardCol;
 		this.delta = delta;

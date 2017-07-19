@@ -2,7 +2,8 @@ package lightout.solver;
 import org.junit.Assert;
 import org.junit.Test;
 
-import lightout.game.array2d.CrossDelta;
+import lightout.game.array2d.Array2DGraph;
+import lightout.game.array2d.NeighberhoodDelta;
 
 public class SolverGetZeroRowCountTest {
 
@@ -146,23 +147,24 @@ public class SolverGetZeroRowCountTest {
 	}
 	
 	public void testGetZeroRowCount(int size, int state, int assetResult) {
-		CrossDelta delta = new CrossDelta(size, size);
+		Array2DGraph g = new Array2DGraph(size, size);
+		NeighberhoodDelta delta = new NeighberhoodDelta(g);
 		Solver percentSolvableCalculator = new Solver(size, size, state, delta);
 		percentSolvableCalculator.setBVector(new int[size * size]);
 		percentSolvableCalculator.RowReduce();
 		int zeroRowCount = percentSolvableCalculator.zeroRowCount();
 		Assert.assertEquals(zeroRowCount, assetResult);
 	}
-
-	@Test
-	public void test1() {
-		int size = 5; int state = 2;
-		CrossDelta delta = new CrossDelta(5, 5);
-		Solver percentSolvableCalculator = new Solver(size, size, state, delta);
-		percentSolvableCalculator.setBVector(new int[size * size]);
-		System.out.println(percentSolvableCalculator);
-		percentSolvableCalculator.RowReduce();
-		System.out.println(percentSolvableCalculator);
-
-	}	
+//
+//	@Test
+//	public void test1() {
+//		int size = 5; int state = 2;
+//		NeighberhoodDelta delta = new NeighberhoodDelta(5, 5);
+//		Solver percentSolvableCalculator = new Solver(size, size, state, delta);
+//		percentSolvableCalculator.setBVector(new int[size * size]);
+//		System.out.println(percentSolvableCalculator);
+//		percentSolvableCalculator.RowReduce();
+//		System.out.println(percentSolvableCalculator);
+//
+//	}	
 }

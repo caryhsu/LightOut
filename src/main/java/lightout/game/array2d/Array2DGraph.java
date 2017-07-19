@@ -6,23 +6,24 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import com.google.common.collect.Iterables;
-
 import lightout.game.Graph;
 import lightout.game.Position;
 import lightout.game.Vertex;
 import lombok.Getter;
+import lombok.Setter;
 
 public class Array2DGraph implements Graph {
 
 	@Getter private int width;
 	@Getter private int height;
 	private int[][] values;
+	@Getter @Setter private Integer modularNumber = null;
 	
 	public Array2DGraph(int width, int height) {
 		this.width = width;
 		this.height = height;
 		this.values = new int[this.width][this.height];
+		this.modularNumber = null;
 	}
 
 	public void reset() {
@@ -95,13 +96,22 @@ public class Array2DGraph implements Graph {
 	public int get(Position position) {
 		int x = ((Array2DPosition) position).getX();
 		int y = ((Array2DPosition) position).getY();
-		return this.values[x][y];
+		return this.modularNumber == null? this.values[x][y] : fix(this.values[x][y]);
+	}
+
+	private int fix(int n) {
+		while(n < 0) {
+			n = n + this.modularNumber;
+		}
+		return n % this.modularNumber;
 	}
 
 	@Override
 	public void set(Position position, int value) {
 		int x = ((Array2DPosition) position).getX();
 		int y = ((Array2DPosition) position).getY();
+		if (this.modularNumber != null) 
+			value = fix(value);
 		this.values[x][y] = value;
 	}
 
@@ -116,38 +126,99 @@ public class Array2DGraph implements Graph {
 	
 	@Override
 	public Position[] getNeighberhood(Position position) {  
-		char[] directions = new char[] {'L', 'R', 'U', 'D'};
 		List<Position> positions = new ArrayList<>();
-		for(char direction : directions) {
-			Position newPos = move(position, direction);
-			if (newPos != null)
-				positions.add(newPos);
+		{
+			Position newPos = moveLeft(position);
+			if (newPos != null) positions.add(newPos);
+		}
+		{
+			Position newPos = moveRight(position);
+			if (newPos != null) positions.add(newPos);
+		}
+		{
+			Position newPos = moveDown(position);
+			if (newPos != null) positions.add(newPos);
+		}
+		{
+			Position newPos = moveUp(position);
+			if (newPos != null) positions.add(newPos);
 		}
 		return positions.toArray(new Position[] {});
 	}
 
 	@Override
-	public Position move(Position position, char direction) {
-		int x = ((Array2DPosition) position).getX();
-		int y = ((Array2DPosition) position).getY();
-		if (direction == '←' || direction == 'L') {
-			x = x - 1;
+	public Position move(Position position, String direction) {
+		String[] ds = direction.toLowerCase().split(",");
+		for(String d : ds) {
+			switch(d.trim()) {
+			case "":
+				break;
+			case "left":
+				position = moveLeft(position); break;
+			case "right":
+				position = moveRight(position); break;
+			case "up":
+				position = moveUp(position); break;
+			case "down":
+				position = moveDown(position); break;
+			default:
+				throw new RuntimeException("illegal direction:" + direction.toLowerCase());
+			}
 		}
-		else if (direction == '→' || direction == 'R') {
-			x = x + 1;
-		}
-		else if (direction == '↑' || direction == 'U') {
-			y = y - 1;
-		}
-		else if (direction == '↓' || direction == 'D') {
-			y = y + 1;
-		}
-		if (x < 0 || x >= this.width || y < 0 || y <= this.height) {
-			return null;
-		}
-		return new Array2DPosition(x, y);
+		return position;
 	}
 	
+	@Override
+	public boolean inScope(Position position) {
+		int x = ((Array2DPosition) position).getX();
+		int y = ((Array2DPosition) position).getY();
+		return inScope(x, y);
+	}
+	
+	public boolean inScope(int x, int y) {
+		return x >= 0 && y >= 0 && x < this.width && y < this.height;
+	}
+
+	public Position moveLeft(Position position) {
+		return moveLeft(position, 1);
+	}
+		
+	public Position moveLeft(Position position, int steps) {
+		int x = ((Array2DPosition) position).getX() - steps;
+		int y = ((Array2DPosition) position).getY();
+		return !inScope(x, y) ? null : new Array2DPosition(x, y);
+	}
+
+	public Position moveRight(Position position) {
+		return moveRight(position, 1);
+	}
+		
+	public Position moveRight(Position position, int steps) {
+		int x = ((Array2DPosition) position).getX() + steps;
+		int y = ((Array2DPosition) position).getY();
+		return !inScope(x, y) ? null : new Array2DPosition(x, y);
+	}
+
+	public Position moveUp(Position position) {
+		return moveUp(position, 1);
+	}
+	
+	public Position moveUp(Position position, int steps) {
+		int x = ((Array2DPosition) position).getX();
+		int y = ((Array2DPosition) position).getY() - steps;
+		return !inScope(x, y) ? null : new Array2DPosition(x, y);
+	}
+
+	public Position moveDown(Position position) {
+		return moveDown(position, 1);
+	}
+	
+	public Position moveDown(Position position, int steps) {
+		int x = ((Array2DPosition) position).getX();
+		int y = ((Array2DPosition) position).getY() + steps;
+		return !inScope(x, y) ? null : new Array2DPosition(x, y);
+	}
+
 	public int[][] getValues() {
 		return this.values;
 	}
