@@ -56,9 +56,7 @@ public class Game {
 	}
 
 	public void setState(int state) {
-		int width = ((Array2DGraph) this.values).getWidth();
-		int height = ((Array2DGraph) this.values).getHeight();
-		this.values = new Array2DGraph(width, height);
+		this.state = state;
 		this.reset();
 	}	
 	

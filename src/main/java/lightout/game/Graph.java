@@ -15,11 +15,19 @@ public interface Graph<P extends Position> {
 	public int get(P position);
 	
 	public void set(P position, int value);
-
+	
+	default public void increase(P position, int value) {
+		set(position, get(position) + value);
+	}
+	
 	public int[][] getValues();
 	
 	public P[] getPositions();
 	
 	public void forEachPosition(Consumer<P> action);
+	
+	public P[] getNeighberhood(P position);
+
+	public P move(P position, char direction);
 	
 }

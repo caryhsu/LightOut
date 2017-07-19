@@ -4,7 +4,7 @@ import lightout.game.Delta;
 import lombok.Getter;
 import lombok.Setter;
 
-public class CrossDelta implements Delta<Array2DPosition> {
+public class CrossDelta implements Delta<Array2DGraph, Array2DPosition> {
 
 	@Getter @Setter private int width;
 	@Getter @Setter private int height;

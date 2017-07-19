@@ -1,5 +1,6 @@
 package lightout.game.array2d;
 
+import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -77,8 +78,43 @@ public class Array2DGraph implements Graph<Array2DPosition> {
 		return true;
 	}
 
+	@Override
+	public Array2DPosition[] getNeighberhood(Array2DPosition position) {  
+		char[] directions = new char[] {'L', 'R', 'U', 'D'};
+		List<Array2DPosition> positions = new ArrayList<Array2DPosition>();
+		for(char direction : directions) {
+			Array2DPosition newPos = move(position, direction);
+			if (newPos != null)
+				positions.add(newPos);
+		}
+		return positions.toArray(new Array2DPosition[] {});
+	}
+
+	@Override
+	public Array2DPosition move(Array2DPosition position, char direction) {
+		int x = position.getX();
+		int y = position.getY();
+		if (direction == '←' || direction == 'L') {
+			x = x - 1;
+		}
+		else if (direction == '→' || direction == 'R') {
+			x = x + 1;
+		}
+		else if (direction == '↑' || direction == 'U') {
+			y = y - 1;
+		}
+		else if (direction == '↓' || direction == 'D') {
+			y = y + 1;
+		}
+		if (x < 0 || x >= this.width || y < 0 || y <= this.height) {
+			return null;
+		}
+		return new Array2DPosition(x, y);
+	}
+	
 	public int[][] getValues() {
 		return this.values;
 	}
+	
 	
 }
