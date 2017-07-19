@@ -221,7 +221,7 @@ public class Board extends JFrame {
 		
 		int width = game.getWidth();
 		int height = game.getHeight();
-		Graph<Array2DPosition> values = game.getValues();
+		Graph values = game.getValues();
 		
 		p.setLayout(new GridLayout(width, height));
 		p.setPreferredSize(new Dimension(600, 600));
@@ -255,7 +255,7 @@ public class Board extends JFrame {
 
 					@Override
 					public void mouseEntered(MouseEvent arg0) {
-						game.setCursor(x, y);
+						game.setCursor(new Array2DPosition(x, y));
 						refreshModelBinding();
 					}
 
@@ -294,7 +294,7 @@ public class Board extends JFrame {
 	private void refreshModelBinding() {
 		int width = game.getWidth();
 		int height = game.getHeight();
-		Graph<Array2DPosition> values = game.getValues();
+		Graph values = game.getValues();
 		
 		GameColorManager cm = new GameColorManager(game.getState());
 		for (int i = 0; i < width; i++) {
@@ -321,7 +321,7 @@ public class Board extends JFrame {
 		int width = game.getWidth();
 		int height = game.getHeight();
 		int state = game.getState();
-		Graph<Array2DPosition> values = game.getValues();
+		Graph values = game.getValues();
 		// Create a solver
 		CrossDelta delta = new CrossDelta(width, height);
 		
@@ -368,7 +368,7 @@ public class Board extends JFrame {
 		int width = game.getWidth();
 		int height = game.getHeight();
 		int state = game.getState();
-		Graph<Array2DPosition> values = game.getValues();
+		Graph values = game.getValues();
 		int[] b = new int[width * height];
 		int count = 0;
 		for (int i = 0; i < width; i++) {
@@ -382,7 +382,7 @@ public class Board extends JFrame {
 	}
 
 	public int[][] solve() {
-		Graph<Array2DPosition> values = game.getValues();
+		Graph values = game.getValues();
 		return values.getValues();
 	}
 	

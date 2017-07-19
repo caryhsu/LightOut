@@ -11,7 +11,12 @@ public class GameColorManager {
 	}
 	
 	public static Color getColor(String a) {
-		return Color.decode(a);
+		try {
+			return Color.decode(a);
+		}
+		catch(NumberFormatException ex) {
+			throw new RuntimeException("illegal color:" + a, ex);
+		}
 	}
 	
 	public String darkenColor(int currState) {

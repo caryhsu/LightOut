@@ -12,4 +12,8 @@ public class Array2DPosition implements Position {
 	@Getter private int x;
 	@Getter private int y;
 	
+	@Override
+	public String toString() {
+		return "[" + x + "," + y + "]";
+	}
 }

@@ -1,10 +1,11 @@
 package lightout.game.array2d;
 
 import lightout.game.Delta;
+import lightout.game.Position;
 import lombok.Getter;
 import lombok.Setter;
 
-public class CrossDelta implements Delta<Array2DGraph, Array2DPosition> {
+public class CrossDelta implements Delta {
 
 	@Getter @Setter private int width;
 	@Getter @Setter private int height;
@@ -14,12 +15,12 @@ public class CrossDelta implements Delta<Array2DGraph, Array2DPosition> {
 		this.height = height;
 	}
 	
-	
-	public int getDeltaValue(Array2DPosition targetPosition, Array2DPosition cursorPosition) {
-		int x = targetPosition.getX();
-		int y = targetPosition.getY();
-		int cursorX = cursorPosition.getX();
-		int cursorY = cursorPosition.getY();
+	@Override
+	public int getDeltaValue(Position targetPosition, Position cursorPosition) {
+		int x = ((Array2DPosition) targetPosition).getX();
+		int y = ((Array2DPosition) targetPosition).getY();
+		int cursorX = ((Array2DPosition) cursorPosition).getX();
+		int cursorY = ((Array2DPosition) cursorPosition).getY();
 		if (x == cursorX && y == cursorY) {
 			return 1;
 		}

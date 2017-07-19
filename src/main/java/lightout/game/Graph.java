@@ -1,8 +1,11 @@
 package lightout.game;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
-public interface Graph<P extends Position> {
+import lightout.game.array2d.Array2DPosition;
+
+public interface Graph {
 
 	default public void reset() {
 		reset(0);
@@ -10,24 +13,34 @@ public interface Graph<P extends Position> {
 	
 	public void reset(int value);
 
-	public boolean isAllEquals(int n);
+	public boolean checkAllPositions(Predicate<Integer> predicate);
 
-	public int get(P position);
+	public int get(Position position);
 	
-	public void set(P position, int value);
+	public void set(Position position, int value);
+
+	default public void increase(Position position) {
+		increase(position, 1);
+	}
 	
-	default public void increase(P position, int value) {
+	default public void increase(Position position, int value) {
 		set(position, get(position) + value);
 	}
 	
 	public int[][] getValues();
 	
-	public P[] getPositions();
+	public Position[] getPositions();
 	
-	public void forEachPosition(Consumer<P> action);
-	
-	public P[] getNeighberhood(P position);
+	public Vertex[] getVertexes();
 
-	public P move(P position, char direction);
+	public Vertex getVertex(Position position);
+	
+	public void forEachPosition(Consumer<Position> action);
+	public void forEachVertex(Consumer<Vertex> action);
+	
+	public Position[] getNeighberhood(Position position);
+
+	public Position move(Position position, char direction);
+
 	
 }
