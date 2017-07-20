@@ -72,7 +72,7 @@ public class Game {
 			}
 		}
 		else { // if (this.editMode == false)
-			this.delta.apply((Array2DGraph) this.values, (Array2DPosition) this.cursor);
+			this.delta.apply((Array2DPosition) this.cursor);
 		}
 	}
 

@@ -96,14 +96,17 @@ public class Array2DGraph implements Graph {
 	public int get(Position position) {
 		int x = ((Array2DPosition) position).getX();
 		int y = ((Array2DPosition) position).getY();
-		return this.modularNumber == null? this.values[x][y] : fix(this.values[x][y]);
+		return this.modularNumber == null? this.values[x][y] : mod(this.values[x][y]);
 	}
 
-	private int fix(int n) {
-		while(n < 0) {
-			n = n + this.modularNumber;
+	public int mod(int n) {
+		if (this.modularNumber != null) {
+			n %= this.modularNumber;
+			if (n < 0) {
+				n += this.modularNumber;
+			}
 		}
-		return n % this.modularNumber;
+		return n;
 	}
 
 	@Override
@@ -111,7 +114,7 @@ public class Array2DGraph implements Graph {
 		int x = ((Array2DPosition) position).getX();
 		int y = ((Array2DPosition) position).getY();
 		if (this.modularNumber != null) 
-			value = fix(value);
+			value = mod(value);
 		this.values[x][y] = value;
 	}
 
@@ -219,6 +222,18 @@ public class Array2DGraph implements Graph {
 		return !inScope(x, y) ? null : new Array2DPosition(x, y);
 	}
 
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		for(int x = 0; x < this.width; x++) {
+			for(int y = 0; y < this.height; y++) {
+				sb.append(this.get(new Array2DPosition(x, y))).append(' ');
+			}
+			sb.append('\n');
+		}
+		return sb.toString();
+	}
+	
 	public int[][] getValues() {
 		return this.values;
 	}

@@ -1,8 +1,8 @@
-package lightout.game;
+package lightout.game.array2d;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
+import lightout.game.Position;
+import lightout.game.Vertex;
 import lightout.game.array2d.Array2DGraph;
 import lightout.game.array2d.Array2DPosition;
 
@@ -97,6 +99,51 @@ public class Array2DGraphTest {
 	}
 
 	@Test
+	public void testMovePosition2() {
+		Array2DGraph g = new Array2DGraph(4, 5);
+		Array2DPosition position = new Array2DPosition(1, 2);
+		{
+			Position p = position;
+			p = g.moveUp(p);
+			p = g.moveDown(p);
+			assertThat(p, is(position));
+		}
+		{
+			Position p = position;
+			p = g.moveLeft(p);
+			p = g.moveRight(p);
+			assertThat(p, is(position));
+		}
+		{
+			Position p = position;
+			p = g.moveUp(p);
+			p = g.moveLeft(p);
+			p = g.moveDown(p);
+			p = g.moveRight(p);
+			assertThat(p, is(position));
+		}
+	}
+	
+	@Test
+	public void testNeighborhood() {
+		Array2DGraph g = new Array2DGraph(4, 5);
+		{
+			Array2DPosition p = new Array2DPosition(0, 0);
+			Position[] neighborhoods = g.getNeighberhood(p);
+			assertThat(neighborhoods.length, is(2));
+		}
+		{
+			Array2DPosition p = new Array2DPosition(0, 1);
+			Position[] neighborhoods = g.getNeighberhood(p);
+			assertThat(neighborhoods.length, is(3));
+		}
+		{
+			Array2DPosition p = new Array2DPosition(1, 1);
+			Position[] neighborhoods = g.getNeighberhood(p);
+			assertThat(neighborhoods.length, is(4));
+		}
+	}
+	@Test
 	public void testVertexGetSet() {
 		Array2DGraph g = new Array2DGraph(4, 5);
 		g.reset(3);
@@ -106,4 +153,18 @@ public class Array2DGraphTest {
 		assertThat(v.getValue(), is(10));
 		assertThat(g.get(p1), is(10));
 	}
+	
+	@Test
+	public void testMod() {
+		Array2DGraph g = new Array2DGraph(4, 5);
+		assertThat(g.mod(-1), is(-1));
+		g.setModularNumber(10);
+		assertThat(g.mod(-1), is(9));
+
+		for(int i = -100; i <=100; i++) {
+			assertTrue(g.mod(i) >= 0);
+			assertTrue(g.mod(i) < 10);
+		}
+	}
+	
 }
