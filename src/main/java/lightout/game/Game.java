@@ -39,8 +39,8 @@ public class Game {
 	}
 	
 	public void setEditMode(boolean editMode) {
-		this.editMode = editMode;
 		this.reset();
+		this.editMode = editMode;
 	}
 
 	public void setSize(int width, int height) {
@@ -62,22 +62,19 @@ public class Game {
 		this.reset();
 	}	
 	
-	public void select(int x, int y) {
-		this.setCursor(new Array2DPosition(x, y));
-		this.select();
-	}
-	
-	private void select() {
+	public void select(Position position) {
+		this.setCursor(position);
+		if (!this.values.inScope(position)) {
+			return;
+		}
 		if (this.editMode == true) {
-			if (this.cursor != null) {
-				this.values.increase((Array2DPosition) this.cursor);
-
-			}
+			this.deltaForEditMode.apply(this.cursor);
 		}
 		else { // if (this.editMode == false)
-			this.delta.apply((Array2DPosition) this.cursor);
+			this.delta.apply(this.cursor);
 		}
 	}
+	
 
 	public void reset() {
 		this.editMode = false;
@@ -99,7 +96,7 @@ public class Game {
 			for (int j = 0; j < height; j++) {
 				int tt = (int) (Math.random() * state);
 				for (int times = 0; times < tt; times++) {
-					select(i, j);
+					select(new Array2DPosition(i, j));
 				}
 			}
 		}

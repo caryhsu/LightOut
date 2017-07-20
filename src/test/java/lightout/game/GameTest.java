@@ -16,10 +16,27 @@ public class GameTest {
 		assertThat(game.getWidth(), is(5));
 		assertThat(game.getHeight(), is(6));
 		assertThat(game.getState(), is(3));
+		
+		game.setSize(7, 8);
+		assertThat(game.getWidth(), is(7));
+		assertThat(game.getHeight(), is(8));
+		
+		game.setState(10);
+		assertThat(game.getState(), is(10));
+	}
+
+	@Test
+	public void testEditMode() {
+		Game game = new Game(5, 6, 3);
 		assertThat(game.isEditMode(), is(false));
 		game.setEditMode(true);
 		assertThat(game.isEditMode(), is(true));
 		game.setEditMode(false);
+		assertThat(game.isEditMode(), is(false));
+		
+		game.setEditMode(true);
+		game.reset();
+		assertThat(game.isEditMode(), is(false));
 	}
 	
 	@Test
@@ -39,5 +56,13 @@ public class GameTest {
 		assertEquals(game.getCursor(), position);
 		game.clearCursor();
 		assertNull(game.getCursor());
+	}
+
+	@Test
+	public void testSelect() {
+		Game game = new Game(5, 6, 3);
+		Array2DPosition position = new Array2DPosition(1, 1);
+		game.select(position);
+		
 	}
 }
