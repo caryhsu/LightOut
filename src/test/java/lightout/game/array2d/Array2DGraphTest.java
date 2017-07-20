@@ -1,8 +1,9 @@
 package lightout.game.array2d;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,8 +13,6 @@ import org.junit.Test;
 
 import lightout.game.Position;
 import lightout.game.Vertex;
-import lightout.game.array2d.Array2DGraph;
-import lightout.game.array2d.Array2DPosition;
 
 public class Array2DGraphTest {
 

@@ -10,10 +10,12 @@ import lightout.game.array2d.SelfDeltaTest;
 import org.junit.runner.RunWith;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({Array2DGraphTest.class, 
-					Array2DPositionTest.class, 
-					NeighberhoodDeltaTest.class,
-					SelfDeltaTest.class
+@Suite.SuiteClasses({
+	GameTest.class,
+	Array2DGraphTest.class, 
+	Array2DPositionTest.class, 
+	NeighberhoodDeltaTest.class,
+	SelfDeltaTest.class
 					})
 public class TestSuite {
   //nothing

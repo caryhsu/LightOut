@@ -5,6 +5,7 @@ import java.util.Objects;
 import lightout.game.array2d.Array2DGraph;
 import lightout.game.array2d.Array2DPosition;
 import lightout.game.array2d.NeighberhoodDelta;
+import lightout.game.array2d.SelfDelta;
 import lightout.solver.PercentSolvableCalculator;
 import lombok.Getter;
 
@@ -12,6 +13,7 @@ public class Game {
 
 	@Getter private int state;
 	@Getter private Array2DGraph values;
+	@Getter private SelfDelta deltaForEditMode;
 	@Getter private NeighberhoodDelta delta;
 	
 	@Getter private boolean editMode = false;
@@ -21,6 +23,7 @@ public class Game {
 	public Game(int width, int height, int state) {
 		this.values = new Array2DGraph(width, height);
 		this.delta = new NeighberhoodDelta(this.values);
+		this.deltaForEditMode = new SelfDelta(this.values);
 		this.state = state;
 		this.reset();
 	}
@@ -37,7 +40,7 @@ public class Game {
 	
 	public void setEditMode(boolean editMode) {
 		this.editMode = editMode;
-		this.numberOfClicks = 0;
+		this.reset();
 	}
 
 	public void setSize(int width, int height) {
