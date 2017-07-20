@@ -1,5 +1,7 @@
 package lightout.game;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import lightout.game.array2d.Array2DGraph;
@@ -104,7 +106,8 @@ public class Game {
 	}
 
 	public boolean isSolved() {
-		return this.values.checkAllPositions(value -> value == state - 1);
+		List<Vertex> vertexes = Arrays.asList(this.values.getVertexes());
+		return vertexes.stream().allMatch(v->v.getValue()==state - 1);
 	}
 
 	@Override

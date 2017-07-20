@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
@@ -123,6 +124,32 @@ public class Array2DGraphTest {
 		}
 	}
 	
+	@Test
+	public void testMovePosition3() {
+		Array2DGraph g = new Array2DGraph(4, 5);
+		Array2DPosition position = new Array2DPosition(1, 2);
+		{
+			Position p1 = g.move(position, "up");
+			Position p2 = g.moveUp(position);
+			assertTrue(Objects.equals(p1, p2));
+		}
+		{
+			Position p1 = g.move(position, "down");
+			Position p2 = g.moveDown(position);
+			assertTrue(Objects.equals(p1, p2));
+		}
+		{
+			Position p1 = g.move(position, "left");
+			Position p2 = g.moveLeft(position);
+			assertTrue(Objects.equals(p1, p2));
+		}
+		{
+			Position p1 = g.move(position, "right");
+			Position p2 = g.moveRight(position);
+			assertTrue(Objects.equals(p1, p2));
+		}
+	}
+
 	@Test
 	public void testNeighborhood() {
 		Array2DGraph g = new Array2DGraph(4, 5);

@@ -1,9 +1,6 @@
 package lightout.game;
 
 import java.util.function.Consumer;
-import java.util.function.Predicate;
-
-import lightout.game.array2d.Array2DPosition;
 
 public interface Graph {
 
@@ -13,19 +10,9 @@ public interface Graph {
 	
 	void reset(int value);
 
-	boolean checkAllPositions(Predicate<Integer> predicate);
-
 	int get(Position position);
 	
 	void set(Position position, int value);
-
-	default void increase(Position position) {
-		increase(position, 1);
-	}
-	
-	default void increase(Position position, int value) {
-		set(position, get(position) + value);
-	}
 	
 	int[][] getValues();
 	

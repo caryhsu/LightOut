@@ -63,6 +63,6 @@ public class GameTest {
 		Game game = new Game(5, 6, 3);
 		Array2DPosition position = new Array2DPosition(1, 1);
 		game.select(position);
-		
+		System.out.println(game);
 	}
 }

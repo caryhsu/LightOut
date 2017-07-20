@@ -117,15 +117,6 @@ public class Array2DGraph implements Graph {
 			value = mod(value);
 		this.values[x][y] = value;
 	}
-
-	public boolean checkAllPositions(Predicate<Integer> predicate) {
-		for(Position position : this.getPositions()) {
-			int value = this.get(position);
-			if (!predicate.test(value)) 
-				return false;
-		}
-		return true;
-	}
 	
 	@Override
 	public Position[] getNeighberhood(Position position) {  
