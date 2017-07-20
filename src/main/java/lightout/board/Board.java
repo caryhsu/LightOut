@@ -267,7 +267,7 @@ public class Board extends JFrame {
 
 					@Override
 					public void mouseReleased(MouseEvent arg0) {
-						game.select(x, y);
+						game.select(new Array2DPosition(x, y));
 						refreshModelBinding();
 					}
 				});
