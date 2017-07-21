@@ -1,4 +1,4 @@
-package lightout.solver;
+package lightout.game.solver.impl1;
 import lightout.field.Matrix;
 import lightout.field.Zn;
 import lightout.game.array2d.Array2DPosition;

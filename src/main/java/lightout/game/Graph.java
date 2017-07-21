@@ -2,7 +2,7 @@ package lightout.game;
 
 import java.util.function.Consumer;
 
-public interface Graph {
+public interface Graph extends Cloneable {
 
 	default void reset() {
 		reset(0);
@@ -33,4 +33,5 @@ public interface Graph {
 	Integer getModularNumber();
 	void setModularNumber(Integer n);
 	
+	Graph clone();
 }

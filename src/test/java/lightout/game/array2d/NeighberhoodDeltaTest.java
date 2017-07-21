@@ -1,20 +1,14 @@
 package lightout.game.array2d;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
-
 import lightout.game.Vertex;
-
-import static org.junit.Assert.*;
-
-import static org.hamcrest.CoreMatchers.*;
 
 public class NeighberhoodDeltaTest {
 

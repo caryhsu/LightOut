@@ -8,7 +8,7 @@ import lightout.game.array2d.Array2DGraph;
 import lightout.game.array2d.Array2DPosition;
 import lightout.game.array2d.NeighberhoodDelta;
 import lightout.game.array2d.SelfDelta;
-import lightout.solver.PercentSolvableCalculator;
+import lightout.game.solver.impl1.PercentSolvableCalculator;
 import lombok.Getter;
 
 public class RectangleGame implements Game, Rectangle {

@@ -1,6 +1,7 @@
 package lightout.game.array2d;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -11,8 +12,9 @@ import lightout.game.Rectangle;
 import lightout.game.Vertex;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 
-public class Array2DGraph implements Graph, Rectangle {
+public class Array2DGraph implements Graph, Rectangle, Cloneable {
 
 	@Getter private int width;
 	@Getter private int height;
@@ -235,5 +237,14 @@ public class Array2DGraph implements Graph, Rectangle {
 	public int[][] getValues() {
 		return this.values;
 	}
-		
+
+	@SneakyThrows
+	public Graph clone() {
+		Array2DGraph other = (Array2DGraph) super.clone();
+		other.values = new int[this.width][this.height];
+		for (int i = 0; i < this.values.length; i++)
+		     other.values[i] = Arrays.copyOf(this.values[i], this.values[i].length);
+		return other;
+	}
+	
 }

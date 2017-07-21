@@ -1,4 +1,4 @@
-package lightout.solver;
+package lightout.game.solver.impl1;
 
 import lightout.game.array2d.NeighberhoodDelta;
 

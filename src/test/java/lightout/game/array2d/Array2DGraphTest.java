@@ -201,4 +201,12 @@ public class Array2DGraphTest {
 		}
 	}
 	
+	@Test
+	public void testClone() {
+		Graph g = new Array2DGraph(4, 5);
+		g.set(new Array2DPosition(1,1), 10);
+		Graph g2 = g.clone();
+		assertTrue(g.equals(g2));
+	}
+	
 }

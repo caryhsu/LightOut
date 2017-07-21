@@ -1,4 +1,4 @@
-package lightout.solver;
+package lightout.game.solver.impl1;
 
 import lombok.Getter;
 
