@@ -29,5 +29,8 @@ public interface Graph {
 	Position move(Position position, String direction);
 
 	boolean inScope(Position position);
+
+	Integer getModularNumber();
+	void setModularNumber(Integer n);
 	
 }

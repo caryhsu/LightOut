@@ -21,6 +21,8 @@ import javax.swing.JPanel;
 
 import lightout.game.Game;
 import lightout.game.Graph;
+import lightout.game.Rectangle;
+import lightout.game.RectangleGame;
 import lightout.game.array2d.Array2DPosition;
 import lightout.game.array2d.NeighberhoodDelta;
 import lightout.solver.PercentSolvableCalculator;
@@ -96,7 +98,7 @@ public class Board extends JFrame {
 		sideP.setPreferredSize(new Dimension(200, 600));
 
 		// Set puzzle's parameter
-		this.game = new Game(size, size, state);
+		this.game = new RectangleGame(size, size, state);
 
 		// initialize GUI for side Panel
 		// need to add methods for these buttons
@@ -185,7 +187,7 @@ public class Board extends JFrame {
 				String[] ss = s.split("x");
 				int width = Integer.parseInt(ss[0]);
 				int height = Integer.parseInt(ss[1]);
-				game.setSize(width, height);
+				((Rectangle) game).setSize(width, height);
 				createBoard();
 				p.revalidate();
 				subSolutionP.revalidate();
@@ -219,8 +221,8 @@ public class Board extends JFrame {
 		// initialize the values
 		game.reset();
 		
-		int width = game.getWidth();
-		int height = game.getHeight();
+		int width = ((Rectangle) game).getWidth();
+		int height = ((Rectangle) game).getHeight();
 		Graph values = game.getValues();
 		
 		p.setLayout(new GridLayout(width, height));
@@ -233,7 +235,7 @@ public class Board extends JFrame {
 				final int y = j;
 				Array2DPosition position = new Array2DPosition(i, j);
 				buttons[i][j] = new JButton(values.get(position) + "");
-				buttons[i][j].setFont(new Font("Dialog", Font.PLAIN, 60 - 3 * game.getWidth()));
+				buttons[i][j].setFont(new Font("Dialog", Font.PLAIN, 60 - 3 * ((Rectangle) game).getWidth()));
 				buttons[i][j].setOpaque(true);
 				/*
 				 * buttons[i][j].addActionListener(new ActionListener() {
@@ -292,8 +294,8 @@ public class Board extends JFrame {
 	}
 	
 	private void refreshModelBinding() {
-		int width = game.getWidth();
-		int height = game.getHeight();
+		int width = ((Rectangle) game).getWidth();
+		int height = ((Rectangle) game).getHeight();
 		Graph values = game.getValues();
 		
 		GameColorManager cm = new GameColorManager(game.getState());
@@ -318,8 +320,8 @@ public class Board extends JFrame {
 	}
 
 	public void publishSolution() {
-		int width = game.getWidth();
-		int height = game.getHeight();
+		int width = ((Rectangle) game).getWidth();
+		int height = ((Rectangle) game).getHeight();
 		int state = game.getState();
 		Graph values = game.getValues();
 		// Create a solver
@@ -365,8 +367,8 @@ public class Board extends JFrame {
 	}
 
 	public int[] publishB() {
-		int width = game.getWidth();
-		int height = game.getHeight();
+		int width = ((Rectangle) game).getWidth();
+		int height = ((Rectangle) game).getHeight();
 		int state = game.getState();
 		Graph values = game.getValues();
 		int[] b = new int[width * height];

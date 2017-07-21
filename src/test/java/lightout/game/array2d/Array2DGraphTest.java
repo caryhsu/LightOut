@@ -12,23 +12,30 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
+import lightout.game.Graph;
 import lightout.game.Position;
+import lightout.game.Rectangle;
 import lightout.game.Vertex;
 
 public class Array2DGraphTest {
 
 	@Test
 	public void testSize() {
-		Array2DGraph g = new Array2DGraph(4, 5);
+		Rectangle g = new Array2DGraph(4, 5);
 		assertThat(g.getWidth(), is(4));
 		assertThat(g.getHeight(), is(5));
-		assertThat(g.getPositions().length, is(20));
-		assertThat(g.getVertexes().length, is(20));
 	}
 	
 	@Test
+	public void testGetPositions() {
+		Graph g = new Array2DGraph(4, 5);
+		assertThat(g.getPositions().length, is(20));
+		assertThat(g.getVertexes().length, is(20));
+	}
+		
+	@Test
 	public void testReset1() {
-		Array2DGraph g = new Array2DGraph(4, 5);
+		Graph g = new Array2DGraph(4, 5);
 		g.reset();
 		List<Vertex> vertexes = Arrays.<Vertex>asList(g.getVertexes());
 		List<Vertex> vertexes1 = vertexes.stream()
@@ -39,7 +46,7 @@ public class Array2DGraphTest {
 	
 	@Test
 	public void testReset2() {
-		Array2DGraph g = new Array2DGraph(4, 5);
+		Graph g = new Array2DGraph(4, 5);
 		g.reset(3);
 		List<Vertex> vertexes = Arrays.<Vertex>asList(g.getVertexes());
 		List<Vertex> vertexes1 = vertexes.stream()
@@ -50,7 +57,7 @@ public class Array2DGraphTest {
 
 	@Test
 	public void testGetSet() {
-		Array2DGraph g = new Array2DGraph(4, 5);
+		Graph g = new Array2DGraph(4, 5);
 		g.reset(3);
 		Position p1 = new Array2DPosition(1, 1);
 		g.set(p1, 10);
@@ -69,7 +76,7 @@ public class Array2DGraphTest {
 
 	@Test
 	public void testGetSetWithModularNumber() {
-		Array2DGraph g = new Array2DGraph(4, 5);
+		Graph g = new Array2DGraph(4, 5);
 		assertNull(g.getModularNumber());
 		g.setModularNumber(7);
 		assertThat(g.getModularNumber(), is(7));
@@ -152,7 +159,7 @@ public class Array2DGraphTest {
 
 	@Test
 	public void testNeighborhood() {
-		Array2DGraph g = new Array2DGraph(4, 5);
+		Graph g = new Array2DGraph(4, 5);
 		{
 			Array2DPosition p = new Array2DPosition(0, 0);
 			Position[] neighborhoods = g.getNeighberhood(p);
@@ -169,9 +176,10 @@ public class Array2DGraphTest {
 			assertThat(neighborhoods.length, is(4));
 		}
 	}
+	
 	@Test
 	public void testVertexGetSet() {
-		Array2DGraph g = new Array2DGraph(4, 5);
+		Graph g = new Array2DGraph(4, 5);
 		g.reset(3);
 		Position p1 = new Array2DPosition(1, 1);
 		Vertex v = g.getVertex(p1);

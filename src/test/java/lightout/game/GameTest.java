@@ -12,22 +12,28 @@ public class GameTest {
 
 	@Test
 	public void testSize() {
-		Game game = new Game(5, 6, 3);
+		Rectangle game = new RectangleGame(5, 6, 3);
 		assertThat(game.getWidth(), is(5));
 		assertThat(game.getHeight(), is(6));
-		assertThat(game.getState(), is(3));
 		
 		game.setSize(7, 8);
 		assertThat(game.getWidth(), is(7));
 		assertThat(game.getHeight(), is(8));
 		
+	}
+
+	@Test
+	public void testState() {
+		Game game = new RectangleGame(5, 6, 3);
+		assertThat(game.getState(), is(3));
+			
 		game.setState(10);
 		assertThat(game.getState(), is(10));
 	}
 
 	@Test
 	public void testEditMode() {
-		Game game = new Game(5, 6, 3);
+		Game game = new RectangleGame(5, 6, 3);
 		assertThat(game.isEditMode(), is(false));
 		game.setEditMode(true);
 		assertThat(game.isEditMode(), is(true));
@@ -41,14 +47,14 @@ public class GameTest {
 	
 	@Test
 	public void testDelta() {
-		Game game = new Game(5, 6, 3);
+		RectangleGame game = new RectangleGame(5, 6, 3);
 		assertNotNull(game.getDelta());
 		assertNotNull(game.getDeltaForEditMode());
 	}
 	
 	@Test
 	public void testCursor() {
-		Game game = new Game(5, 6, 3);
+		Game game = new RectangleGame(5, 6, 3);
 		assertNull(game.getCursor());
 		Array2DPosition position = new Array2DPosition(1, 1);
 		game.setCursor(position);
@@ -60,7 +66,7 @@ public class GameTest {
 
 	@Test
 	public void testSelect() {
-		Game game = new Game(5, 6, 3);
+		Game game = new RectangleGame(5, 6, 3);
 		Array2DPosition position = new Array2DPosition(1, 1);
 		game.select(position);
 		System.out.println(game);

@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 import lightout.game.Graph;
 import lightout.game.Position;
+import lightout.game.Rectangle;
 import lightout.game.Vertex;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Array2DGraph implements Graph {
+public class Array2DGraph implements Graph, Rectangle {
 
 	@Getter private int width;
 	@Getter private int height;
@@ -26,6 +26,13 @@ public class Array2DGraph implements Graph {
 		this.modularNumber = null;
 	}
 
+	@Override
+	public void setSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+		this.values = new int[this.width][this.height];
+	}
+	
 	public void reset() {
 		reset(0);
 	}
@@ -228,6 +235,5 @@ public class Array2DGraph implements Graph {
 	public int[][] getValues() {
 		return this.values;
 	}
-
 		
 }
