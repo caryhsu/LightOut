@@ -10,10 +10,12 @@ import lightout.game.Graph;
 import lightout.game.Position;
 import lightout.game.Rectangle;
 import lightout.game.Vertex;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
+@EqualsAndHashCode(exclude={})
 public class Array2DGraph implements Graph, Rectangle, Cloneable {
 
 	@Getter private int width;

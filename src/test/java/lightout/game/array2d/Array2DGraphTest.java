@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import java.util.Arrays;
 import java.util.List;
@@ -204,9 +205,18 @@ public class Array2DGraphTest {
 	@Test
 	public void testClone() {
 		Graph g = new Array2DGraph(4, 5);
-		g.set(new Array2DPosition(1,1), 10);
+		g.reset();
+		Position position = new Array2DPosition(1,1);
+		g.set(position, 10);
 		Graph g2 = g.clone();
-		assertTrue(g.equals(g2));
+		assertTrue(Objects.equals(g, g2));
+		assertThat(g2.get(position), is(10));
+		
+		g.set(position, 11);
+		assertFalse(Objects.equals(g, g2));
+		assertThat(g.get(position), is(11));
+		assertThat(g2.get(position), is(10));
 	}
 	
+
 }
