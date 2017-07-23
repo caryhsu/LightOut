@@ -1,12 +1,14 @@
 package lightout.game;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
 
 import lightout.game.array2d.Array2DPosition;
-
-import static org.hamcrest.CoreMatchers.*;
-import org.junit.*;
-import static org.junit.Assert.*;
 
 public class GameTest {
 

@@ -22,7 +22,6 @@ public class GraphList implements Iterable<Graph> {
 	public Iterator<Graph> iterator() {
 		return new GraphIterator(first);
 	}
-
 	
 	public static class GraphIterator implements Iterator<Graph> {
 

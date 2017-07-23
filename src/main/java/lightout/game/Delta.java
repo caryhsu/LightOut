@@ -4,10 +4,11 @@ public interface Delta {
 
 	public int getDeltaValue(Position target, Position cursor);
 	
-	public Graph getGraph();
+	public Graph getTarget();
+	public void setTarget(Graph target);
 	
 	default public void apply(Position cursor) {
-		Graph graph = this.getGraph();
+		Graph graph = this.getTarget();
 		graph.forEachVertex(vertex -> {
 			int dv = getDeltaValue(vertex.getPosition(), cursor);
 			vertex.increase(dv);
@@ -27,7 +28,7 @@ public interface Delta {
 	}
 
 	default public void random(int state) {
-		Graph graph = this.getGraph();
+		Graph graph = this.getTarget();
 		graph.forEachVertex(vertex -> {
 			int tt = (int) (Math.random() * state);
 			for(int i = 0; i < tt; i++) {

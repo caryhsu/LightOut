@@ -27,6 +27,7 @@ public class RectangleGame implements Game, Rectangle {
 		this.delta = new NeighberhoodDelta(this.values);
 		this.deltaForEditMode = new SelfDelta(this.values);
 		this.state = state;
+		this.values.setModularNumber(this.state);
 		this.reset();
 	}
 
@@ -46,6 +47,7 @@ public class RectangleGame implements Game, Rectangle {
 	@Override
 	public void setSize(int width, int height) {
 		this.values = new Array2DGraph(width, height);
+		this.values.setModularNumber(this.state);
 		this.delta = new NeighberhoodDelta(this.values);
 		this.reset();
 	}
@@ -65,6 +67,7 @@ public class RectangleGame implements Game, Rectangle {
 
 	public void setState(int state) {
 		this.state = state;
+		this.values.setModularNumber(this.state);
 		this.reset();
 	}	
 	

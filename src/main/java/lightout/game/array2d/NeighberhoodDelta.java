@@ -8,22 +8,27 @@ import lightout.game.Delta;
 import lightout.game.Graph;
 import lightout.game.Position;
 import lombok.Getter;
+import lombok.Setter;
 
 public class NeighberhoodDelta implements Delta {
 
-	@Getter private Graph graph;
+	@Getter @Setter private Graph target;
+
+	public NeighberhoodDelta() {
+		this.target = null;
+	}
 	
-	public NeighberhoodDelta(Graph graph) {
-		this.graph = graph;
+	public NeighberhoodDelta(Graph target) {
+		this.target = target;
 	}
 	
 	@Override
-	public int getDeltaValue(Position target, Position cursor) {
-		if (Objects.equals(target, cursor)) {
+	public int getDeltaValue(Position targetPosition, Position cursor) {
+		if (Objects.equals(targetPosition, cursor)) {
 			return 1;
 		} else {
-			List<Position> neighberhood = Arrays.asList(graph.getNeighberhood(cursor));
-			if (neighberhood.contains(target)) {
+			List<Position> neighberhood = Arrays.asList(this.target.getNeighberhood(cursor));
+			if (neighberhood.contains(targetPosition)) {
 				return 1;
 			}
 			else {

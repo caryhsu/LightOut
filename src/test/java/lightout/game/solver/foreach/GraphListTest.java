@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.Iterator;
-import java.util.function.Consumer;
 
 import org.junit.Test;
 
@@ -49,7 +48,7 @@ public class GraphListTest {
 	
 	@Data
 	class N {
-		private int n = 0;
+		private long n = 0;
 		public void increase() {this.n++;}
 	}
 }

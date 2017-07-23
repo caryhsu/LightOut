@@ -6,13 +6,18 @@ import lightout.game.Delta;
 import lightout.game.Graph;
 import lightout.game.Position;
 import lombok.Getter;
+import lombok.Setter;
 
 public class SelfDelta implements Delta {
 
-	@Getter private Graph graph;
+	@Getter @Setter private Graph target;
+
+	public SelfDelta(Graph target) {
+		this.target = target;
+	}
 	
-	public SelfDelta(Graph graph) {
-		this.graph = graph;
+	public SelfDelta() {
+		this.target = null;
 	}
 	
 	@Override

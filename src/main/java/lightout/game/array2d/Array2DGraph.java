@@ -10,6 +10,7 @@ import lightout.game.Graph;
 import lightout.game.Position;
 import lightout.game.Rectangle;
 import lightout.game.Vertex;
+import lightout.game.solver.foreach.GraphList;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -249,4 +250,9 @@ public class Array2DGraph implements Graph, Rectangle, Cloneable {
 		return other;
 	}
 	
+	public static GraphList getGraphList(int width, int height, int moduleNumber) {
+		Graph g0 = new Array2DGraph(width, height);
+		g0.setModularNumber(moduleNumber);
+		return new GraphList(g0);
+	}
 }

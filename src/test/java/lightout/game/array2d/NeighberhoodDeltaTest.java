@@ -44,5 +44,17 @@ public class NeighberhoodDeltaTest {
 				assertThat(c1, is(3L));
 		}
 		System.out.println(g);
+		delta.apply(p);
+		{
+			long c0 = vertexes.stream()
+				.filter(v->v.getValue() == 0)
+				.count();
+			assertThat(c0, is(20L));
+			long c1 = vertexes.stream()
+					.filter(v->v.getValue() == 1)
+					.count();
+				assertThat(c1, is(0L));
+		}
+		System.out.println(g);
 	}
 }
