@@ -32,12 +32,12 @@ public class TryAllCaseSolutionFinder implements SolutionFinder {
 		List<Graph> solutions = new ArrayList<>();
 		graphList.forEach(pattern ->{
 			Graph f = applyer.apply(pattern);
-			/*
-			System.out.println("try pattern:");
-			System.out.println(pattern);
-			System.out.println("result:");
-			System.out.println(f);
-			*/
+			
+//			System.out.println("try pattern:");
+//			System.out.println(pattern);
+//			System.out.println("result:");
+//			System.out.println(f);
+			
 			f.setModularNumber(finalGraph.getModularNumber());
 			if (Arrays.deepEquals(f.getValues(), finalGraph.getValues())) {
 				solutions.add(pattern);

@@ -125,9 +125,21 @@ public class Array2DGraph implements Graph, Rectangle, Cloneable {
 	public void set(Position position, int value) {
 		int x = ((Array2DPosition) position).getX();
 		int y = ((Array2DPosition) position).getY();
+		set(x, y, value);
+	}
+
+	public void set(int x, int y, int value) {
 		if (this.modularNumber != null) 
 			value = mod(value);
 		this.values[x][y] = value;
+	}
+
+	public void set(int[][] values) {
+		for(int x = 0; x < values.length; x++) {
+			for(int y = 0; y < values[x].length; y++) {
+				this.set(x, y, values[x][y]);
+			}
+		}
 	}
 	
 	@Override
