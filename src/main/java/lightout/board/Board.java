@@ -19,10 +19,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import lightout.game.Game;
 import lightout.game.Graph;
 import lightout.game.Rectangle;
-import lightout.game.RectangleGame;
 import lightout.game.array2d.Array2DPosition;
 import lightout.game.array2d.NeighberhoodDelta;
 import lightout.game.solver.impl1.PercentSolvableCalculator;
@@ -32,7 +30,7 @@ import lombok.Setter;
 
 public class Board extends JFrame {
 	// Fields that deals with the puzzle's logic
-	@Getter @Setter private Game game;
+	@Getter @Setter private BoardViewModel game;
 
 	// Fields that deals with GUI
 	// private JPanel m = new JPanel(new FlowLayout());
@@ -98,7 +96,7 @@ public class Board extends JFrame {
 		sideP.setPreferredSize(new Dimension(200, 600));
 
 		// Set puzzle's parameter
-		this.game = new RectangleGame(size, size, state);
+		this.game = new BoardViewModel(size, size, state);
 
 		// initialize GUI for side Panel
 		// need to add methods for these buttons
@@ -223,7 +221,7 @@ public class Board extends JFrame {
 		
 		int width = ((Rectangle) game).getWidth();
 		int height = ((Rectangle) game).getHeight();
-		Graph values = game.getValues();
+		Graph values = game.getGraph();
 		
 		p.setLayout(new GridLayout(width, height));
 		p.setPreferredSize(new Dimension(600, 600));
@@ -296,7 +294,7 @@ public class Board extends JFrame {
 	private void refreshModelBinding() {
 		int width = ((Rectangle) game).getWidth();
 		int height = ((Rectangle) game).getHeight();
-		Graph values = game.getValues();
+		Graph values = game.getGraph();
 		
 		//GameColorManager cm = new GameColorManager(game.getState());
 		for (int i = 0; i < width; i++) {
@@ -323,7 +321,7 @@ public class Board extends JFrame {
 		int width = ((Rectangle) game).getWidth();
 		int height = ((Rectangle) game).getHeight();
 		int state = game.getState();
-		Graph values = game.getValues();
+		Graph values = game.getGraph();
 		// Create a solver
 		NeighberhoodDelta delta = new NeighberhoodDelta(values);
 		
@@ -370,7 +368,7 @@ public class Board extends JFrame {
 		int width = ((Rectangle) game).getWidth();
 		int height = ((Rectangle) game).getHeight();
 		int state = game.getState();
-		Graph values = game.getValues();
+		Graph values = game.getGraph();
 		int[] b = new int[width * height];
 		int count = 0;
 		for (int i = 0; i < width; i++) {
@@ -384,7 +382,7 @@ public class Board extends JFrame {
 	}
 
 	public int[][] solve() {
-		Graph values = game.getValues();
+		Graph values = game.getGraph();
 		return values.getValues();
 	}
 	

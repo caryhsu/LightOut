@@ -1,9 +1,13 @@
-package lightout.game;
+package lightout.board;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import lightout.game.Graph;
+import lightout.game.Position;
+import lightout.game.Rectangle;
+import lightout.game.Vertex;
 import lightout.game.array2d.Array2DGraph;
 import lightout.game.array2d.Array2DPosition;
 import lightout.game.array2d.NeighberhoodDelta;
@@ -11,10 +15,10 @@ import lightout.game.array2d.SelfDelta;
 import lightout.game.solver.impl1.PercentSolvableCalculator;
 import lombok.Getter;
 
-public class RectangleGame implements Game, Rectangle {
+public class BoardViewModel implements Rectangle {
 
 	@Getter private int state;
-	@Getter private Graph values;
+	@Getter private Graph graph;
 	@Getter private SelfDelta deltaForEditMode;
 	@Getter private NeighberhoodDelta delta;
 	
@@ -22,33 +26,33 @@ public class RectangleGame implements Game, Rectangle {
 	@Getter private Position cursor;
 	@Getter private int numberOfClicks = 0;	
 	
-	public RectangleGame(int width, int height, int state) {
-		this.values = new Array2DGraph(width, height);
-		this.delta = new NeighberhoodDelta(this.values);
-		this.deltaForEditMode = new SelfDelta(this.values);
+	public BoardViewModel(int width, int height, int state) {
+		this.graph = new Array2DGraph(width, height);
+		this.delta = new NeighberhoodDelta(this.graph);
+		this.deltaForEditMode = new SelfDelta(this.graph);
 		this.state = state;
-		this.values.setModularNumber(this.state);
+		this.graph.setModularNumber(this.state);
 		this.reset();
 	}
 
 	@Override
 	public int getWidth() {
-		int width = ((Array2DGraph) this.values).getWidth();
+		int width = ((Array2DGraph) this.graph).getWidth();
 		return width;
 	}
 	
 	
 	@Override
 	public int getHeight() {
-		int height = ((Array2DGraph) this.values).getHeight();
+		int height = ((Array2DGraph) this.graph).getHeight();
 		return height;
 	}
 	
 	@Override
 	public void setSize(int width, int height) {
-		this.values = new Array2DGraph(width, height);
-		this.values.setModularNumber(this.state);
-		this.delta = new NeighberhoodDelta(this.values);
+		this.graph = new Array2DGraph(width, height);
+		this.graph.setModularNumber(this.state);
+		this.delta = new NeighberhoodDelta(this.graph);
 		this.reset();
 	}
 	
@@ -67,13 +71,13 @@ public class RectangleGame implements Game, Rectangle {
 
 	public void setState(int state) {
 		this.state = state;
-		this.values.setModularNumber(this.state);
+		this.graph.setModularNumber(this.state);
 		this.reset();
 	}	
 	
 	public void select(Position position) {
 		this.setCursor(position);
-		if (!this.values.inScope(position)) {
+		if (!this.graph.inScope(position)) {
 			return;
 		}
 		if (this.editMode == true) {
@@ -87,7 +91,7 @@ public class RectangleGame implements Game, Rectangle {
 
 	public void reset() {
 		this.editMode = false;
-		this.values.reset(0);
+		this.graph.reset(0);
 		this.clearCursor();
 		this.numberOfClicks = 0;
 		this.recalculatePercentSolvable();
@@ -98,7 +102,7 @@ public class RectangleGame implements Game, Rectangle {
 		this.clearCursor();
 		this.numberOfClicks = 0;
 		reset();
-		Arrays.asList(this.values.getVertexes()).forEach(
+		Arrays.asList(this.graph.getVertexes()).forEach(
 			v->{
 				int tt = (int) (Math.random() * state);
 				for (int times = 0; times < tt; times++) {
@@ -110,19 +114,19 @@ public class RectangleGame implements Game, Rectangle {
 	}
 
 	public boolean isSolved() {
-		List<Vertex> vertexes = Arrays.asList(this.values.getVertexes());
+		List<Vertex> vertexes = Arrays.asList(this.graph.getVertexes());
 		return vertexes.stream().allMatch(v->v.getValue()==state - 1);
 	}
 
 	@Override
 	public String toString() {
 		StringBuffer output = new StringBuffer();
-		int width = ((Array2DGraph) this.values).getWidth();
-		int height = ((Array2DGraph) this.values).getHeight();
+		int width = ((Array2DGraph) this.graph).getWidth();
+		int height = ((Array2DGraph) this.graph).getHeight();
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				Array2DPosition position = new Array2DPosition(i, j);
-				output.append(this.values.get(position));
+				output.append(this.graph.get(position));
 				if (this.getDeltaValue(i, j)>0) {
 					output.append("*");
 				}
@@ -147,8 +151,8 @@ public class RectangleGame implements Game, Rectangle {
 	}
 	
 	public void recalculatePercentSolvable() {
-		int width = ((Array2DGraph) this.values).getWidth();
-		int height = ((Array2DGraph) this.values).getHeight();
+		int width = ((Array2DGraph) this.graph).getWidth();
+		int height = ((Array2DGraph) this.graph).getHeight();
 		
 		int min = Math.min(width, height);
 		PercentSolvableCalculator c = new PercentSolvableCalculator(min, state, delta);
