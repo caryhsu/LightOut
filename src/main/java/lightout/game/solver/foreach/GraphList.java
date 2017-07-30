@@ -59,12 +59,12 @@ public class GraphList implements Iterable<Graph> {
 				g.set(position, value % g.getModularNumber());
 				carried = nextCarried;
 				position = next(g, position);
-				this.hasNext = !Arrays.asList(g.getVertexes()).stream().allMatch(v->v.getValue()==(g.getModularNumber()-1));
+				this.hasNext = !(g.getVertexes().stream().allMatch(v->v.getValue()==(g.getModularNumber()-1)));
 			}
 		}
 
 		private Position next(Graph g, Position position) {
-			List<Position> positions = Arrays.asList(g.getPositions());
+			List<Position> positions = g.getPositions();
 			int index = positions.indexOf(position) + 1;
 			return index < positions.size() ? positions.get(index) : null;
 		}

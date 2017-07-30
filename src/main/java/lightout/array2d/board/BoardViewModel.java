@@ -102,19 +102,17 @@ public class BoardViewModel implements Rectangle {
 		this.clearCursor();
 		this.numberOfClicks = 0;
 		reset();
-		Arrays.asList(this.graph.getVertexes()).forEach(
-			v->{
-				int tt = (int) (Math.random() * state);
-				for (int times = 0; times < tt; times++) {
-					select(v.getPosition());
-				}
+		this.graph.getVertexes().forEach(v->{
+			int tt = (int) (Math.random() * state);
+			for (int times = 0; times < tt; times++) {
+				select(v.getPosition());
 			}
-		);
+		});
 		this.recalculatePercentSolvable();
 	}
 
 	public boolean isSolved() {
-		List<Vertex> vertexes = Arrays.asList(this.graph.getVertexes());
+		List<Vertex> vertexes = this.graph.getVertexes();
 		return vertexes.stream().allMatch(v->v.getValue()==state - 1);
 	}
 

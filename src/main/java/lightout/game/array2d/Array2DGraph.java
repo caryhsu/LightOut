@@ -43,41 +43,41 @@ public class Array2DGraph implements Graph, Rectangle, Cloneable {
 	}
 	
 	public void reset(int value) {
-		this.forEachVertex(v -> v.setValue(value));
+		this.getVertexes().forEach(v -> v.setValue(value));
 	}
 	
-	public void forEachPosition(Consumer<Position> action) {
-		Objects.requireNonNull(action);
-        for (Position position : this.getPositions()) {
-            action.accept(position);
-        }
-	}
-	
-	public void forEachVertex(Consumer<Vertex> action) {
-		Objects.requireNonNull(action);
-        for (Vertex vertex : this.getVertexes()) {
-            action.accept(vertex);
-        }
-	}
+//	public void forEachPosition(Consumer<Position> action) {
+//		Objects.requireNonNull(action);
+//        for (Position position : this.getPositions()) {
+//            action.accept(position);
+//        }
+//	}
+//	
+//	public void forEachVertex(Consumer<Vertex> action) {
+//		Objects.requireNonNull(action);
+//        for (Vertex vertex : this.getVertexes()) {
+//            action.accept(vertex);
+//        }
+//	}
 	
 	@Override
-	public Position[] getPositions() {
+	public List<Position> getPositions() {
 		List<Position> positions = new ArrayList<>();
 		for (int i = 0; i < this.width; i++) {
 			for (int j = 0; j < this.height; j++) {
 				positions.add(new Array2DPosition(i, j));
 			}
 		}
-		return positions.toArray(new Position[] {});
+		return positions;
 	}
 
 	@Override
-	public Vertex[] getVertexes() {
+	public List<Vertex> getVertexes() {
 		final List<Vertex> vertexes = new ArrayList<>();
-		forEachPosition(position -> {
+		this.getPositions().forEach(position -> {
 			vertexes.add(new VertexImpl(position));
 		});
-		return vertexes.toArray(new Vertex[] {});
+		return vertexes;
 	}
 
 	@Override

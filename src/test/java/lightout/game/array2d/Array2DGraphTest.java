@@ -30,15 +30,15 @@ public class Array2DGraphTest {
 	@Test
 	public void testGetPositions() {
 		Graph g = new Array2DGraph(4, 5);
-		assertThat(g.getPositions().length, is(20));
-		assertThat(g.getVertexes().length, is(20));
+		assertThat(g.getPositions().size(), is(20));
+		assertThat(g.getVertexes().size(), is(20));
 	}
 		
 	@Test
 	public void testReset1() {
 		Graph g = new Array2DGraph(4, 5);
 		g.reset();
-		List<Vertex> vertexes = Arrays.<Vertex>asList(g.getVertexes());
+		List<Vertex> vertexes =g.getVertexes();
 		List<Vertex> vertexes1 = vertexes.stream()
 			.filter(v -> v.getValue() == 0)
 			.collect(Collectors.toList());
@@ -49,7 +49,7 @@ public class Array2DGraphTest {
 	public void testReset2() {
 		Graph g = new Array2DGraph(4, 5);
 		g.reset(3);
-		List<Vertex> vertexes = Arrays.<Vertex>asList(g.getVertexes());
+		List<Vertex> vertexes = g.getVertexes();
 		List<Vertex> vertexes1 = vertexes.stream()
 			.filter(v -> v.getValue() == 3)
 			.collect(Collectors.toList());
@@ -64,7 +64,7 @@ public class Array2DGraphTest {
 		g.set(p1, 10);
 		assertThat(g.get(p1), is(10));
 		
-		List<Vertex> vertexes = Arrays.<Vertex>asList(g.getVertexes());
+		List<Vertex> vertexes = g.getVertexes();
 		List<Vertex> vertexes1 = vertexes.stream()
 			.filter(v -> v.getValue() == 3)
 			.collect(Collectors.toList());

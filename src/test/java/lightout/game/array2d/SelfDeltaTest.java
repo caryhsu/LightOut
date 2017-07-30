@@ -19,7 +19,7 @@ public class SelfDeltaTest {
 		g.reset();
 		Array2DPosition p = new Array2DPosition(0, 0);
 		SelfDelta delta = new SelfDelta(g);
-		List<Vertex> vertexes = Arrays.asList(g.getVertexes());
+		List<Vertex> vertexes = g.getVertexes();
 		{
 			long c0 = vertexes.stream()
 				.filter(v->v.getValue() == 0)

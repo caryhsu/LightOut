@@ -9,7 +9,7 @@ public interface Delta {
 	
 	default public void apply(Position cursor) {
 		Graph graph = this.getTarget();
-		graph.forEachVertex(vertex -> {
+		graph.getVertexes().forEach(vertex -> {
 			int dv = getDeltaValue(vertex.getPosition(), cursor);
 			vertex.increase(dv);
 		});
@@ -29,7 +29,7 @@ public interface Delta {
 
 	default public void random(int state) {
 		Graph graph = this.getTarget();
-		graph.forEachVertex(vertex -> {
+		graph.getVertexes().forEach(vertex -> {
 			int tt = (int) (Math.random() * state);
 			for(int i = 0; i < tt; i++) {
 				apply(vertex.getPosition());

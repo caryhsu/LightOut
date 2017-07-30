@@ -1,5 +1,6 @@
 package lightout.game;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public interface Graph extends Cloneable {
@@ -16,13 +17,13 @@ public interface Graph extends Cloneable {
 	
 	int[][] getValues();
 	
-	Position[] getPositions();
+	List<Position> getPositions();
 	
-	Vertex[] getVertexes();
+	List<Vertex> getVertexes();
 	Vertex getVertex(Position position);
 	
-	void forEachPosition(Consumer<Position> action);
-	void forEachVertex(Consumer<Vertex> action);
+//	void forEachPosition(Consumer<Position> action);
+//	void forEachVertex(Consumer<Vertex> action);
 	
 	Position[] getNeighberhood(Position position);
 

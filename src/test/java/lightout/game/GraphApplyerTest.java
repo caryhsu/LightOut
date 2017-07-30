@@ -34,7 +34,7 @@ public class GraphApplyerTest {
 		assertThat(t.get(new Array2DPosition(0, 2)), is(1));
 		assertThat(t.get(new Array2DPosition(2, 0)), is(1));
 
-		long c0 = Arrays.asList(t.getVertexes()).stream()
+		long c0 = t.getVertexes().stream()
 				.filter(v->v.getValue() == 0)
 				.count();
 		assertThat(c0, is(6L));

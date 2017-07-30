@@ -17,8 +17,7 @@ public class GraphApplyer {
 		Graph target = this.target.clone();
 		target.setModularNumber(this.moduleNumber);
 		List<Position> positions = new ArrayList<>();
-		Arrays.asList(pattern.getVertexes())
-			.forEach(v->{
+		pattern.getVertexes().forEach(v->{
 				for(int i = 0; i < v.getValue(); i++) {
 					positions.add(v.getPosition());
 				}}
