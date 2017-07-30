@@ -1,8 +1,8 @@
 package lightout.game.solver.foreach;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 
 import lightout.game.Graph;
 import lightout.game.Position;
@@ -12,15 +12,24 @@ import lombok.Setter;
 
 public class GraphList implements Iterable<Graph> {
 
-	private Graph first;
+	@Getter private Graph first;
+	@Getter @Setter private Predicate<Graph> endPreidcate;
 	
 	public GraphList(Graph first) {
+		this(first, g -> {
+			return g.getVertexes().stream().allMatch(v->v.getValue()==(g.getModularNumber()-1));
+		});
+	}
+	
+	public GraphList(Graph first, Predicate<Graph> endPreidcate) {
 		this.first = first;
+		this.endPreidcate = endPreidcate;
+		
 	}
 	
 	@Override
 	public Iterator<Graph> iterator() {
-		return new GraphIterator(first);
+		return new GraphIterator(first, this.endPreidcate);
 	}
 	
 	public static class GraphIterator implements Iterator<Graph> {
@@ -28,12 +37,20 @@ public class GraphList implements Iterable<Graph> {
 		private Graph first;
 		private Graph current;
 		private boolean hasNext;
+		private Predicate<Graph> endPreidcate;
 		@Getter @Setter private boolean reverse = false;
 		
 		public GraphIterator(Graph first) {
+			this(first, g -> {
+				return g.getVertexes().stream().allMatch(v->v.getValue()==(g.getModularNumber()-1));
+			});
+		}
+		
+		public GraphIterator(Graph first, Predicate<Graph> endPreidcate) {
 			this.first = first;
 			this.current = null;
 			this.hasNext = true;
+			this.endPreidcate = endPreidcate;
 		}
 		
 		@Override
@@ -59,9 +76,13 @@ public class GraphList implements Iterable<Graph> {
 				g.set(position, value % g.getModularNumber());
 				carried = nextCarried;
 				position = next(g, position);
-				this.hasNext = !(g.getVertexes().stream().allMatch(v->v.getValue()==(g.getModularNumber()-1)));
+				this.hasNext = !endPreidcate.test(g);
 			}
 		}
+
+//		public boolean hasNext(Graph g) {
+//			return !(g.getVertexes().stream().allMatch(v->v.getValue()==(g.getModularNumber()-1)));
+//		}
 
 		private Position next(Graph g, Position position) {
 			List<Position> positions = g.getPositions();

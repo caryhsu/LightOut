@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 import org.junit.Test;
 
@@ -20,7 +21,8 @@ public class GraphListTest {
 		Array2DGraph g = new Array2DGraph(2, 3);
 		g.setModularNumber(2);
 		
-		for(Iterator<Graph> it = new GraphIterator(g); it.hasNext(); ) {
+		GraphIterator graphIterator = new GraphIterator(g);
+		for(Iterator<Graph> it = graphIterator; it.hasNext(); ) {
 			Graph g2 = it.next();
 			System.out.println(g2);
 			n++;
@@ -28,6 +30,24 @@ public class GraphListTest {
 		assertThat(n, is((long) Math.pow(2, 6)));
 	}
 
+	@Test
+	public void testIterator2() {
+		long n = 0;
+		Array2DGraph gr = new Array2DGraph(5, 5);
+		gr.setModularNumber(2);
+		
+		Predicate<Graph> endPredicate = (g) -> {
+			return ((Array2DGraph) g).getVertexesForRow(0).stream().allMatch(v->v.getValue()==(g.getModularNumber()-1));
+		};
+		GraphIterator graphIterator = new GraphIterator(gr, endPredicate);
+		for(Iterator<Graph> it = graphIterator; it.hasNext(); ) {
+			Graph g2 = it.next();
+			System.out.println(g2);
+			n++;
+		}
+		assertThat(n, is((long) Math.pow(2, 5)));
+	}
+	
 	@Test
 	public void testList() {
 		Array2DGraph g = new Array2DGraph(2, 3);

@@ -21,6 +21,13 @@ public class SelfDelta implements Delta {
 	}
 	
 	@Override
+	public void apply(Position cursor) {
+		Graph graph = this.getTarget();
+		int dv = getDeltaValue(cursor, cursor);
+		graph.getVertex(cursor).increase(dv);
+	}
+	
+	@Override
 	public int getDeltaValue(Position target, Position cursor) {
 		if (Objects.equals(target, cursor)) {
 			return 1;

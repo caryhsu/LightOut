@@ -57,7 +57,6 @@ public class BoardViewModel implements Rectangle {
 	}
 	
 	public void setEditMode(boolean editMode) {
-		this.reset();
 		this.editMode = editMode;
 	}
 	
@@ -80,6 +79,8 @@ public class BoardViewModel implements Rectangle {
 		if (!this.graph.inScope(position)) {
 			return;
 		}
+		this.deltaForEditMode.setTarget(this.graph);
+		this.delta.setTarget(this.graph);
 		if (this.editMode == true) {
 			this.deltaForEditMode.apply(this.cursor);
 		}

@@ -3,8 +3,7 @@ package lightout.game.array2d;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import lightout.game.Graph;
 import lightout.game.Position;
@@ -45,20 +44,14 @@ public class Array2DGraph implements Graph, Rectangle, Cloneable {
 	public void reset(int value) {
 		this.getVertexes().forEach(v -> v.setValue(value));
 	}
-	
-//	public void forEachPosition(Consumer<Position> action) {
-//		Objects.requireNonNull(action);
-//        for (Position position : this.getPositions()) {
-//            action.accept(position);
-//        }
-//	}
-//	
-//	public void forEachVertex(Consumer<Vertex> action) {
-//		Objects.requireNonNull(action);
-//        for (Vertex vertex : this.getVertexes()) {
-//            action.accept(vertex);
-//        }
-//	}
+
+	public List<Position> getPositionsForRow(int rowIndex) {
+		List<Position> positions = new ArrayList<>();
+		for (int j = 0; j < this.height; j++) {
+			positions.add(new Array2DPosition(rowIndex, j));
+		}
+		return positions;
+	}
 	
 	@Override
 	public List<Position> getPositions() {
@@ -71,6 +64,14 @@ public class Array2DGraph implements Graph, Rectangle, Cloneable {
 		return positions;
 	}
 
+	public List<Vertex> getVertexesForRow(int rowIndex) {
+		final List<Vertex> vertexes = new ArrayList<>();
+		this.getPositionsForRow(rowIndex).forEach(position -> {
+			vertexes.add(new VertexImpl(position));
+		});
+		return vertexes;
+	}
+	
 	@Override
 	public List<Vertex> getVertexes() {
 		final List<Vertex> vertexes = new ArrayList<>();
@@ -108,6 +109,10 @@ public class Array2DGraph implements Graph, Rectangle, Cloneable {
 	public int get(Position position) {
 		int x = ((Array2DPosition) position).getX();
 		int y = ((Array2DPosition) position).getY();
+		return get(x, y);
+	}
+
+	public int get(int x, int y) {
 		return this.modularNumber == null? this.values[x][y] : mod(this.values[x][y]);
 	}
 
@@ -266,5 +271,15 @@ public class Array2DGraph implements Graph, Rectangle, Cloneable {
 		Graph g0 = new Array2DGraph(width, height);
 		g0.setModularNumber(moduleNumber);
 		return new GraphList(g0);
+	}
+
+	public static GraphList getGraphListForFirstRow(int width, int height, int moduleNumber) {
+		Array2DGraph g0 = new Array2DGraph(width, height);
+		g0.setModularNumber(moduleNumber);
+		Predicate<Graph> endPreidcate = (g) -> {
+			return ((Array2DGraph) g).getVertexesForRow(0).stream().allMatch(
+					v->{return v.getValue() == (moduleNumber-1);});
+		};
+		return new GraphList(g0, endPreidcate);
 	}
 }
