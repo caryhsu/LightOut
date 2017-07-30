@@ -8,7 +8,7 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import lightout.board.BoardViewModel;
+import lightout.array2d.board.BoardViewModel;
 import lightout.game.array2d.Array2DPosition;
 
 public class GameTest {

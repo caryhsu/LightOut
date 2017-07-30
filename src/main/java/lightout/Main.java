@@ -1,6 +1,6 @@
 package lightout;
 
-import lightout.board.Board;
+import lightout.array2d.board.Board;
 
 public class Main {
 

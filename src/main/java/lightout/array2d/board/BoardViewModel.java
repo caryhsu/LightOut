@@ -1,4 +1,4 @@
-package lightout.board;
+package lightout.array2d.board;
 
 import java.util.Arrays;
 import java.util.List;
