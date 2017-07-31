@@ -22,7 +22,7 @@ public class VectorBFactoryTest {
 			{1, 0, 0}
 		});
 		NeighberhoodDelta delta = new NeighberhoodDelta(g1);
-		VectorBFactory factory = new VectorBFactoryImpl1(delta);
+		VectorBFactory factory = new VectorBFactoryImpl(delta);
 		int[] B = factory.newInstance();
 		
 		System.out.println(Arrays.toString(B));
