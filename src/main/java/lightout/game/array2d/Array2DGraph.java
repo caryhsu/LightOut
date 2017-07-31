@@ -22,7 +22,7 @@ public class Array2DGraph extends AbstractGraph implements Graph, Rectangle, Clo
 	@Getter private int width;
 	@Getter private int height;
 	private int[][] values;
-	@Getter @Setter private Integer modularNumber = null;
+	@Getter @Setter private boolean cycled = false;
 	
 	public Array2DGraph(int width, int height) {
 		this.width = width;
@@ -191,6 +191,10 @@ public class Array2DGraph extends AbstractGraph implements Graph, Rectangle, Clo
 		
 	public Position moveLeft(Position position, int steps) {
 		int x = ((Array2DPosition) position).getX() - steps;
+		if (this.cycled) {
+			x %= this.width;
+			if (x < 0) x += this.width;
+		}
 		int y = ((Array2DPosition) position).getY();
 		return !inScope(x, y) ? null : new Array2DPosition(x, y);
 	}
@@ -201,6 +205,10 @@ public class Array2DGraph extends AbstractGraph implements Graph, Rectangle, Clo
 		
 	public Position moveRight(Position position, int steps) {
 		int x = ((Array2DPosition) position).getX() + steps;
+		if (this.cycled) {
+			x %= this.width;
+			if (x < 0) x += this.width;
+		}
 		int y = ((Array2DPosition) position).getY();
 		return !inScope(x, y) ? null : new Array2DPosition(x, y);
 	}
@@ -212,6 +220,10 @@ public class Array2DGraph extends AbstractGraph implements Graph, Rectangle, Clo
 	public Position moveUp(Position position, int steps) {
 		int x = ((Array2DPosition) position).getX();
 		int y = ((Array2DPosition) position).getY() - steps;
+		if (this.cycled) {
+			y %= this.height;
+			if (y < 0) y += this.height;
+		}
 		return !inScope(x, y) ? null : new Array2DPosition(x, y);
 	}
 
@@ -222,6 +234,10 @@ public class Array2DGraph extends AbstractGraph implements Graph, Rectangle, Clo
 	public Position moveDown(Position position, int steps) {
 		int x = ((Array2DPosition) position).getX();
 		int y = ((Array2DPosition) position).getY() + steps;
+		if (this.cycled) {
+			y %= this.height;
+			if (y < 0) y += this.height;
+		}
 		return !inScope(x, y) ? null : new Array2DPosition(x, y);
 	}
 

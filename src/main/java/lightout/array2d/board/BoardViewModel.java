@@ -18,7 +18,7 @@ import lombok.Getter;
 public class BoardViewModel implements Rectangle {
 
 	@Getter private int state;
-	@Getter private Graph graph;
+	@Getter private Array2DGraph graph;
 	@Getter private SelfDelta deltaForEditMode;
 	@Getter private NeighberhoodDelta delta;
 	
@@ -28,6 +28,7 @@ public class BoardViewModel implements Rectangle {
 	
 	public BoardViewModel(int width, int height, int state) {
 		this.graph = new Array2DGraph(width, height);
+		this.graph.setCycled(true);
 		this.delta = new NeighberhoodDelta(this.graph);
 		this.deltaForEditMode = new SelfDelta(this.graph);
 		this.state = state;
@@ -51,6 +52,7 @@ public class BoardViewModel implements Rectangle {
 	@Override
 	public void setSize(int width, int height) {
 		this.graph = new Array2DGraph(width, height);
+		this.graph.setCycled(true);
 		this.graph.setModularNumber(this.state);
 		this.delta = new NeighberhoodDelta(this.graph);
 		this.reset();
