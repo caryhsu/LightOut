@@ -15,30 +15,15 @@ public class Solver {
 	@Getter private int state;
 	
 	@Getter @Setter private NeighberhoodDelta delta;
-
+	
 	public Solver(int boardRow, int boardCol, int state, NeighberhoodDelta delta) {
 		this.boardRow = boardRow;
 		this.boardCol = boardCol;
 		this.delta = delta;
 		this.ASize = boardRow * boardCol;
 		this.state = state;
-		this.A = new Matrix<Integer>(ASize, ASize, new Zn(this.state));
-		initMatrixA();
-	}
-
-	private void initMatrixA() {
-		for (int Arow = 0; Arow < ASize; Arow++) {
-			for (int Acol = 0; Acol < ASize; Acol++) {
-				int i, j, i_, j_ = 0;
-				i = Arow / this.boardCol; // index (i, j) is the tile that you're setting the equation up for
-				j = Arow % this.boardCol;
-				i_ = Acol / this.boardCol; // index (i_, j_) is the index of where you are pressing
-				j_ = Acol % this.boardCol;
-				Array2DPosition p1 = new Array2DPosition(i, j);
-				Array2DPosition p2 = new Array2DPosition(i_, j_);
-				this.A.set(Arow, Acol, delta.getDeltaValue(p1, p2));
-			}
-		}
+		
+		this.A = new MatrixAFactoryImpl1(this.delta).newInstance();
 	}
 
 	public void setBVector(int[] bVector) {

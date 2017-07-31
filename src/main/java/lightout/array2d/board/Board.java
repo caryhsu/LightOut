@@ -322,10 +322,10 @@ public class Board extends JFrame {
 		int width = ((Rectangle) game).getWidth();
 		int height = ((Rectangle) game).getHeight();
 		int state = game.getState();
-		Graph values = game.getGraph();
-		// Create a solver
-		NeighberhoodDelta delta = new NeighberhoodDelta(values);
 		
+		Array2DGraph graph = game.getGraph();
+		// Create a solver
+		NeighberhoodDelta delta = new NeighberhoodDelta(graph);
 		Solver einstein = new Solver(width, height, state, delta);
 		
 		// Build the b vector
@@ -334,7 +334,7 @@ public class Board extends JFrame {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				Array2DPosition position = new Array2DPosition(i, j);
-				b[index] = state - values.get(position);
+				b[index] = state - graph.get(position);
 				index++;
 			}
 		}

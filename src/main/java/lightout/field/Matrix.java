@@ -1,9 +1,11 @@
 package lightout.field;
 import java.util.Arrays;
 
+import lombok.Getter;
+
 public final class Matrix<T> implements Cloneable {
 	
-	private Object[][] values;
+	@Getter private Object[][] values;
 	public Object[][] bVector; 
 
 	private FieldOperators<T> op;
@@ -142,7 +144,7 @@ public final class Matrix<T> implements Cloneable {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("values:\n" + toString(values));
-		sb.append("bVector:\n" + toString(bVector));
+		//sb.append("bVector:\n" + toString(bVector));
 		return sb.toString(); 
 	}
 	
