@@ -1,4 +1,4 @@
-package lightout.game.solver.matrix;
+package lightout.game.solver.matrix.matrixa;
 
 import lightout.field.Matrix;
 

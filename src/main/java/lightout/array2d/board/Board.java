@@ -26,6 +26,7 @@ import lightout.game.array2d.Array2DPosition;
 import lightout.game.delta.NeighberhoodDelta;
 import lightout.game.solver.grouping.PercentSolvableCalculator;
 import lightout.game.solver.matrix.Solver;
+import lightout.game.solver.matrix.vectorb.VectorBFactoryImpl1;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -327,18 +328,10 @@ public class Board extends JFrame {
 		// Create a solver
 		NeighberhoodDelta delta = new NeighberhoodDelta(graph);
 		Solver einstein = new Solver(width, height, state, delta);
-		
+
 		// Build the b vector
-		int[] b = new int[width*height];
-		int index = 0;
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
-				Array2DPosition position = new Array2DPosition(i, j);
-				b[index] = state - graph.get(position);
-				index++;
-			}
-		}
-		
+		int[] b = new VectorBFactoryImpl1(delta).newInstance();
+				
 		// Give the b vector to the solver and solve
 		einstein.setBVector(b);
 		einstein.RowReduce();

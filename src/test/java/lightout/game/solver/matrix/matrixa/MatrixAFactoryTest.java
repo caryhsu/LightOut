@@ -1,9 +1,7 @@
-package lightout.game.solver.matrix;
+package lightout.game.solver.matrix.matrixa;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
-import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -11,7 +9,7 @@ import lightout.field.Matrix;
 import lightout.game.array2d.Array2DGraph;
 import lightout.game.delta.NeighberhoodDelta;
 
-public class MatrixAFactoryImpl1Test {
+public class MatrixAFactoryTest {
 
 	@Test
 	public void test1() {

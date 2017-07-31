@@ -1,4 +1,4 @@
-package lightout.game.solver.matrix;
+package lightout.game.solver.matrix.matrixa;
 
 import lightout.field.Matrix;
 import lightout.field.Zn;
@@ -13,11 +13,12 @@ public class MatrixAFactoryImpl1 implements MatrixAFactory {
 	@Getter private int boardCol;
 	@Getter private int ASize;
 	@Getter private int state;
+	@Getter private Array2DGraph graph;
 	@Getter private NeighberhoodDelta delta;
 
 	public MatrixAFactoryImpl1(NeighberhoodDelta delta) {
 		this.delta = delta;
-		Array2DGraph graph = (Array2DGraph) delta.getTarget();
+		this.graph = (Array2DGraph) delta.getTarget();
 		this.boardRow = graph.getWidth();
 		this.boardCol = graph.getHeight();
 		this.ASize = this.boardRow * this.boardCol;

@@ -3,6 +3,7 @@ import lightout.field.Matrix;
 import lightout.field.Zn;
 import lightout.game.array2d.Array2DPosition;
 import lightout.game.delta.NeighberhoodDelta;
+import lightout.game.solver.matrix.matrixa.MatrixAFactoryImpl;
 import lombok.Getter;
 import lombok.Setter;
 
