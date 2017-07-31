@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import lightout.game.array2d.Array2DGraph;
 import lightout.game.delta.NeighberhoodDelta;
-import lightout.game.solver.impl1.Solver;
+import lightout.game.solver.matrix.Solver;
 
 public class SolverGetZeroRowCountTest {
 

@@ -24,8 +24,8 @@ import lightout.game.Rectangle;
 import lightout.game.array2d.Array2DGraph;
 import lightout.game.array2d.Array2DPosition;
 import lightout.game.delta.NeighberhoodDelta;
-import lightout.game.solver.impl1.PercentSolvableCalculator;
-import lightout.game.solver.impl1.Solver;
+import lightout.game.solver.grouping.PercentSolvableCalculator;
+import lightout.game.solver.matrix.Solver;
 import lombok.Getter;
 import lombok.Setter;
 

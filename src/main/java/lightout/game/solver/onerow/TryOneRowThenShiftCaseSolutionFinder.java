@@ -39,9 +39,9 @@ public class TryOneRowThenShiftCaseSolutionFinder implements SolutionFinder {
 			for(int i = 0; i < ((Array2DGraph) initGraph).getWidth(); i++) {
 				// copy row from (pattern0 or result) to pattern
 				if (i == 0) 
-					copyRow((Array2DGraph) pattern0, 0, pattern, 0);
+					copyRow((Array2DGraph) pattern0, 0, pattern, 0, false);
 				else
-					copyRow(result, i-1, pattern, i);
+					copyRow(result, i-1, pattern, i, true);
 				result = (Array2DGraph) applyer.apply(pattern);
 				//System.out.println("3:(pattern)\n" + pattern);
 				//System.out.println("4:(after merge)\n" + result);
@@ -56,9 +56,12 @@ public class TryOneRowThenShiftCaseSolutionFinder implements SolutionFinder {
 		return solutions.toArray(new Graph[] {});
 	}
 
-	private void copyRow(Array2DGraph srcGraph, int srcRow, Array2DGraph dstGraph, int dstRow) {
+	private void copyRow(Array2DGraph srcGraph, int srcRow, Array2DGraph dstGraph, int dstRow, boolean reverse) {
 		for(int j = 0; j < ((Array2DGraph) initGraph).getHeight(); j++) {
 			int value = srcGraph.get(srcRow, j);
+			if (reverse) {
+				value = srcGraph.getModularNumber() - value; 
+			}
 			dstGraph.set(dstRow, j, value);
 		}
 	}

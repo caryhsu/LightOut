@@ -11,6 +11,7 @@ import lightout.game.Vertex;
 import lightout.game.solver.foreach.GraphList;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 
 @EqualsAndHashCode(callSuper=false, exclude={})
@@ -18,6 +19,7 @@ public class Array1DGraph extends AbstractGraph implements Graph  {
 
 	@Getter private int length;
 	private int[] values;
+	@Getter @Setter private boolean cycled = false;
 	
 	public Array1DGraph(int length) {
 		this.length = length;
@@ -145,6 +147,10 @@ public class Array1DGraph extends AbstractGraph implements Graph  {
 		
 	public Position moveLeft(Position position, int steps) {
 		int x = ((Array1DPosition) position).getX() - steps;
+		if (this.cycled) {
+			x %= this.length;
+			if (x < 0) x += this.length;
+		}
 		return !inScope(x) ? null : new Array1DPosition(x);
 	}
 
@@ -154,6 +160,10 @@ public class Array1DGraph extends AbstractGraph implements Graph  {
 		
 	public Position moveRight(Position position, int steps) {
 		int x = ((Array1DPosition) position).getX() + steps;
+		if (this.cycled) {
+			x %= this.length;
+			if (x < 0) x += this.length;
+		}
 		return !inScope(x) ? null : new Array1DPosition(x);
 	}
 

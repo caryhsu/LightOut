@@ -1,4 +1,4 @@
-package lightout.game.solver.impl1;
+package lightout.game.solver.matrix;
 import lightout.field.Matrix;
 import lightout.field.Zn;
 import lightout.game.array2d.Array2DPosition;
@@ -8,11 +8,11 @@ import lombok.Setter;
 
 public class Solver {
 	
-	private Matrix<Integer> A;
-	private int ASize;
-	int boardRow;
-	int boardCol;
-	int state;
+	@Getter private Matrix<Integer> A;
+	@Getter private int ASize;
+	@Getter private int boardRow;
+	@Getter private int boardCol;
+	@Getter private int state;
 	
 	@Getter @Setter private NeighberhoodDelta delta;
 

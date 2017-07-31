@@ -1,6 +1,7 @@
-package lightout.game.solver.impl1;
+package lightout.game.solver.grouping;
 
 import lightout.game.delta.NeighberhoodDelta;
+import lightout.game.solver.matrix.Solver;
 
 public class PercentSolvableCalculator {
 
@@ -21,15 +22,15 @@ public class PercentSolvableCalculator {
 	}
 	
 	public PercentSolvableValue calculate() {
-		int state = this.solver.state;
+		int state = this.solver.getState();
 		return new PercentSolvableValue(state, zeroRowCount);
 	}
 
 	public int getCol() {
-		return this.solver.boardCol;
+		return this.solver.getBoardCol();
 	}
 	
 	public int getRow() {
-		return this.solver.boardRow;
+		return this.solver.getBoardRow();
 	}
 }
