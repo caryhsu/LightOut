@@ -5,7 +5,7 @@ import org.junit.Test;
 import lightout.game.Graph;
 import lightout.game.array2d.Array2DGraph;
 import lightout.game.array2d.Array2DPosition;
-import lightout.game.array2d.NeighberhoodDelta;
+import lightout.game.delta.NeighberhoodDelta;
 import lightout.game.solver.SolutionFinder;
 import lightout.game.solver.foreach.TryAllCaseSolutionFinder;
 

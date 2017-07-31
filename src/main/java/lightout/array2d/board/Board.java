@@ -21,8 +21,9 @@ import javax.swing.JPanel;
 
 import lightout.game.Graph;
 import lightout.game.Rectangle;
+import lightout.game.array2d.Array2DGraph;
 import lightout.game.array2d.Array2DPosition;
-import lightout.game.array2d.NeighberhoodDelta;
+import lightout.game.delta.NeighberhoodDelta;
 import lightout.game.solver.impl1.PercentSolvableCalculator;
 import lightout.game.solver.impl1.Solver;
 import lombok.Getter;
@@ -382,7 +383,7 @@ public class Board extends JFrame {
 	}
 
 	public int[][] solve() {
-		Graph values = game.getGraph();
+		Array2DGraph values = (Array2DGraph) game.getGraph();
 		return values.getValues();
 	}
 	

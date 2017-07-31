@@ -27,7 +27,7 @@ public class TryAllCaseSolutionFinder implements SolutionFinder {
 		graphList.forEach(pattern ->{
 			Graph f = applyer.apply(pattern);			
 			f.setModularNumber(finalGraph.getModularNumber());
-			if (Arrays.deepEquals(f.getValues(), finalGraph.getValues())) {
+			if (Arrays.equals(f.getValuesAs1DArray(), finalGraph.getValuesAs1DArray())) {
 				solutions.add(pattern);
 			}
 		});

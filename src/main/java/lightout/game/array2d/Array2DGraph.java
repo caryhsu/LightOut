@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
+import lightout.game.AbstractGraph;
 import lightout.game.Graph;
 import lightout.game.Position;
 import lightout.game.Rectangle;
@@ -15,8 +16,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
-@EqualsAndHashCode(exclude={})
-public class Array2DGraph implements Graph, Rectangle, Cloneable {
+@EqualsAndHashCode(callSuper=false, exclude={})
+public class Array2DGraph extends AbstractGraph implements Graph, Rectangle, Cloneable {
 
 	@Getter private int width;
 	@Getter private int height;
@@ -36,15 +37,16 @@ public class Array2DGraph implements Graph, Rectangle, Cloneable {
 		this.height = height;
 		this.values = new int[this.width][this.height];
 	}
+
+	@Override
+	public int getSize() {
+		return this.width * this.height;
+	}
 	
 	public void reset() {
 		reset(0);
 	}
 	
-	public void reset(int value) {
-		this.getVertexes().forEach(v -> v.setValue(value));
-	}
-
 	public List<Position> getPositionsForRow(int rowIndex) {
 		List<Position> positions = new ArrayList<>();
 		for (int j = 0; j < this.height; j++) {
@@ -67,33 +69,24 @@ public class Array2DGraph implements Graph, Rectangle, Cloneable {
 	public List<Vertex> getVertexesForRow(int rowIndex) {
 		final List<Vertex> vertexes = new ArrayList<>();
 		this.getPositionsForRow(rowIndex).forEach(position -> {
-			vertexes.add(new VertexImpl(position));
+			vertexes.add(new VertexImpl((Array2DPosition) position));
 		});
 		return vertexes;
 	}
-	
-	@Override
-	public List<Vertex> getVertexes() {
-		final List<Vertex> vertexes = new ArrayList<>();
-		this.getPositions().forEach(position -> {
-			vertexes.add(new VertexImpl(position));
-		});
-		return vertexes;
-	}
-
+		
 	@Override
 	public Vertex getVertex(Position position) {
-		return new VertexImpl(position);
+		return new VertexImpl((Array2DPosition) position);
 	}
 	
 	public class VertexImpl implements Vertex {
-		@Getter private Position position;
-		public VertexImpl(Position position) {
+		@Getter private Array2DPosition position;
+		public VertexImpl(Array2DPosition position) {
 			this.position = position;
 		}
 		@Override
 		public int getValue() {
-			return Array2DGraph.this.get((Array2DPosition) this.position);
+			return Array2DGraph.this.get(this.position);
 		}
 		@Override
 		public void setValue(int value) {
@@ -114,16 +107,6 @@ public class Array2DGraph implements Graph, Rectangle, Cloneable {
 
 	public int get(int x, int y) {
 		return this.modularNumber == null? this.values[x][y] : mod(this.values[x][y]);
-	}
-
-	public int mod(int n) {
-		if (this.modularNumber != null) {
-			n %= this.modularNumber;
-			if (n < 0) {
-				n += this.modularNumber;
-			}
-		}
-		return n;
 	}
 
 	@Override
@@ -256,6 +239,18 @@ public class Array2DGraph implements Graph, Rectangle, Cloneable {
 	
 	public int[][] getValues() {
 		return this.values;
+	}
+	
+	@Override
+	public int[] getValuesAs1DArray() {
+		int[] result = new int[this.width * this.height];
+		for(int i = 0; i < this.width; i++) {
+			for(int j = 0; j < this.height; j++) {
+				int index = i * this.height + j;
+				result[index] = this.values[i][j];
+			}
+		}
+		return result;
 	}
 
 	@SneakyThrows

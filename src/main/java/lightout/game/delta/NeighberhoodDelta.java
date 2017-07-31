@@ -1,4 +1,4 @@
-package lightout.game.array2d;
+package lightout.game.delta;
 
 import java.util.Arrays;
 import java.util.List;

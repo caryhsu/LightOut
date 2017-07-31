@@ -2,7 +2,7 @@ package lightout.solver;
 
 import org.junit.Test;
 
-import lightout.game.array2d.NeighberhoodDelta;
+import lightout.game.delta.NeighberhoodDelta;
 
 public class PercentSolvableCalculatorTest {
 

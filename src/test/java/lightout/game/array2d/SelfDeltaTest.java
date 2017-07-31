@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Test;
 
 import lightout.game.Vertex;
+import lightout.game.delta.SelfDelta;
 
 public class SelfDeltaTest {
 

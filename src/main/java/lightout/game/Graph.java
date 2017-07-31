@@ -1,29 +1,35 @@
 package lightout.game;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public interface Graph extends Cloneable {
+import lightout.game.array1d.Array1DGraph.VertexImpl;
+
+public interface Graph {
 
 	default void reset() {
 		reset(0);
 	};
 	
-	void reset(int value);
+	default void reset(int value) {
+		this.getVertexes().forEach(v -> v.setValue(value));
+	}
 
 	int get(Position position);
 	
 	void set(Position position, int value);
-	
-	int[][] getValues();
-	
+		
 	List<Position> getPositions();
 	
-	List<Vertex> getVertexes();
+	default List<Vertex> getVertexes() {
+		final List<Vertex> vertexes = new ArrayList<>();
+		this.getPositions().forEach(position -> {
+			vertexes.add(getVertex(position));
+		});
+		return vertexes;
+	}
 	Vertex getVertex(Position position);
-	
-//	void forEachPosition(Consumer<Position> action);
-//	void forEachVertex(Consumer<Vertex> action);
 	
 	Position[] getNeighberhood(Position position);
 
@@ -33,6 +39,11 @@ public interface Graph extends Cloneable {
 
 	Integer getModularNumber();
 	void setModularNumber(Integer n);
-		
+	
 	Graph clone();
+
+	int[] getValuesAs1DArray();
+
+	int getSize();
+	
 }

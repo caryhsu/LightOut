@@ -46,10 +46,10 @@ public class TryOneRowThenShiftCaseSolutionFinder implements SolutionFinder {
 				//System.out.println("3:(pattern)\n" + pattern);
 				//System.out.println("4:(after merge)\n" + result);
 			}
-			Graph f = applyer.apply(pattern);
+			Array2DGraph f = (Array2DGraph) applyer.apply(pattern);
 			//System.out.println("5:(final test)\n" + f);
 			f.setModularNumber(finalGraph.getModularNumber());
-			if (Arrays.deepEquals(f.getValues(), finalGraph.getValues())) {
+			if (Arrays.deepEquals(f.getValues(), ((Array2DGraph) finalGraph).getValues())) {
 				solutions.add(pattern);
 			}
 		});

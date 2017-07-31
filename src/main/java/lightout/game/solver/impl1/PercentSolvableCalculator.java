@@ -1,6 +1,6 @@
 package lightout.game.solver.impl1;
 
-import lightout.game.array2d.NeighberhoodDelta;
+import lightout.game.delta.NeighberhoodDelta;
 
 public class PercentSolvableCalculator {
 

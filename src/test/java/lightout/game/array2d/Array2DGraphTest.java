@@ -189,34 +189,42 @@ public class Array2DGraphTest {
 		assertThat(g.get(p1), is(10));
 	}
 	
-	@Test
-	public void testMod() {
-		Array2DGraph g = new Array2DGraph(4, 5);
-		assertThat(g.mod(-1), is(-1));
-		g.setModularNumber(10);
-		assertThat(g.mod(-1), is(9));
+//	@Test
+//	public void testMod() {
+//		Array2DGraph g = new Array2DGraph(4, 5);
+//		assertThat(g.mod(-1), is(-1));
+//		g.setModularNumber(10);
+//		assertThat(g.mod(-1), is(9));
+//
+//		for(int i = -100; i <=100; i++) {
+//			assertTrue(g.mod(i) >= 0);
+//			assertTrue(g.mod(i) < 10);
+//		}
+//	}
+//	
+//	@Test
+//	public void testClone() {
+//		Graph g = new Array2DGraph(4, 5);
+//		g.reset();
+//		Position position = new Array2DPosition(1,1);
+//		g.set(position, 10);
+//		Graph g2 = g.clone();
+//		assertTrue(Objects.equals(g, g2));
+//		assertThat(g2.get(position), is(10));
+//		
+//		g.set(position, 11);
+//		assertFalse(Objects.equals(g, g2));
+//		assertThat(g.get(position), is(11));
+//		assertThat(g2.get(position), is(10));
+//	}
+//	
 
-		for(int i = -100; i <=100; i++) {
-			assertTrue(g.mod(i) >= 0);
-			assertTrue(g.mod(i) < 10);
-		}
-	}
-	
 	@Test
-	public void testClone() {
-		Graph g = new Array2DGraph(4, 5);
-		g.reset();
-		Position position = new Array2DPosition(1,1);
-		g.set(position, 10);
-		Graph g2 = g.clone();
-		assertTrue(Objects.equals(g, g2));
-		assertThat(g2.get(position), is(10));
-		
-		g.set(position, 11);
-		assertFalse(Objects.equals(g, g2));
-		assertThat(g.get(position), is(11));
-		assertThat(g2.get(position), is(10));
+	public void testGetValuesAs1DArray() {
+		Array2DGraph g = new Array2DGraph(3, 2);
+		g.set(new int[][] {{1, 2}, {4, 5}, {7, 8}});
+//		System.out.println(g);
+//		System.out.println(Arrays.toString(g.getValuesAs1DArray()));
+		assertThat(g.getValuesAs1DArray(), is(new int[] {1, 2, 4, 5, 7, 8}));
 	}
-	
-
 }

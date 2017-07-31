@@ -10,8 +10,8 @@ import lightout.game.Rectangle;
 import lightout.game.Vertex;
 import lightout.game.array2d.Array2DGraph;
 import lightout.game.array2d.Array2DPosition;
-import lightout.game.array2d.NeighberhoodDelta;
-import lightout.game.array2d.SelfDelta;
+import lightout.game.delta.NeighberhoodDelta;
+import lightout.game.delta.SelfDelta;
 import lightout.game.solver.impl1.PercentSolvableCalculator;
 import lombok.Getter;
 
