@@ -93,6 +93,10 @@ public class Array2DGraph extends AbstractGraph implements Graph, Rectangle, Clo
 			Array2DGraph.this.set((Array2DPosition) this.position, value);
 		}
 		@Override
+		public int getPositionIndex() {
+			return this.position.getX() * Array2DGraph.this.height + this.position.getY();
+		}
+		@Override
 		public String toString() {
 			return this.getPosition().toString() + ":" + this.getValue();
 		}

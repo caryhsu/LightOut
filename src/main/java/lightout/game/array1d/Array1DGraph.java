@@ -65,6 +65,10 @@ public class Array1DGraph extends AbstractGraph implements Graph  {
 			Array1DGraph.this.set((Array1DPosition) this.position, value);
 		}
 		@Override
+		public int getPositionIndex() {
+			return this.position.getX();
+		}
+		@Override
 		public String toString() {
 			return this.getPosition().toString() + ":" + this.getValue();
 		}

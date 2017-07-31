@@ -16,13 +16,14 @@ public class MatrixAFactoryImpl1Test {
 	@Test
 	public void test1() {
 		Array2DGraph g1 = new Array2DGraph(3, 3);
+		g1.setModularNumber(2);
 		g1.set(new int[][] {
 			{1, 0, 1},
 			{0, 0, 0},
 			{1, 0, 0}
 		});
 		NeighberhoodDelta delta = new NeighberhoodDelta(g1);
-		MatrixAFactory factory = new MatrixAFactoryImpl1(delta);
+		MatrixAFactory factory = new MatrixAFactoryImpl(delta);
 		Matrix<Integer> A = factory.newInstance();
 	
 		int[][] expectValue = new int[][] {

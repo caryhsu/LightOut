@@ -4,9 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -38,7 +36,7 @@ public class Array2DGraphTest {
 	public void testReset1() {
 		Graph g = new Array2DGraph(4, 5);
 		g.reset();
-		List<Vertex> vertexes =g.getVertexes();
+		List<Vertex> vertexes = g.getVertexes();
 		List<Vertex> vertexes1 = vertexes.stream()
 			.filter(v -> v.getValue() == 0)
 			.collect(Collectors.toList());
@@ -56,6 +54,19 @@ public class Array2DGraphTest {
 		assertThat(vertexes1.size(), is(4*5));
 	}
 
+	@Test
+	public void testVertexGetPositionIndex() {
+		Graph g = new Array2DGraph(4, 5);
+		List<Integer> positionIndexes = g.getVertexes().stream()
+				.map(Vertex::getPositionIndex)
+				.collect(Collectors.toList());
+//		System.out.println(positionIndexes);
+		assertThat(positionIndexes.size(), is(4*5));
+		for(int i = 0; i < positionIndexes.size(); i++) {
+			assertThat(positionIndexes.get(i), is(i));
+		}
+	}
+	
 	@Test
 	public void testGetSet() {
 		Graph g = new Array2DGraph(4, 5);

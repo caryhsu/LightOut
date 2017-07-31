@@ -4,6 +4,8 @@ public interface Vertex {
 
 	public Position getPosition();
 	
+	public int getPositionIndex();
+	
 	public int getValue();
 	
 	public void setValue(int value);

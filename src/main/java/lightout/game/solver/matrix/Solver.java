@@ -23,7 +23,7 @@ public class Solver {
 		this.ASize = boardRow * boardCol;
 		this.state = state;
 		
-		this.A = new MatrixAFactoryImpl1(this.delta).newInstance();
+		this.A = new MatrixAFactoryImpl(this.delta).newInstance();
 	}
 
 	public void setBVector(int[] bVector) {
