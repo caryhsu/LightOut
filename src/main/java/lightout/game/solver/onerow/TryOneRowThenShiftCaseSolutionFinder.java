@@ -26,7 +26,7 @@ public class TryOneRowThenShiftCaseSolutionFinder implements SolutionFinder {
 	public Graph[] find() {
 		Predicate<Graph> endPreidcate = (g) -> {
 			return ((Array2DGraph) g).getVertexesForRow(0).stream().allMatch(v->v.getValue()==(g.getModularNumber()-1));
-		};		
+		};
 		graphList.setEndPreidcate(endPreidcate);
 		
 		GraphApplyer applyer = new GraphApplyer(initGraph, delta, this.moduleNumber);

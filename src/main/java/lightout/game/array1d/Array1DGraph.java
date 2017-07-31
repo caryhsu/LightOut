@@ -3,17 +3,14 @@ package lightout.game.array1d;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 
 import lightout.game.AbstractGraph;
 import lightout.game.Graph;
 import lightout.game.Position;
-import lightout.game.Rectangle;
 import lightout.game.Vertex;
 import lightout.game.solver.foreach.GraphList;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.SneakyThrows;
 
 @EqualsAndHashCode(callSuper=false, exclude={})
