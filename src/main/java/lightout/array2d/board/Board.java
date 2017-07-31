@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 
 import lightout.game.Graph;
 import lightout.game.Rectangle;
-import lightout.game.array2d.Array2DGraph;
 import lightout.game.array2d.Array2DPosition;
 import lightout.game.delta.NeighberhoodDelta;
 import lightout.game.solver.grouping.PercentSolvableCalculator;
@@ -32,7 +31,7 @@ import lombok.Setter;
 
 public class Board extends JFrame {
 	// Fields that deals with the puzzle's logic
-	@Getter @Setter private BoardViewModel game;
+	@Getter @Setter private BoardViewModel viewModel;
 
 	// Fields that deals with GUI
 	// private JPanel m = new JPanel(new FlowLayout());
@@ -98,37 +97,20 @@ public class Board extends JFrame {
 		sideP.setPreferredSize(new Dimension(200, 600));
 
 		// Set puzzle's parameter
-		this.game = new BoardViewModel(size, size, state);
+		this.viewModel = new BoardViewModel(size, size, state);
 
 		// initialize GUI for side Panel
 		// need to add methods for these buttons
 		solveB.setText("Show Solution");
 		solveB.setBackground(GameColorManager.getColor("#CCCCCC"));
-		solveB.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				publishSolution();
-			}
-		});
+		solveB.addActionListener(e -> { publishSolution(); refreshModelBinding(); });
 		sideButtonP.add(solveB);
 		resetB.setText("Reset Board");
-		resetB.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				game.reset();
-				refreshModelBinding();
-			}
-		});
+		resetB.addActionListener(e -> { viewModel.reset(); refreshModelBinding(); });
 		resetB.setBackground(GameColorManager.getColor("#CCCCCC"));
 		sideButtonP.add(resetB);
 		randomizeB.setText("Randomize Board");
-		randomizeB.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				game.randomize();
-				refreshModelBinding();
-			}
-		});
+		randomizeB.addActionListener(e -> { viewModel.randomize(); refreshModelBinding(); });
 		randomizeB.setBackground(GameColorManager.getColor("#CCCCCC"));
 		sideButtonP.add(randomizeB);
 		editB.setText("Edit Board");
@@ -138,10 +120,10 @@ public class Board extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				editOnOff = (editOnOff + 1) % 2;
 				if (editOnOff == 1) {
-					game.setEditMode(true);
+					viewModel.setEditMode(true);
 					editB.setBackground(GameColorManager.getColor("#AAAAAA"));
 				} else {
-					game.setEditMode(false);
+					viewModel.setEditMode(false);
 					editB.setBackground(GameColorManager.getColor("#CCCCCC"));
 				}
 			}
@@ -153,7 +135,7 @@ public class Board extends JFrame {
 		JLabel lightsOutHeader = new JLabel();
 		lightsOutHeader.setText("Lights Out");
 		// lightsOutHeader.setFont(new Font("Lights Out", Font.BOLD, 12));
-		currentL.setText("Current Moves: " + game.getNumberOfClicks());
+		currentL.setText("Current Moves: " + viewModel.getNumberOfClicks());
 		sideLabelP.add(lightsOutHeader);
 		sideLabelP.add(currentL);
 
@@ -187,7 +169,7 @@ public class Board extends JFrame {
 				String[] ss = s.split("x");
 				int width = Integer.parseInt(ss[0]);
 				int height = Integer.parseInt(ss[1]);
-				((Rectangle) game).setSize(width, height);
+				viewModel.setSize(width, height);
 				createBoard();
 				p.revalidate();
 				subSolutionP.revalidate();
@@ -200,7 +182,7 @@ public class Board extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String s = (String) colorsCB.getSelectedItem();
 				Integer colors = Integer.parseInt(s = s.split(" ")[0]);
-				game.setState(colors);
+				viewModel.setState(colors);
 				createBoard();
 				p.revalidate();
 				subSolutionP.revalidate();
@@ -219,11 +201,11 @@ public class Board extends JFrame {
 		
 		p.removeAll();
 		// initialize the values
-		game.reset();
+		viewModel.reset();
 		
-		int width = ((Rectangle) game).getWidth();
-		int height = ((Rectangle) game).getHeight();
-		Graph values = game.getGraph();
+		int width = ((Rectangle) viewModel).getWidth();
+		int height = ((Rectangle) viewModel).getHeight();
+		Graph values = viewModel.getGraph();
 		
 		p.setLayout(new GridLayout(width, height));
 		p.setPreferredSize(new Dimension(600, 600));
@@ -235,7 +217,7 @@ public class Board extends JFrame {
 				final int y = j;
 				Array2DPosition position = new Array2DPosition(i, j);
 				buttons[i][j] = new JButton(values.get(position) + "");
-				buttons[i][j].setFont(new Font("Dialog", Font.PLAIN, 60 - 3 * ((Rectangle) game).getWidth()));
+				buttons[i][j].setFont(new Font("Dialog", Font.PLAIN, 60 - 3 * ((Rectangle) viewModel).getWidth()));
 				buttons[i][j].setOpaque(true);
 				/*
 				 * buttons[i][j].addActionListener(new ActionListener() {
@@ -257,19 +239,19 @@ public class Board extends JFrame {
 
 					@Override
 					public void mouseEntered(MouseEvent arg0) {
-						game.setCursor(new Array2DPosition(x, y));
+						viewModel.setCursor(new Array2DPosition(x, y));
 						refreshModelBinding();
 					}
 
 					@Override
 					public void mouseExited(MouseEvent arg0) {
-						game.clearCursor();
+						viewModel.clearCursor();
 						refreshModelBinding();
 					}
 
 					@Override
 					public void mouseReleased(MouseEvent arg0) {
-						game.select(new Array2DPosition(x, y));
+						viewModel.select(new Array2DPosition(x, y));
 						refreshModelBinding();
 					}
 				});
@@ -294,15 +276,15 @@ public class Board extends JFrame {
 	}
 	
 	private void refreshModelBinding() {
-		int width = ((Rectangle) game).getWidth();
-		int height = ((Rectangle) game).getHeight();
-		Graph values = game.getGraph();
+		int width = ((Rectangle) viewModel).getWidth();
+		int height = ((Rectangle) viewModel).getHeight();
+		Graph values = viewModel.getGraph();
 		
 		//GameColorManager cm = new GameColorManager(game.getState());
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				Array2DPosition position = new Array2DPosition(i, j);
-				if (game.getDeltaValue(i, j) > 0) {
+				if (viewModel.getDeltaValue(i, j) > 0) {
 		//			buttons[i][j].setBackground(Color.decode(cm.darkenColor(values.get(position))));
 				}
 				else {
@@ -312,21 +294,20 @@ public class Board extends JFrame {
 				buttons[i][j].setText("" + values.get(position));
 			}
 		}
-		currentL.setText("Current Moves: " + game.getNumberOfClicks());
+		currentL.setText("Current Moves: " + viewModel.getNumberOfClicks());
 		
-		double percentSolvable = game.getPercentSolvable() * 100;
+		double percentSolvable = viewModel.getPercentSolvable() * 100;
 		percentSolvableLabel.setText((new DecimalFormat("#0.000000")).format(percentSolvable) + "% Solvable");
 		
 	}
 
 	public void publishSolution() {
-		int width = ((Rectangle) game).getWidth();
-		int height = ((Rectangle) game).getHeight();
-		int state = game.getState();
+		int width = viewModel.getWidth();
+		int height = viewModel.getHeight();
+		int state = viewModel.getState();
 		
-		Array2DGraph graph = game.getGraph();
 		// Create a solver
-		NeighberhoodDelta delta = new NeighberhoodDelta(graph);
+		NeighberhoodDelta delta = this.viewModel.getDelta();
 		Solver einstein = new Solver(width, height, state, delta);
 
 		// Build the b vector
@@ -357,28 +338,5 @@ public class Board extends JFrame {
 			solutionHeader.setForeground(Color.red);
 		}
 	}
-
-	public int[] publishB() {
-		int width = ((Rectangle) game).getWidth();
-		int height = ((Rectangle) game).getHeight();
-		int state = game.getState();
-		Graph values = game.getGraph();
-		int[] b = new int[width * height];
-		int count = 0;
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
-				Array2DPosition position = new Array2DPosition(i, j);
-				b[count] = (state - values.get(position)) % state;
-				count++;
-			}
-		}
-		return b;
-	}
-
-	public int[][] solve() {
-		Array2DGraph values = (Array2DGraph) game.getGraph();
-		return values.getValues();
-	}
-	
 
 }
