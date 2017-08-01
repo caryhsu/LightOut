@@ -1,5 +1,6 @@
 package lightout.array2d.board;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -7,7 +8,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.MouseAdapter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,9 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
 
 import lightout.game.Graph;
 import lightout.game.Rectangle;
@@ -57,11 +60,6 @@ public class Board extends JFrame {
 	private JLabel[][] solutionGrid;
 	private JLabel solutionHeader;
 	private JLabel percentSolvableLabel;
-
-	// combo Boxes
-
-	// boolean edit
-	private int editOnOff = 0;
 
 	public Board(int size, int state) {
 		// Board GUI
@@ -103,7 +101,7 @@ public class Board extends JFrame {
 		// need to add methods for these buttons
 		solveB.setText("Show Solution");
 		solveB.setBackground(GameColorManager.getColor("#CCCCCC"));
-		solveB.addActionListener(e -> { publishSolution(); refreshModelBinding(); });
+		solveB.addActionListener(e -> { viewModel.publishSolution(); refreshModelBinding(); });
 		sideButtonP.add(solveB);
 		resetB.setText("Reset Board");
 		resetB.addActionListener(e -> { viewModel.reset(); refreshModelBinding(); });
@@ -115,19 +113,7 @@ public class Board extends JFrame {
 		sideButtonP.add(randomizeB);
 		editB.setText("Edit Board");
 		editB.setBackground(GameColorManager.getColor("#CCCCCC"));
-		editB.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				editOnOff = (editOnOff + 1) % 2;
-				if (editOnOff == 1) {
-					viewModel.setEditMode(true);
-					editB.setBackground(GameColorManager.getColor("#AAAAAA"));
-				} else {
-					viewModel.setEditMode(false);
-					editB.setBackground(GameColorManager.getColor("#CCCCCC"));
-				}
-			}
-		});
+		editB.addActionListener(e -> { viewModel.triggleEditMode(); refreshModelBinding(); });
 		sideButtonP.add(editB);
 
 		// initialize GUI for side Label Panel
@@ -135,7 +121,7 @@ public class Board extends JFrame {
 		JLabel lightsOutHeader = new JLabel();
 		lightsOutHeader.setText("Lights Out");
 		// lightsOutHeader.setFont(new Font("Lights Out", Font.BOLD, 12));
-		currentL.setText("Current Moves: " + viewModel.getNumberOfClicks());
+		currentL.setText("");
 		sideLabelP.add(lightsOutHeader);
 		sideLabelP.add(currentL);
 
@@ -154,38 +140,32 @@ public class Board extends JFrame {
 			boardSizesList.add("" + i + "x" + i);
 		}
 		String[] boardSizes = boardSizesList.toArray(new String[] {});
-		List<String> numOfColorsList = new ArrayList<String>();
-		for(int i = 2; i <= 20; i++) {
-			numOfColorsList.add("" + i + " colors");
-		}
-		String[] numOfColors = numOfColorsList.toArray(new String[] {});
 		final JComboBox boardSizeCB = new JComboBox(boardSizes);
 		final int color = state;
 		boardSizeCB.addActionListener(new ActionListener() {
-
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				String s = (String) boardSizeCB.getSelectedItem();
-				String[] ss = s.split("x");
-				int width = Integer.parseInt(ss[0]);
-				int height = Integer.parseInt(ss[1]);
-				viewModel.setSize(width, height);
+				viewModel.setSize(s);
 				createBoard();
-				p.revalidate();
-				subSolutionP.revalidate();
+				viewModel.recalculatePercentSolvable();
+				refreshModelBinding();
 			}
-
 		});
-		final JComboBox colorsCB = new JComboBox(numOfColors);
+		List<Integer> numOfColors = new ArrayList<Integer>();
+		for(int i = 2; i <= 20; i++) {
+			numOfColors.add(i);
+		}
+		final JComboBox<Integer> colorsCB = new JComboBox<Integer>(numOfColors.toArray(new Integer[] {}));
+		colorsCB.setSelectedItem(color);
 		colorsCB.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				String s = (String) colorsCB.getSelectedItem();
-				Integer colors = Integer.parseInt(s = s.split(" ")[0]);
+			public void actionPerformed(ActionEvent e) {
+				Integer colors = (Integer) colorsCB.getSelectedItem();
 				viewModel.setState(colors);
 				createBoard();
-				p.revalidate();
-				subSolutionP.revalidate();
+				viewModel.recalculatePercentSolvable();
+				refreshModelBinding();
 			}
 
 		});
@@ -198,15 +178,11 @@ public class Board extends JFrame {
 
 	public void createBoard() {
 		// Compute how unsolvable the current version of the puzzle is
-		
 		p.removeAll();
-		// initialize the values
-		viewModel.reset();
-		
-		int width = ((Rectangle) viewModel).getWidth();
-		int height = ((Rectangle) viewModel).getHeight();
+		int width = viewModel.getWidth();
+		int height = viewModel.getHeight();
 		Graph values = viewModel.getGraph();
-		
+	
 		p.setLayout(new GridLayout(width, height));
 		p.setPreferredSize(new Dimension(600, 600));
 		p.setBackground(GameColorManager.getColor("#F0F0F0"));
@@ -219,38 +195,19 @@ public class Board extends JFrame {
 				buttons[i][j] = new JButton(values.get(position) + "");
 				buttons[i][j].setFont(new Font("Dialog", Font.PLAIN, 60 - 3 * ((Rectangle) viewModel).getWidth()));
 				buttons[i][j].setOpaque(true);
-				/*
-				 * buttons[i][j].addActionListener(new ActionListener() {
-				 * 
-				 * @Override public void actionPerformed(ActionEvent e) {
-				 * press(x, y); } });
-				 */
-				buttons[i][j].addMouseListener(new MouseListener() {
+				buttons[i][j].addMouseListener(new MouseAdapter() {
 					@Override
-					public void mousePressed(MouseEvent e) {
-						// do some stuff
-					}
-
-					@Override
-					public void mouseClicked(MouseEvent arg0) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void mouseEntered(MouseEvent arg0) {
+					public void mouseEntered(MouseEvent e) {
 						viewModel.setCursor(new Array2DPosition(x, y));
 						refreshModelBinding();
 					}
-
 					@Override
-					public void mouseExited(MouseEvent arg0) {
+					public void mouseExited(MouseEvent e) {
 						viewModel.clearCursor();
 						refreshModelBinding();
 					}
-
 					@Override
-					public void mouseReleased(MouseEvent arg0) {
+					public void mouseReleased(MouseEvent e) {
 						viewModel.select(new Array2DPosition(x, y));
 						refreshModelBinding();
 					}
@@ -272,12 +229,15 @@ public class Board extends JFrame {
 		}
 		solutionP.add(subSolutionP);
 		
+		p.revalidate();
+		subSolutionP.revalidate();
+		viewModel.recalculatePercentSolvable();
 		this.refreshModelBinding();
 	}
 	
 	private void refreshModelBinding() {
-		int width = ((Rectangle) viewModel).getWidth();
-		int height = ((Rectangle) viewModel).getHeight();
+		int width = viewModel.getWidth();
+		int height = viewModel.getHeight();
 		Graph values = viewModel.getGraph();
 		
 		//GameColorManager cm = new GameColorManager(game.getState());
@@ -295,48 +255,24 @@ public class Board extends JFrame {
 			}
 		}
 		currentL.setText("Current Moves: " + viewModel.getNumberOfClicks());
-		
-		double percentSolvable = viewModel.getPercentSolvable() * 100;
-		percentSolvableLabel.setText((new DecimalFormat("#0.000000")).format(percentSolvable) + "% Solvable");
-		
-	}
-
-	public void publishSolution() {
-		int width = viewModel.getWidth();
-		int height = viewModel.getHeight();
-		int state = viewModel.getState();
-		
-		// Create a solver
-		NeighberhoodDelta delta = this.viewModel.getDelta();
-		Solver einstein = new Solver(width, height, state, delta);
-
-		// Build the b vector
-		int[] b = new VectorBFactoryImpl(delta).newInstance();
-
-		// Give the b vector to the solver and solve
-		einstein.setBVector(b);
-		einstein.RowReduce();
-		
-		// Count the row of zero
-		PercentSolvableCalculator c = new PercentSolvableCalculator(einstein);
-		double percentSolvable = c.calculate().doubleValue() * 100;
-		percentSolvableLabel.setText((new DecimalFormat("#0.00")).format(percentSolvable) + "% Solvable");
-
+		percentSolvableLabel.setText((new DecimalFormat("#0.000000")).format(viewModel.getPercentSolvable() * 100) + "% Solvable");
+		editB.setText(viewModel.isEditMode() ? "Play": "Edit Board");
 		
 		// Check if a solution exists
-		if (einstein.hasSolution()) {
-			solutionHeader.setText("Solution");
-			solutionHeader.setForeground(Color.black);
-			int[][] solution = einstein.publishSolution();
-			for (int i = 0; i < width; i++){
-				for (int j = 0; j < height; j++) {
-					solutionGrid[i][j].setText("" + solution[i][j]);
-				}
-			} 
-		} else {
-			solutionHeader.setText("NO SOLUTION!");
-			solutionHeader.setForeground(Color.red);
+		if (viewModel.getSolvable() != null) {
+			solutionHeader.setText(viewModel.getSolvable()? "Solution": "NO SOLUTION!");
+			solutionHeader.setForeground(viewModel.getSolvable()? Color.black: Color.red);
 		}
+		else {
+			solutionHeader.setText("");
+			solutionHeader.setForeground(Color.black);
+		}
+		int[][] solution = viewModel.getSolution();
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				solutionGrid[i][j].setText(solution == null ? "" : "" + solution[i][j]);
+			}
+		} 
 	}
 
 }

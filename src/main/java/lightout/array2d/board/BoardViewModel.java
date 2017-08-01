@@ -1,5 +1,7 @@
 package lightout.array2d.board;
 
+import java.awt.Color;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -13,6 +15,8 @@ import lightout.game.array2d.Array2DPosition;
 import lightout.game.delta.NeighberhoodDelta;
 import lightout.game.delta.SelfDelta;
 import lightout.game.solver.grouping.PercentSolvableCalculator;
+import lightout.game.solver.matrix.Solver;
+import lightout.game.solver.matrix.vectorb.VectorBFactoryImpl;
 import lombok.Getter;
 
 public class BoardViewModel implements Rectangle {
@@ -58,6 +62,17 @@ public class BoardViewModel implements Rectangle {
 		this.reset();
 	}
 	
+	public void setSize(String text) {
+		String[] ss = text.split("x");
+		int width = Integer.parseInt(ss[0]);
+		int height = Integer.parseInt(ss[1]);
+		this.setSize(width, height);
+		this._percentSolvable = null;
+		this.solution = null;
+		this.solvable = null;
+	}
+	
+	
 	public void setEditMode(boolean editMode) {
 		this.editMode = editMode;
 	}
@@ -73,6 +88,9 @@ public class BoardViewModel implements Rectangle {
 	public void setState(int state) {
 		this.state = state;
 		this.graph.setModularNumber(this.state);
+		this._percentSolvable = null;
+		this.solution = null;
+		this.solvable = null;
 		this.reset();
 	}	
 	
@@ -178,6 +196,31 @@ public class BoardViewModel implements Rectangle {
 		}
 		else { // (this.editMode == false) {
 			return delta.getDeltaValue((Array2DPosition) target, (Array2DPosition) cursor);
+		}
+	}
+	
+	public void triggleEditMode() {
+		this.editMode = !editMode;
+	}
+	
+	@Getter private Boolean solvable;
+	@Getter private int[][] solution;
+	
+	public void publishSolution() {
+		recalculatePercentSolvable();
+		// Create a solver
+		Solver einstein = new Solver(this.getWidth(), this.getHeight(), state, delta);
+		// Build the b vector
+		int[] b = new VectorBFactoryImpl(delta).newInstance();
+		// Give the b vector to the solver and solve
+		einstein.setBVector(b);
+		einstein.RowReduce();
+		this.solvable = einstein.hasSolution();
+		if (this.solvable) {
+			this.solution = einstein.publishSolution();
+		}
+		else {
+			this.solution = null;
 		}
 	}
 	
