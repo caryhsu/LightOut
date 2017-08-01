@@ -1,38 +1,35 @@
 package lightout.array2d.board;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
 
 import lightout.game.Graph;
 import lightout.game.Rectangle;
 import lightout.game.array2d.Array2DPosition;
-import lightout.game.delta.NeighberhoodDelta;
-import lightout.game.solver.grouping.PercentSolvableCalculator;
-import lightout.game.solver.matrix.Solver;
-import lightout.game.solver.matrix.vectorb.VectorBFactoryImpl;
 import lombok.Getter;
 import lombok.Setter;
 
 public class Board extends JFrame {
+	
+	private static final long serialVersionUID = -6982879331734265860L;
+
 	// Fields that deals with the puzzle's logic
 	@Getter @Setter private BoardViewModel viewModel;
 
@@ -56,7 +53,6 @@ public class Board extends JFrame {
 
 	// labels
 	private JLabel currentL = new JLabel();
-	private JLabel bestL = new JLabel();
 	private JLabel[][] solutionGrid;
 	private JLabel solutionHeader;
 	private JLabel percentSolvableLabel;
@@ -195,6 +191,8 @@ public class Board extends JFrame {
 				buttons[i][j] = new JButton(values.get(position) + "");
 				buttons[i][j].setFont(new Font("Dialog", Font.PLAIN, 60 - 3 * ((Rectangle) viewModel).getWidth()));
 				buttons[i][j].setOpaque(true);
+				buttons[i][j].setBorderPainted(false);
+				
 				buttons[i][j].addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseEntered(MouseEvent e) {
@@ -240,16 +238,16 @@ public class Board extends JFrame {
 		int height = viewModel.getHeight();
 		Graph values = viewModel.getGraph();
 		
-		//GameColorManager cm = new GameColorManager(game.getState());
+		GameColorManager cm = new GameColorManager(this.viewModel.getState());
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				Array2DPosition position = new Array2DPosition(i, j);
 				if (viewModel.getDeltaValue(i, j) > 0) {
-		//			buttons[i][j].setBackground(Color.decode(cm.darkenColor(values.get(position))));
+					buttons[i][j].setBackground(Color.decode(cm.darkenColor(values.get(position))));
 				}
 				else {
-		//			Color theColor = GameColorManager.getColor(cm.colorHex(values.get(position)));
-		//			buttons[i][j].setBackground(theColor);
+					Color theColor = GameColorManager.getColor(cm.colorHex(values.get(position)));
+					buttons[i][j].setBackground(theColor);
 				}
 				buttons[i][j].setText("" + values.get(position));
 			}
