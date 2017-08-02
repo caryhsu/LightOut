@@ -26,7 +26,7 @@ public class MatrixAFactoryImpl implements MatrixAFactory {
 	public void init(Matrix<Integer> A) {
 		graph.getVertexes().forEach(v1 -> {
 			graph.getVertexes().forEach(v2 -> {
-				A.set(v1.getPositionIndex(), v2.getPositionIndex(), delta.getDeltaValue(v1.getPosition(), v2.getPosition()));
+				A.setCoefficient(v1.getPositionIndex(), v2.getPositionIndex(), delta.getDeltaValue(v1.getPosition(), v2.getPosition()));
 			});
 		});
 	}

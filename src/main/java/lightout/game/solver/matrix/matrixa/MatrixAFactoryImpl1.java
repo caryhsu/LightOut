@@ -36,7 +36,7 @@ public class MatrixAFactoryImpl1 implements MatrixAFactory {
 				j_ = Acol % this.boardCol;
 				Array2DPosition p1 = new Array2DPosition(i, j);
 				Array2DPosition p2 = new Array2DPosition(i_, j_);
-				A.set(Arow, Acol, delta.getDeltaValue(p1, p2));
+				A.setCoefficient(Arow, Acol, delta.getDeltaValue(p1, p2));
 			}
 		}
 	}

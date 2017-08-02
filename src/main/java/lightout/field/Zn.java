@@ -19,19 +19,29 @@ public class Zn implements FieldOperators<Integer> {
 
 	@Override
 	public Integer add(Integer x, Integer y) {
-		return (x + y) % n;
+		int result = (x + y) % n;
+		if (result < 0) result += n;
+		return result;
 	}
 
 	@Override
 	public Integer multiply(Integer x, Integer y) {
-		return (x * y) % n;
+		int result = (x * y) % n;
+		if (result < 0) result += n;
+		return result;
 	}
 
+	/**
+	 *  加法的相反數
+	 */
 	@Override
 	public Integer negate(Integer x) {
 		return multiply(x, n - 1);
 	}
 
+	/**
+	 *  乘法的相反數
+	 */
 	@Override
 	public Integer reciprocal(Integer x) throws IllegalArgumentException {
 		for (int i = n - 1; i >= 0; i--) {
@@ -44,6 +54,11 @@ public class Zn implements FieldOperators<Integer> {
 
 	@Override
 	public boolean equals(Integer x, Integer y) {
+		x = x % n;
+		if (x < 0) x += n;
+		y = y % n;
+		if (y < 0) y += n;
+		
 		return x == y;
 	}
 

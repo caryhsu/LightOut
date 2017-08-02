@@ -34,7 +34,7 @@ public class Solver {
 					"The b vector does not have the correct dimension.");
 		}
 		for (int i = 0; i < bVector.length; i++) {
-			A.setBVector(i, 0, (Integer) bVector[i]);
+			A.setConstant(i, (Integer) bVector[i]);
 		}
 	}
 
@@ -45,11 +45,11 @@ public class Solver {
 	public boolean hasSolution() {
 		for (int curr_Row = ASize - 1; curr_Row >= 0; curr_Row--) { // Go through each row of A starting from the bottom
 			for (int i = 0; i < ASize; i++) {
-				if ((int)A.get(curr_Row, i) != 0) { // If it isn't all zero
+				if ((int)A.getCoefficient(curr_Row, i) != 0) { // If it isn't all zero
 					return true;
 				}
 			}
-			if ((int)A.getBVector(curr_Row, 0) != 0) { // If it is all zero with non zero value for b vector
+			if ((int)A.getConstant(curr_Row) != 0) { // If it is all zero with non zero value for b vector
 				return false;
 			}
 		}
@@ -59,7 +59,7 @@ public class Solver {
 	public int[][] publishSolution() {
 		int[][] solution = new int[boardRow][boardCol];
 		for (int i = 0; i < ASize; i++) {
-			solution[i / boardCol][i % boardCol] = A.getBVector(i, 0);
+			solution[i / boardCol][i % boardCol] = A.getConstant(i);
 		}
 		return solution;
 	}
@@ -67,7 +67,7 @@ public class Solver {
 	public void printA() {
 		for (int i = 0; i < ASize; i++) {
 			for (int j = 0; j < ASize; j++) {
-				System.out.print(A.get(i, j) + " ");
+				System.out.print(A.getCoefficient(i, j) + " ");
 			}
 			System.out.println();
 		}
@@ -78,7 +78,7 @@ public class Solver {
 		int count = 0;
 		for (int curr_Row = ASize - 1; curr_Row >= 0; curr_Row--) { // Go through each row of A starting from the bottom
 			for (int i = 0; i < ASize; i++) {
-				if ((int)A.get(curr_Row, i) != 0) { // If it isn't all zero
+				if ((int)A.getCoefficient(curr_Row, i) != 0) { // If it isn't all zero
 					return count;
 				}
 			}

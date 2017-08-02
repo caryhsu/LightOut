@@ -1,113 +1,212 @@
 package lightout.field;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 
 public final class Matrix<T> implements Cloneable {
 	
-	@Getter private Object[][] values;
-	public Object[][] bVector; 
+	@Getter private int rows;
+	@Getter private int columns;
+	@Getter private Object[][] coefficients;
+	@Getter private Object[][] constants; 
 
 	private FieldOperators<T> op;
 	
-	public Matrix(int rows, int cols, FieldOperators<T> f) {
-		values = new Object[rows][cols];
+	public Matrix(int rows, int columns, FieldOperators<T> f) {
+		this.rows = rows;
+		this.columns = columns;
+		coefficients = new Object[rows][columns];
 		this.op = f;
-		bVector = new Object[rows][1];
+		constants = new Object[rows][1];
 	}
-	
-	public int rowCount() {
-		return values.length;
-	}
-	public int columnCount() {
-		return values[0].length;
-	}
-	
-	public T get(int row, int col) {
-		if (row < 0 || row >= values.length || col < 0 || col >= values[row].length)
+		
+	@SuppressWarnings("unchecked")
+	public T getCoefficient(int rowIndex, int columnIndex) {
+		if (rowIndex < 0 || rowIndex >= this.rows || columnIndex < 0 || columnIndex >= this.columns)
 			throw new IndexOutOfBoundsException("Row or column index out of bounds");
-		return (T)values[row][col];
+		return (T) this.coefficients[rowIndex][columnIndex];
 	}
 	
-	public T getBVector(int row, int col) {
-		if (row < 0 || row >= values.length || col < 0 || col >= values[row].length)
+	@SuppressWarnings("unchecked")
+	public T getConstant(int rowIndex) {
+		if (rowIndex < 0 || rowIndex >= this.rows)
 			throw new IndexOutOfBoundsException("Row or column index out of bounds");
-		return (T)bVector[row][col];
+		return (T) this.constants[rowIndex][0];
 	}
 	
-	public void set(int row, int col, T val) {
-		if (row < 0 || row >= values.length || col < 0 || col >= values[0].length)
+	public void setCoefficient(int rowIndex, int columnIndex, T value) {
+		if (rowIndex < 0 || rowIndex >= this.rows || columnIndex < 0 || columnIndex >= this.columns)
 			throw new IndexOutOfBoundsException("Row or column index out of bounds");
-		values[row][col] = val;
+		this.coefficients[rowIndex][columnIndex] = value;
 	}
 	
-	public void setBVector(int row, int col, T val) {
-		if (row < 0 || row >= values.length || col < 0 || col >= values[0].length)
+	public void setCoefficientsRow(int rowIndex, T[] coefficients) {
+		if (rowIndex < 0 || rowIndex >= this.rows || coefficients.length != this.columns)
 			throw new IndexOutOfBoundsException("Row or column index out of bounds");
-		bVector[row][0] = val;
+		this.coefficients[rowIndex] = coefficients;
 	}
 
+	public void setCoefficients(T[][] coefficients) {
+		if (coefficients.length != this.rows || coefficients[0].length != this.columns)
+			throw new IndexOutOfBoundsException("Row or column index out of bounds");
+		this.coefficients = coefficients;
+	}
+
+	public void setConstant(int rowIndex, T constant) {
+		if (rowIndex < 0 || rowIndex >= this.rows)
+			throw new IndexOutOfBoundsException("Row or column index out of bounds");
+		this.constants[rowIndex][0] = constant;
+	}
+
+	public void setContants(T[] constants) {
+		for(int index = 0; index < rows; index++) {
+			this.constants[index][0] = constants[index];
+		}
+	}
+	
 	public Matrix<T> clone() {
-		int rows = rowCount();
-		int cols = columnCount();
-		Matrix<T> result = new Matrix<T>(rows, cols, op);
-		for (int i = 0; i < values.length; i++)
-			System.arraycopy(values[i], 0, result.values[i], 0, cols);
+		int rows = this.rows;
+		int columns = this.columns;
+		Matrix<T> result = new Matrix<T>(rows, columns, op);
+		for (int i = 0; i < coefficients.length; i++)
+			System.arraycopy(coefficients[i], 0, result.coefficients[i], 0, columns);
 		return result;
 	}
 	
-	public void swapRows(int row0, int row1) {
-		if (row0 < 0 || row0 >= values.length || row1 < 0 || row1 >= values.length)
+	/**
+	 * 將兩列互調
+	 * @param row0
+	 * @param row1
+	 */
+	public void swapRows(Row row0, Row row1) {
+		swapRows(row0, row1);
+	}
+	
+	/**
+	 * 將兩列互調
+	 * @param rowIndex0
+	 * @param rowIndex1
+	 */
+	public void swapRows(int rowIndex0, int rowIndex1) {
+		if (rowIndex0 < 0 || rowIndex0 >= this.rows || rowIndex1 < 0 || rowIndex1 >= this.rows)
 			throw new IndexOutOfBoundsException("Row index out of bounds");
-		Object[] temp = values[row0];
-		values[row0] = values[row1];
-		values[row1] = temp;
+		Object[] temp = coefficients[rowIndex0];
+		coefficients[rowIndex0] = coefficients[rowIndex1];
+		coefficients[rowIndex1] = temp;
 		// change identity matrix
-		Object[] temp2 = bVector[row0];
-		bVector[row0] = bVector[row1];
-		bVector[row1] = temp2;
+		Object[] temp2 = constants[rowIndex0];
+		constants[rowIndex0] = constants[rowIndex1];
+		constants[rowIndex1] = temp2;
 	}
 	
-	public void multiplyRow(int row, T factor) {
-		for (int j = 0, cols = columnCount(); j < cols; j++) {
-			set(row, j, op.multiply(get(row, j), factor));
+	/**
+	 * 將某列乘以 factor
+	 * @param rowIndex
+	 * @param factor
+	 */
+	public void multiplyRow(Row row, T factor) {
+		multiplyRow(row, factor);
+	}
+	
+	/**
+	 * 將某列乘以 factor
+	 * @param rowIndex
+	 * @param factor
+	 */
+	public void multiplyRow(int rowIndex, T factor) {
+		this.updateValues(rowIndex, cell -> {return op.multiply(cell.getValue(), factor);});
+	}
+	
+	public void _multiplyRow(int rowIndex, T factor) {
+		Row row = row(rowIndex);
+		for (int j = 0, cols = this.columns; j < cols; j++) {
+			T newCoefficient = op.multiply(row.getCoefficient(j), factor);
+			row.setCoefficient(j, newCoefficient);
 		}
-		setBVector(row, 0, op.multiply(getBVector(row, 0), factor));
+		row.setConstant(op.multiply(row.getConstant(), factor));
 	}
 	
-	public void addRows(int srcRow, int destRow, T factor) {
-		for (int j = 0, cols = columnCount(); j < cols; j++) {
-			set(destRow, j, op.add(get(destRow, j), op.multiply(get(srcRow, j), factor)));
+	public void updateValues(int rowIndex, Function<Cell<T>,T> function) {
+		Row row = row(rowIndex);
+		row.getCells().forEach(cell-> {
+			T newCoef = function.apply(cell);
+			cell.setValue(newCoef);
+		});
+	}
+	
+	public void updateValues(int srcRowIndex, int dstRowIndex, Function<PairCells<T>,T> function) {
+		Row srcRow = row(srcRowIndex);
+		Row dstRow = row(dstRowIndex);
+		
+		dstRow.getCells().forEach(dstCell-> {
+			Cell<T> srcCell = srcRow.cell(dstCell.getCellIndex());
+			PairCells<T> pair = new PairCells<T>(srcCell, dstCell);
+			T newCoef = function.apply(pair);
+			dstCell.setValue(newCoef);
+		});
+	}
+
+	public void addRows(int srcRowIndex, int dstRowIndex, T factor) {
+		updateValues(srcRowIndex, dstRowIndex, pair-> {
+			Cell<T> srcCell = pair.srcCell;
+			Cell<T> dstCell = pair.dstCell;
+			return new Expression<T>()
+					.setOp(this.op)
+					.setInitial(srcCell.getValue())
+					.multiply(factor)
+					.add(dstCell.getValue())
+					.result();
+		});
+	}
+	
+	public void _addRows(int srcRowIndex, int dstRowIndex, T factor) {
+		for (int j = 0, cols = this.columns; j < cols; j++) {
+			setCoefficient(dstRowIndex, j, 
+					op.add(getCoefficient(dstRowIndex, j), op.multiply(getCoefficient(srcRowIndex, j), factor)));
 		}
-		setBVector(destRow, 0, op.add(getBVector(destRow, 0), op.multiply(getBVector(srcRow, 0), factor)));
+		setConstant(dstRowIndex, op.add(getConstant(dstRowIndex), 
+				op.multiply(getConstant(srcRowIndex), factor)));
 	}
 	
+	/**
+	 * 矩陣相乘
+	 * @param other
+	 * @return
+	 */
 	public Matrix<T> multiply(Matrix<T> other) {
-		if (columnCount() != other.rowCount())
+		if (this.columns != other.rows)
 			throw new IllegalArgumentException("Incompatible matrix sizes for multiplication");
-		int rows = rowCount();
-		int cols = other.columnCount();
-		int cells = columnCount();
-		Matrix<T> result = new Matrix<T>(rows, cols, op);
+		int rows = this.rows;
+		int columns = other.columns;
+		int cells = this.columns;
+		Matrix<T> result = new Matrix<T>(rows, columns, op);
 		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
+			for (int j = 0; j < columns; j++) {
 				T sum = op.zero();
 				for (int k = 0; k < cells; k++)
-					sum = op.add(op.multiply(get(i, k), other.get(k, j)), sum);
-				result.set(i, j, sum);
+					sum = op.add(op.multiply(getCoefficient(i, k), other.getCoefficient(k, j)), sum);
+				result.setCoefficient(i, j, sum);
 			}
 		}
 		return result;
 	}
 	
 	public void reducedRowEchelonForm() throws IllegalArgumentException {
-		int rows = rowCount();
-		int cols = columnCount();
+		int rows = this.rows;
+		int columns = this.columns;
+		
+		System.out.println(this);
 		
 		int numPivots = 0;
-		for (int j = 0; j < cols; j++) {
+		for (int j = 0; j < columns; j++) {
 			int pivotRow = numPivots; 
-			while (pivotRow < rows && op.equals(get(pivotRow, j), op.zero()))
+			while (pivotRow < rows && op.equals(getCoefficient(pivotRow, j), op.zero()))
 				pivotRow++;
 			if (pivotRow == rows)
 				continue;
@@ -116,45 +215,174 @@ public final class Matrix<T> implements Cloneable {
 			numPivots++;
 			
 			try {
-				multiplyRow(pivotRow, op.reciprocal(get(pivotRow, j))); // try to turn pivot to one
+				multiplyRow(pivotRow, op.reciprocal(getCoefficient(pivotRow, j))); // try to turn pivot to one
 			} catch(IllegalArgumentException e) {
 			}
 			
 			for (int i = pivotRow + 1; i < rows; i++)
-				addRows(pivotRow, i, op.negate(get(i, j)));
+				addRows(pivotRow, i, op.negate(getCoefficient(i, j)));
+			
+			System.out.println(this);
 		}
 		
 		for (int i = rows - 1; i >= 0; i--) {
 			int pivotCol = 0;
-			while (pivotCol < cols && op.equals(get(i, pivotCol), op.zero()))
+			while (pivotCol < columns && op.equals(getCoefficient(i, pivotCol), op.zero()))
 				pivotCol++;
-			if (pivotCol == cols)
+			if (pivotCol == columns)
 				continue;
 			for (int j = i - 1; j >= 0; j--) {
-				addRows(i, j, op.negate(get(j, pivotCol)));
+				addRows(i, j, op.negate(getCoefficient(j, pivotCol)));
 			}
 		}
 	}
 	
-	public Object[][] getBVector() {
-		return bVector;
+	public Object[][] getConstants() {
+		return constants;
 	}
 	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("values:\n" + toString(values));
-		//sb.append("bVector:\n" + toString(bVector));
-		return sb.toString(); 
-	}
-	
-	public String toString(Object[][] array) {
+		
 		String lineSeparator = System.lineSeparator();
-		StringBuilder sb = new StringBuilder();
-		for (Object[] row : array) {
-		    sb.append(Arrays.toString(row))
+		for (int i = 0; i < coefficients.length; i++) {
+			Object[] row1 = coefficients[i];
+			Object[] rowB = this.constants == null? null : this.constants[i];
+		    sb.append(Arrays.toString(row1))
+		      .append(rowB == null? "" : Arrays.toString(rowB))
 		      .append(lineSeparator);
 		}
 		return sb.toString();
+	}
+	
+	public Row row(int rowIndex) {
+		return new Row(rowIndex);
+	}
+	
+	public class Row {
+		@Getter private int rowIndex;
+		
+		private Row(int rowIndex) {
+			this.rowIndex = rowIndex;
+		}
+		
+		public T getCoefficient(int columnIndex) {
+			return Matrix.this.getCoefficient(this.rowIndex, columnIndex);
+		}
+
+		public T getConstant() {
+			return Matrix.this.getConstant(this.rowIndex);
+		}
+		
+		public void setCoefficient(int columnIndex, T value) {
+			Matrix.this.setCoefficient(this.rowIndex, columnIndex, value);
+		}
+		
+		public void setCoefficients(T[] coefficients) {
+			Matrix.this.setCoefficientsRow(this.rowIndex, coefficients);
+		}
+		
+		public void setConstant(T constant) {
+			Matrix.this.setConstant(this.rowIndex, constant);
+		}
+		
+		/**
+		 * 和另一列互調
+		 * @param otherRow
+		 */
+		public void swap(Row otherRow) {
+			Matrix.this.swapRows(this, otherRow);
+		}
+		
+		/**
+		 * 乘以 factor
+		 * @param factor
+		 */
+		public void multiply(T factor) {
+			Matrix.this.multiplyRow(this, factor);
+		}
+		
+		public List<Cell<T>> getCells() {
+			List<Cell<T>> cells = new ArrayList<>();
+			for (int cellIndex = -1; cellIndex < Matrix.this.columns; cellIndex++) {
+				cells.add(cell(cellIndex));
+			}
+			return cells;
+		}
+		
+		public Cell<T> cell(int cellIndex) {
+			if (cellIndex == -1) {
+				return new ConstantCell();
+			}
+			else {
+				return new CoefficientCell(cellIndex);
+			}
+		}
+		
+//		@Override
+//		public String toString() {
+//			StringBuilder sb = new StringBuilder();
+//			
+//			String lineSeparator = System.lineSeparator();
+//			for (int i = 0; i < coefficients.length; i++) {
+//				Object[] row1 = coefficients[i];
+//				Object[] rowB = this.constants == null? null : this.constants[i];
+//			    sb.append(Arrays.toString(row1))
+//			      .append(rowB == null? "" : Arrays.toString(rowB))
+//			      .append(lineSeparator);
+//			}
+//			return sb.toString();
+//		}
+				
+		public class CoefficientCell implements Cell<T> {
+
+			@Getter private int cellIndex;
+			
+			private CoefficientCell(int cellIndex) {
+				this.cellIndex = cellIndex;
+			}
+			
+			public T getValue() {
+				return Row.this.getCoefficient(this.cellIndex);
+			}
+			
+			public void setValue(T value) {
+				Row.this.setCoefficient(this.cellIndex, value);
+			}
+			
+		}
+
+		public class ConstantCell implements Cell<T> {
+			
+			private ConstantCell() {
+			}
+			
+			public int getCellIndex() {
+				return -1;
+			}
+			
+			public T getValue() {
+				return Row.this.getConstant();
+			}
+			
+			public void setValue(T value) {
+				Row.this.setConstant(value);
+			}
+			
+		}
+	}
+	
+	@AllArgsConstructor
+	@Data
+	public static class PairCells<T> {
+		private Cell<T> srcCell;
+		private Cell<T> dstCell;
+	}
+	
+	public static interface Cell<T> {
+		public int getCellIndex();
+		public T getValue();
+		public void setValue(T value);
 	}
 }

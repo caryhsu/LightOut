@@ -35,6 +35,6 @@ public class MatrixAFactoryTest {
 			{0, 0, 0, 0, 1, 0, 1, 1, 1},
 			{0, 0, 0, 0, 0, 1, 0, 1, 1}
 		};
-		assertThat(A.getValues(), is(expectValue));
+		assertThat(A.getCoefficients(), is(expectValue));
 	}
 }
