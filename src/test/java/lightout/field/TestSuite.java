@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 @Suite.SuiteClasses({
 	MatrixTest.class,
 	ZnTest.class,
+	ZTest.class,
 	ExpressionTest.class
 					})
 public class TestSuite {

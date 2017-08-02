@@ -16,7 +16,7 @@ public final class Matrix<T> implements Cloneable {
 	@Getter private Object[][] coefficients;
 	@Getter private Object[][] constants; 
 
-	private FieldOperators<T> op;
+	@Getter private FieldOperators<T> op;
 	
 	public Matrix(int rows, int columns, FieldOperators<T> f) {
 		this.rows = rows;
@@ -111,7 +111,7 @@ public final class Matrix<T> implements Cloneable {
 	 * @param factor
 	 */
 	public void multiplyRow(Row row, T factor) {
-		multiplyRow(row, factor);
+		multiplyRow(row.rowIndex, factor);
 	}
 	
 	/**
@@ -198,43 +198,7 @@ public final class Matrix<T> implements Cloneable {
 	}
 	
 	public void reducedRowEchelonForm() throws IllegalArgumentException {
-		int rows = this.rows;
-		int columns = this.columns;
-		
-		System.out.println(this);
-		
-		int numPivots = 0;
-		for (int j = 0; j < columns; j++) {
-			int pivotRow = numPivots; 
-			while (pivotRow < rows && op.equals(getCoefficient(pivotRow, j), op.zero()))
-				pivotRow++;
-			if (pivotRow == rows)
-				continue;
-			swapRows(numPivots, pivotRow);
-			pivotRow = numPivots;
-			numPivots++;
-			
-			try {
-				multiplyRow(pivotRow, op.reciprocal(getCoefficient(pivotRow, j))); // try to turn pivot to one
-			} catch(IllegalArgumentException e) {
-			}
-			
-			for (int i = pivotRow + 1; i < rows; i++)
-				addRows(pivotRow, i, op.negate(getCoefficient(i, j)));
-			
-			System.out.println(this);
-		}
-		
-		for (int i = rows - 1; i >= 0; i--) {
-			int pivotCol = 0;
-			while (pivotCol < columns && op.equals(getCoefficient(i, pivotCol), op.zero()))
-				pivotCol++;
-			if (pivotCol == columns)
-				continue;
-			for (int j = i - 1; j >= 0; j--) {
-				addRows(i, j, op.negate(getCoefficient(j, pivotCol)));
-			}
-		}
+		new GaussianElimination<T>(this).reduce();
 	}
 	
 	public Object[][] getConstants() {

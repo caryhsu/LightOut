@@ -28,11 +28,7 @@ public class Z implements FieldOperators<Integer> {
 
 	@Override
 	public Integer reciprocal(Integer x) throws IllegalArgumentException {
-//		for (int i = n - 1; i >= 0; i--) {
-//			if ((x * i) % n == 1) {
-//				return i;
-//			}
-//		}
+		if (Math.abs(x) == 1) return x;
 		throw new IllegalArgumentException("Multiplicative inverse does not exist for " + x + " on the field Z");
 	}
 
@@ -42,11 +38,8 @@ public class Z implements FieldOperators<Integer> {
 	}
 
 	@Override
-	public Integer productEqsY(Integer x, Integer y) {
-//		for (int z = 0; z < n; z++) {
-//			if (equals(multiply(x, z), y))
-//				return z;
-//		}
+	public Integer productEqsY(Integer x, Integer y) { // y/x
+		if (x != 0 && y % x == 0) return y/x;
 		throw new IllegalArgumentException("No solution, z, exists for " + x +" * z = " + y);
 	}
 
