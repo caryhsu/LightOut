@@ -18,7 +18,9 @@ public class GaussianEliminationTest {
 		m.setContants(new Integer[] {9, 3, 2});
 		
 		System.out.println(m);
-		new GaussianElimination<Integer>(m).reduceByColumn(0);
+		GaussianElimination<Integer> g = new GaussianElimination<Integer>(m);
+		g.reduceByColumn(0);
+		g.reduceByColumn(1);
 		System.out.println(m);
 		
 		assertThat(m.getCoefficients(), is(new Integer[][] {

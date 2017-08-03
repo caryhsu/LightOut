@@ -23,7 +23,7 @@ public class SolverGetZeroRowCountTest {
 				g.setModularNumber(state);
 				NeighberhoodDelta delta = new NeighberhoodDelta(g);
 				Solver percentSolvableCalculator = new Solver(size, size, state, delta);
-				percentSolvableCalculator.setBVector(new int[size * size]);
+				percentSolvableCalculator.setConstants(new int[size * size]);
 				percentSolvableCalculator.RowReduce();
 				int zeroRowCount = percentSolvableCalculator.zeroRowCount();
 				System.out.println("testGetZeroRowCount(" + size + ", " + state + ", " + zeroRowCount + ");");

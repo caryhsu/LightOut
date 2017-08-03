@@ -47,31 +47,30 @@ public class GaussianElimination<T> {
 		if (pivotRowIndex == rows)
 			return;
 		if (pivotRowIndex != numPivots) {
-			System.out.println(">>swap row: " + numPivots + "," + pivotRowIndex);
+//			System.out.println(">>swap row: " + numPivots + "," + pivotRowIndex);
 			this.matrix.swapRows(numPivots, pivotRowIndex);
-			System.out.println(this.matrix);
+//			System.out.println(this.matrix);
 			pivotRowIndex = numPivots;
 		}
 		numPivots++;
 		
 		Matrix<T>.Row pivotRow = this.matrix.row(pivotRowIndex);
 		
-		try {
-			T factor = op.reciprocal(pivotRow.getCoefficient(columnIndex));
+		T factor = op.reciprocal(pivotRow.getCoefficient(columnIndex));
+		if (factor != null) {
 			if (!op.equals(factor, op.one())) {
-				System.out.println(">>mult row: " + "row" + pivotRowIndex + "x" + factor + " => row" + pivotRowIndex);
+//				System.out.println(">>mult row: " + "row" + pivotRowIndex + "x" + factor + " => row" + pivotRowIndex);
 				pivotRow.multiply(factor); // try to turn pivot to one
-				System.out.println(this.matrix);
+//				System.out.println(this.matrix);
 			}
-		} catch(IllegalArgumentException e) {
 		}
 		
 		for (int i = pivotRowIndex + 1; i < rows; i++) {
-			T factor = op.negate(this.matrix.getCoefficient(i, columnIndex));
+			factor = op.negate(this.matrix.getCoefficient(i, columnIndex));
 			if (!op.equals(factor, op.zero())) {
-				System.out.println(">>add row: row" + pivotRowIndex + "x" + factor + " ==> row" + i);
+//				System.out.println(">>add row: row" + pivotRowIndex + "x" + factor + " ==> row" + i);
 				this.matrix.addRows(pivotRowIndex, i, factor);
-				System.out.println(this.matrix);
+//				System.out.println(this.matrix);
 			}
 		}
 	}

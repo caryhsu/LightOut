@@ -21,7 +21,7 @@ public class MatrixAFactoryTest {
 			{1, 0, 0}
 		});
 		NeighberhoodDelta delta = new NeighberhoodDelta(g1);
-		MatrixAFactory factory = new MatrixAFactoryImpl(delta);
+		MatrixAFactory factory = new MatrixAFactory(delta);
 		Matrix<Integer> A = factory.newInstance();
 	
 		int[][] expectValue = new int[][] {

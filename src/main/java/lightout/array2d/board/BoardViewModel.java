@@ -213,7 +213,7 @@ public class BoardViewModel implements Rectangle {
 		// Build the b vector
 		int[] b = new VectorBFactoryImpl(delta).newInstance();
 		// Give the b vector to the solver and solve
-		einstein.setBVector(b);
+		einstein.setConstants(b);
 		einstein.RowReduce();
 		this.solvable = einstein.hasSolution();
 		if (this.solvable) {

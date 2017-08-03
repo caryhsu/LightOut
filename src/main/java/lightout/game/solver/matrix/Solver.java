@@ -3,7 +3,7 @@ import lightout.field.Matrix;
 import lightout.field.Zn;
 import lightout.game.array2d.Array2DPosition;
 import lightout.game.delta.NeighberhoodDelta;
-import lightout.game.solver.matrix.matrixa.MatrixAFactoryImpl;
+import lightout.game.solver.matrix.matrixa.MatrixAFactory;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,17 +24,17 @@ public class Solver {
 		this.ASize = boardRow * boardCol;
 		this.state = state;
 		
-		this.A = new MatrixAFactoryImpl(this.delta).newInstance();
+		this.A = new MatrixAFactory(this.delta).newInstance();
 	}
 
-	public void setBVector(int[] bVector) {
+	public void setConstants(int[] constants) {
 		// Check for illegal input
-		if (bVector.length != ASize) {
+		if (constants.length != ASize) {
 			throw new IllegalArgumentException(
-					"The b vector does not have the correct dimension.");
+					"The constants does not have the correct dimension.");
 		}
-		for (int i = 0; i < bVector.length; i++) {
-			A.setConstant(i, (Integer) bVector[i]);
+		for (int i = 0; i < constants.length; i++) {
+			A.setConstant(i, (Integer) constants[i]);
 		}
 	}
 
