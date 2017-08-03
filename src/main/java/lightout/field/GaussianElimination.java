@@ -5,14 +5,14 @@ import lombok.Getter;
 /**
  * reducedRowEchelonForm
  */
-public class GaussianElimination<T> {
+public class GaussianElimination {
 
-	@Getter private Matrix<T> matrix;
-	@Getter private FieldOperators<T> op;
+	@Getter private Matrix matrix;
+	@Getter private FieldOperators<Integer> op;
 	@Getter private int rows;
 	@Getter private int columns;
 	
-	public GaussianElimination(Matrix<T> matrix) {
+	public GaussianElimination(Matrix matrix) {
 		this.matrix = matrix;
 		this.op = matrix.getOp();
 		this.rows = this.matrix.getRows();
@@ -41,36 +41,39 @@ public class GaussianElimination<T> {
 	}
 
 	public void reduceByColumn(int columnIndex) {
+		System.out.println(this.matrix);
 		int pivotRowIndex = numPivots; 
 		while (pivotRowIndex < rows && op.equals(this.matrix.getCoefficient(pivotRowIndex, columnIndex), op.zero()))
 			pivotRowIndex++;
 		if (pivotRowIndex == rows)
 			return;
 		if (pivotRowIndex != numPivots) {
-//			System.out.println(">>swap row: " + numPivots + "," + pivotRowIndex);
+			System.out.println(">>swap row: " + numPivots + "," + pivotRowIndex);
 			this.matrix.swapRows(numPivots, pivotRowIndex);
-//			System.out.println(this.matrix);
+			System.out.println(this.matrix);
 			pivotRowIndex = numPivots;
 		}
 		numPivots++;
 		
-		Matrix<T>.Row pivotRow = this.matrix.row(pivotRowIndex);
+		Matrix.Row pivotRow = this.matrix.row(pivotRowIndex);
 		
-		T factor = op.reciprocal(pivotRow.getCoefficient(columnIndex));
+		Integer factor = op.reciprocal(pivotRow.getCoefficient(columnIndex));
 		if (factor != null) {
 			if (!op.equals(factor, op.one())) {
-//				System.out.println(">>mult row: " + "row" + pivotRowIndex + "x" + factor + " => row" + pivotRowIndex);
+				System.out.println(">>mult row: " + "row" + pivotRowIndex + "x" + factor + " => row" + pivotRowIndex);
 				pivotRow.multiply(factor); // try to turn pivot to one
-//				System.out.println(this.matrix);
+				System.out.println(this.matrix);
 			}
 		}
 		
 		for (int i = pivotRowIndex + 1; i < rows; i++) {
 			factor = op.negate(this.matrix.getCoefficient(i, columnIndex));
-			if (!op.equals(factor, op.zero())) {
-//				System.out.println(">>add row: row" + pivotRowIndex + "x" + factor + " ==> row" + i);
-				this.matrix.addRows(pivotRowIndex, i, factor);
-//				System.out.println(this.matrix);
+			if (factor != null) {
+				if (!op.equals(factor, op.zero())) {
+					System.out.println(">>add row: row" + pivotRowIndex + "x" + factor + " ==> row" + i);
+					this.matrix.addRows(pivotRowIndex, i, factor);
+					System.out.println(this.matrix);
+				}
 			}
 		}
 	}

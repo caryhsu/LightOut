@@ -1,4 +1,4 @@
-package lightout.game;
+package lightout.array2d.board;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -11,11 +11,11 @@ import org.junit.Test;
 import lightout.array2d.board.BoardViewModel;
 import lightout.game.array2d.Array2DPosition;
 
-public class GameTest {
+public class BoardViewModelTest {
 
 	@Test
 	public void testSize() {
-		Rectangle game = new BoardViewModel(5, 6, 3);
+		BoardViewModel game = new BoardViewModel(5, 6, 3);
 		assertThat(game.getWidth(), is(5));
 		assertThat(game.getHeight(), is(6));
 		

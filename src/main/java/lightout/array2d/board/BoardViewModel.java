@@ -1,12 +1,8 @@
 package lightout.array2d.board;
 
-import java.awt.Color;
-import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import lightout.game.Graph;
 import lightout.game.Position;
 import lightout.game.Rectangle;
 import lightout.game.Vertex;
@@ -16,7 +12,6 @@ import lightout.game.delta.NeighberhoodDelta;
 import lightout.game.delta.SelfDelta;
 import lightout.game.solver.grouping.PercentSolvableCalculator;
 import lightout.game.solver.matrix.Solver;
-import lightout.game.solver.matrix.vectorb.VectorBFactoryImpl;
 import lombok.Getter;
 
 public class BoardViewModel implements Rectangle {
@@ -211,9 +206,9 @@ public class BoardViewModel implements Rectangle {
 		// Create a solver
 		Solver einstein = new Solver(this.getWidth(), this.getHeight(), state, delta);
 		// Build the b vector
-		int[] b = new VectorBFactoryImpl(delta).newInstance();
+//		int[] b = new VectorBFactory(delta).newInstance();
 		// Give the b vector to the solver and solve
-		einstein.setConstants(b);
+//		einstein.setConstants(b);
 		einstein.RowReduce();
 		this.solvable = einstein.hasSolution();
 		if (this.solvable) {

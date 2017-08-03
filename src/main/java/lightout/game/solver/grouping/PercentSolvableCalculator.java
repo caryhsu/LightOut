@@ -10,7 +10,6 @@ public class PercentSolvableCalculator {
 	
 	public PercentSolvableCalculator(int size, int state, NeighberhoodDelta delta) {
 		this.solver = new Solver(size, size, state, delta);
-		solver.setConstants(new int[size * size]);
 		solver.RowReduce();
 		
 		this.zeroRowCount = solver.zeroRowCount();

@@ -151,7 +151,7 @@ public class SolverGetZeroRowCountTest {
 		Array2DGraph g = new Array2DGraph(size, size);
 		NeighberhoodDelta delta = new NeighberhoodDelta(g);
 		Solver percentSolvableCalculator = new Solver(size, size, state, delta);
-		percentSolvableCalculator.setConstants(new int[size * size]);
+//		percentSolvableCalculator.setConstants(new int[size * size]);
 		percentSolvableCalculator.RowReduce();
 		int zeroRowCount = percentSolvableCalculator.zeroRowCount();
 		Assert.assertEquals(zeroRowCount, assetResult);

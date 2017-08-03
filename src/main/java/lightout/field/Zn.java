@@ -29,7 +29,7 @@ public class Zn implements FieldOperators<Integer> {
 		this.reciprocalLookupTable = new Integer[n];
 		IntStream.range(0, n-1).forEach(x->{
 			IntStream.range(0, n-1).forEach(y->{
-				Integer r1 = this.add(x, y);
+				Integer r1 = this._add(x, y);
 				this.addLookupTable[x][y] = r1;
 				this.subtractLookupTable[r1][x] = y;
 				this.subtractLookupTable[r1][y] = x;
@@ -60,9 +60,19 @@ public class Zn implements FieldOperators<Integer> {
 		return 1;
 	}
 
+	private Integer _add(Integer x, Integer y) {
+		return (x + y) % n;
+	}
+	
 	@Override
 	public Integer add(Integer x, Integer y) {
-		if (x == null || y == null) return null;
+//		if (x == null || y == null) return null;
+		x %= n;
+		if (x < 0) x+= n;
+		y %= n;
+		if (y < 0) y+= n;
+//		System.out.println("add:" + addLookupTable[x][y]);
+//		return addLookupTable[x][y];
 		int result = (x + y) % n;
 		if (result < 0) result += n;
 		return result;
@@ -75,19 +85,26 @@ public class Zn implements FieldOperators<Integer> {
 		if (result < 0) result += n;
 		return result;
 	}
+	
+	@Override
+	public Integer subtract(Integer x, Integer y) {
+		if (x == null || y == null) return null;
+		return add(x, negate(y));
+	}
+	
+//	@Override
+//	public integer divide(Integer x, Integer y) {
+//		if (x == null || y == null) return null;
+//		return multiply(x, reciprocal(y));
+//	}
+	
 
-	/**
-	 *  加法的相反數
-	 */
 	@Override
 	public Integer negate(Integer x) {
 		if (x == null) return null;
 		return multiply(x, n - 1);
 	}
 
-	/**
-	 *  乘法的相反數, 不存在 return null
-	 */
 	@Override
 	public Integer reciprocal(Integer x) {
 		if (x == null) return null;

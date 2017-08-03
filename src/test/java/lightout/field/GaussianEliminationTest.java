@@ -9,25 +9,25 @@ public class GaussianEliminationTest {
 
 	@Test
 	public void test1() {
-		Matrix<Integer> m = new Matrix<Integer>(3, 3, new Z());
-		m.setCoefficients(new Integer[][] {
+		Matrix m = new Matrix(3, 3, new Z());
+		m.setCoefficients(new int[][] {
 			{ 1, 1, -1},
 			{ 0, 1,  3},
 			{-1, 0, -2}
 		});
-		m.setContants(new Integer[] {9, 3, 2});
+		m.setContants(new int[] {9, 3, 2});
 		
 		System.out.println(m);
-		GaussianElimination<Integer> g = new GaussianElimination<Integer>(m);
+		GaussianElimination g = new GaussianElimination(m);
 		g.reduceByColumn(0);
 		g.reduceByColumn(1);
 		System.out.println(m);
 		
-		assertThat(m.getCoefficients(), is(new Integer[][] {
+		assertThat(m.getCoefficients(), is(new int[][] {
 			{ 1, 1, -1},
 			{ 0, 1,  3},
 			{ 0, 1, -3}
 		}));
-		assertThat(m.getConstants(), is(new Integer[] {9, 3, 11}));
+		assertThat(m.getConstants(), is(new int[] {9, 3, 11}));
 	}
 }

@@ -9,7 +9,7 @@ import lightout.field.Matrix;
 import lightout.game.array2d.Array2DGraph;
 import lightout.game.delta.NeighberhoodDelta;
 
-public class MatrixAFactoryTest {
+public class MatrixFactoryTest {
 
 	@Test
 	public void test1() {
@@ -21,8 +21,8 @@ public class MatrixAFactoryTest {
 			{1, 0, 0}
 		});
 		NeighberhoodDelta delta = new NeighberhoodDelta(g1);
-		MatrixAFactory factory = new MatrixAFactory(delta);
-		Matrix<Integer> A = factory.newInstance();
+		MatrixFactory factory = new MatrixFactory(delta);
+		Matrix m = factory.newInstance();
 	
 		int[][] expectValue = new int[][] {
 			{1, 1, 0, 1, 0, 0, 0, 0, 0},
@@ -35,6 +35,9 @@ public class MatrixAFactoryTest {
 			{0, 0, 0, 0, 1, 0, 1, 1, 1},
 			{0, 0, 0, 0, 0, 1, 0, 1, 1}
 		};
-		assertThat(A.getCoefficients(), is(expectValue));
+		assertThat(m.getCoefficients(), is(expectValue));
+		
+		int[] expectContants = new int[] {1, 2, 1, 2, 2, 2, 1, 2, 2};
+		assertThat(m.getConstants(), is(expectContants));
 	}
 }

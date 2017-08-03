@@ -12,13 +12,12 @@ import org.junit.runner.RunWith;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	GameTest.class,
 	Array2DGraphTest.class, 
 	Array2DPositionTest.class, 
 	NeighberhoodDeltaTest.class,
 	SelfDeltaTest.class,
 	GraphListTest.class
 					})
-public class TestSuite {
+public class GraphTestSuite {
   //nothing
 }

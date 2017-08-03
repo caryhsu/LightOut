@@ -9,11 +9,11 @@ public class MatrixTest {
 
 	@Test
 	public void testCoefficients1() {
-		Matrix<Integer> m = new Matrix<Integer>(3, 3, new Zn(100));
+		Matrix m = new Matrix(3, 3, new Zn(100));
 		
-		m.setCoefficientsRow(0, new Integer[] {1, 2, 3});
-		m.setCoefficientsRow(1, new Integer[] {4, 5, 6});
-		m.setCoefficientsRow(2, new Integer[] {7, 8, 9});
+		m.setCoefficientsRow(0, new int[] {1, 2, 3});
+		m.setCoefficientsRow(1, new int[] {4, 5, 6});
+		m.setCoefficientsRow(2, new int[] {7, 8, 9});
 		
 		assertThat(m.getCoefficient(0, 0), is(1));
 		assertThat(m.getCoefficient(0, 1), is(2));
@@ -28,9 +28,9 @@ public class MatrixTest {
 
 	@Test
 	public void testCoefficients2() {
-		Matrix<Integer> m = new Matrix<Integer>(3, 3, new Zn(100));
+		Matrix m = new Matrix(3, 3, new Zn(100));
 		
-		m.setCoefficients(new Integer[][] {
+		m.setCoefficients(new int[][] {
 			{1, 2, 3},
 			{4, 5, 6},
 			{7, 8, 9}
@@ -49,8 +49,8 @@ public class MatrixTest {
 	
 	@Test
 	public void testContants() {
-		Matrix<Integer> m = new Matrix<Integer>(3, 3, new Zn(100));
-		m.setContants(new Integer[] {1, 2, 3});
+		Matrix m = new Matrix(3, 3, new Zn(100));
+		m.setContants(new int[] {1, 2, 3});
 		
 		assertThat(m.getConstant(0), is(1));
 		assertThat(m.getConstant(1), is(2));
@@ -59,13 +59,13 @@ public class MatrixTest {
 	
 	@Test
 	public void testSwapRows() {
-		Matrix<Integer> m = new Matrix<Integer>(3, 3, new Zn(100));
-		m.setCoefficients(new Integer[][] {
+		Matrix m = new Matrix(3, 3, new Zn(100));
+		m.setCoefficients(new int[][] {
 			{1, 2, 3},
 			{4, 5, 6},
 			{7, 8, 9}
 		});
-		m.setContants(new Integer[] {1, 2, 3});
+		m.setContants(new int[] {1, 2, 3});
 		
 		m.swapRows(0, 1);
 		assertThat(m.getCoefficients(), is(new Integer[][] {
@@ -73,35 +73,25 @@ public class MatrixTest {
 			{1, 2, 3},
 			{7, 8, 9}
 		}));
-		assertThat(m.getConstants(), is(new Integer[][] {
-			{2},
-			{1},
-			{3}
-		}));
-		
+		assertThat(m.getConstants(), is(new int[] { 2, 1, 3 }));
 	}
 
 	@Test
 	public void testMultiplyRow() {
-		Matrix<Integer> m = new Matrix<Integer>(3, 3, new Zn(100));
-		m.setCoefficients(new Integer[][] {
+		Matrix m = new Matrix(3, 3, new Zn(100));
+		m.setCoefficients(new int[][] {
 			{1, 2, 3},
 			{4, 5, 6},
 			{7, 8, 9}
 		});
-		m.setContants(new Integer[] {1, 2, 3});
+		m.setContants(new int[] {1, 2, 3});
 		
 		m.multiplyRow(1, 10);
-		assertThat(m.getCoefficients(), is(new Integer[][] {
+		assertThat(m.getCoefficients(), is(new int[][] {
 			{1, 2, 3},
 			{40, 50, 60},
 			{7, 8, 9}
 		}));
-		assertThat(m.getConstants(), is(new Integer[][] {
-			{1},
-			{20},
-			{3}
-		}));
-		
+		assertThat(m.getConstants(), is(new int[] { 1, 20, 3 }));
 	}
 }

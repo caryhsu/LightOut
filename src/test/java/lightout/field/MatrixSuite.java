@@ -17,6 +17,6 @@ import org.junit.runner.RunWith;
 	ZTest.class,
 	ExpressionTest.class
 					})
-public class TestSuite {
+public class MatrixSuite {
   //nothing
 }
