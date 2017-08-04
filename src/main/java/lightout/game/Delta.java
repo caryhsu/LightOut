@@ -1,5 +1,8 @@
 package lightout.game;
 
+import lightout.graph.Graph;
+import lightout.graph.Position;
+
 public interface Delta {
 
 	public int getDeltaValue(Position target, Position cursor);

@@ -2,11 +2,11 @@ package lightout.game.solver.foreach;
 
 import org.junit.Test;
 
-import lightout.game.Graph;
-import lightout.game.array2d.Array2DGraph;
 import lightout.game.delta.NeighberhoodDelta;
 import lightout.game.solver.SolutionFinder;
 import lightout.game.solver.onerow.TryOneRowThenShiftCaseSolutionFinder;
+import lightout.graph.Graph;
+import lightout.graph.array2d.Array2DGraph;
 
 public class TryOneRowThenShiftCaseSolutionFinderTest {
 

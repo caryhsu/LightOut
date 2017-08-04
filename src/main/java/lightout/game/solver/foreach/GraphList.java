@@ -4,9 +4,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
-import lightout.game.Graph;
-import lightout.game.Position;
-import lightout.game.array2d.Array2DPosition;
+import lightout.graph.Graph;
+import lightout.graph.Position;
+import lightout.graph.array2d.Array2DPosition;
 import lombok.Getter;
 import lombok.Setter;
 

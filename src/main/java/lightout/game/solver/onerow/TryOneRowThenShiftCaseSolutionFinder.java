@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import lightout.game.Delta;
-import lightout.game.Graph;
-import lightout.game.GraphApplyer;
-import lightout.game.array2d.Array2DGraph;
+import lightout.game.delta.GraphDeltaApplyer;
 import lightout.game.solver.SolutionFinder;
 import lightout.game.solver.foreach.GraphList;
+import lightout.graph.Graph;
+import lightout.graph.array2d.Array2DGraph;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -29,7 +29,7 @@ public class TryOneRowThenShiftCaseSolutionFinder implements SolutionFinder {
 		};
 		graphList.setEndPreidcate(endPreidcate);
 		
-		GraphApplyer applyer = new GraphApplyer(initGraph, delta, this.moduleNumber);
+		GraphDeltaApplyer applyer = new GraphDeltaApplyer(initGraph, delta, this.moduleNumber);
 		List<Graph> solutions = new ArrayList<>();
 		graphList.forEach(pattern0 -> {
 			//System.out.println("1:(initGraph)\n" + initGraph);

@@ -2,12 +2,12 @@ package lightout.game.solver.onerow;
 
 import org.junit.Test;
 
-import lightout.game.Graph;
-import lightout.game.array2d.Array2DGraph;
-import lightout.game.array2d.Array2DPosition;
 import lightout.game.delta.NeighberhoodDelta;
 import lightout.game.solver.SolutionFinder;
 import lightout.game.solver.foreach.TryAllCaseSolutionFinder;
+import lightout.graph.Graph;
+import lightout.graph.array2d.Array2DGraph;
+import lightout.graph.array2d.Array2DPosition;
 
 public class TryAllCaseSolutionFinderTest {
 

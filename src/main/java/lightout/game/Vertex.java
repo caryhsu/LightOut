@@ -1,5 +1,7 @@
 package lightout.game;
 
+import lightout.graph.Position;
+
 public interface Vertex {
 
 	public Position getPosition();

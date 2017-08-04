@@ -10,9 +10,11 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
 
-import lightout.game.array2d.Array2DGraph;
-import lightout.game.array2d.Array2DPosition;
+import lightout.game.delta.GraphDeltaApplyer;
 import lightout.game.delta.NeighberhoodDelta;
+import lightout.graph.Graph;
+import lightout.graph.array2d.Array2DGraph;
+import lightout.graph.array2d.Array2DPosition;
 
 public class GraphApplyerTest {
 
@@ -27,7 +29,7 @@ public class GraphApplyerTest {
 		pattern.set(new Array2DPosition(1, 0), 1);
 		Delta delta = new NeighberhoodDelta();
 		
-		GraphApplyer applyer = new GraphApplyer(target, delta, 2);
+		GraphDeltaApplyer applyer = new GraphDeltaApplyer(target, delta, 2);
 		Graph t = applyer.apply(pattern);
 		
 		assertThat(t.get(new Array2DPosition(0, 0)), is(1));

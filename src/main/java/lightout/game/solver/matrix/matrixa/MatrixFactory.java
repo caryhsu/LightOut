@@ -1,10 +1,10 @@
 package lightout.game.solver.matrix.matrixa;
 
-import lightout.field.FieldOperators;
-import lightout.field.Matrix;
-import lightout.field.Zn;
-import lightout.game.Graph;
 import lightout.game.delta.NeighberhoodDelta;
+import lightout.graph.Graph;
+import lightout.math.algebra.FieldOperators;
+import lightout.math.algebra.Zn;
+import lightout.math.matrix.Matrix;
 import lombok.Getter;
 
 public class MatrixFactory {

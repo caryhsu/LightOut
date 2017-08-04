@@ -1,9 +1,9 @@
 package lightout.game.solver.matrix;
-import lightout.field.Matrix;
-import lightout.field.Zn;
-import lightout.game.array2d.Array2DPosition;
 import lightout.game.delta.NeighberhoodDelta;
 import lightout.game.solver.matrix.matrixa.MatrixFactory;
+import lightout.graph.array2d.Array2DPosition;
+import lightout.math.algebra.Zn;
+import lightout.math.matrix.Matrix;
 import lombok.Getter;
 import lombok.Setter;
 

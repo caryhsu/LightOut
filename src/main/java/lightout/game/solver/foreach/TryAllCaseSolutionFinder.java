@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import lightout.game.Delta;
-import lightout.game.Graph;
-import lightout.game.GraphApplyer;
+import lightout.game.delta.GraphDeltaApplyer;
 import lightout.game.solver.SolutionFinder;
+import lightout.graph.Graph;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -22,7 +22,7 @@ public class TryAllCaseSolutionFinder implements SolutionFinder {
 	@Override
 	public Graph[] find() {
 		
-		GraphApplyer applyer = new GraphApplyer(initGraph, delta, this.moduleNumber);
+		GraphDeltaApplyer applyer = new GraphDeltaApplyer(initGraph, delta, this.moduleNumber);
 		List<Graph> solutions = new ArrayList<>();
 		graphList.forEach(pattern ->{
 			Graph f = applyer.apply(pattern);			

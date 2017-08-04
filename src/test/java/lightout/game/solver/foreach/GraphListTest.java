@@ -1,6 +1,6 @@
 package lightout.game.solver.foreach;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import java.util.Iterator;
@@ -8,9 +8,9 @@ import java.util.function.Predicate;
 
 import org.junit.Test;
 
-import lightout.game.Graph;
-import lightout.game.array2d.Array2DGraph;
 import lightout.game.solver.foreach.GraphList.GraphIterator;
+import lightout.graph.Graph;
+import lightout.graph.array2d.Array2DGraph;
 import lombok.Data;
 
 public class GraphListTest {
@@ -27,7 +27,7 @@ public class GraphListTest {
 			System.out.println(g2);
 			n++;
 		}
-		assertThat(n, is((long) Math.pow(2, 6)));
+		assertThat(n, equalTo((long) Math.pow(2, 6)));
 	}
 
 	@Test
@@ -45,7 +45,7 @@ public class GraphListTest {
 			System.out.println(g2);
 			n++;
 		}
-		assertThat(n, is((long) Math.pow(2, 5)));
+		assertThat(n, equalTo((long) Math.pow(2, 5)));
 	}
 	
 	@Test
@@ -63,7 +63,7 @@ public class GraphListTest {
 		
 		N n = new N();
 		new GraphList(g).forEach(gg->n.increase());
-		assertThat(n.n, is((long) Math.pow(2, 6)));
+		assertThat(n.n, equalTo((long) Math.pow(2, 6)));
 	}
 	
 	@Data

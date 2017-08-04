@@ -1,6 +1,6 @@
 package lightout.game.solver;
 
-import lightout.game.Graph;
+import lightout.graph.Graph;
 
 public interface SolutionFinder {
 	

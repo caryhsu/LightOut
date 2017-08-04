@@ -2,9 +2,9 @@ package lightout.solver;
 import org.junit.Assert;
 import org.junit.Test;
 
-import lightout.game.array2d.Array2DGraph;
 import lightout.game.delta.NeighberhoodDelta;
 import lightout.game.solver.matrix.Solver;
+import lightout.graph.array2d.Array2DGraph;
 
 public class SolverGetZeroRowCountTest {
 
