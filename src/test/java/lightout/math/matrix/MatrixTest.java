@@ -6,7 +6,6 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 import lightout.math.algebra.Zn;
-import lightout.math.matrix.Matrix;
 
 public class MatrixTest {
 

@@ -1,8 +1,4 @@
 package lightout.solver;
-import org.junit.Assert;
-import org.junit.Test;
-
-import lightout.game.delta.NeighberhoodDelta;
 
 public class SolverTest {
 //	@Test

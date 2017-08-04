@@ -7,7 +7,6 @@ import lightout.game.solver.SolutionFinder;
 import lightout.game.solver.foreach.TryAllCaseSolutionFinder;
 import lightout.graph.Graph;
 import lightout.graph.array2d.Array2DGraph;
-import lightout.graph.array2d.Array2DPosition;
 
 public class TryAllCaseSolutionFinderTest {
 

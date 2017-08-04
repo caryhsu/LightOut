@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import lightout.math.algebra.Expression;

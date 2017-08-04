@@ -5,9 +5,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import lightout.math.algebra.Expression;
-import lightout.math.algebra.Zn;
-
 public class ExpressionTest {
 
 	@Test

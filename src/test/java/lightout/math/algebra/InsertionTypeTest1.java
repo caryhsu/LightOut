@@ -1,7 +1,5 @@
 package lightout.math.algebra;
 
-import java.util.Optional;
-
 import org.junit.Test;
 
 public class InsertionTypeTest1 {

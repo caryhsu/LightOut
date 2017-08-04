@@ -6,8 +6,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import lightout.graph.array2d.Array2DPosition;
-
 public class Array2DPositionTest {
 
 	@Test

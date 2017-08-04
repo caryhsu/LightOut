@@ -3,10 +3,8 @@ package lightout.math.algebra;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import org.junit.Test;
 
-import lightout.math.algebra.Z;
+import org.junit.Test;
 
 public class ZTest {
 

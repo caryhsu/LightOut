@@ -1,23 +1,15 @@
-package lightout.game;
+package lightout.game.delta;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-
-import java.util.Arrays;
-
-import lightout.game.delta.Delta;
-import lightout.game.delta.GraphDeltaApplyer;
-import lightout.game.delta.NeighberhoodDelta;
 import lightout.graph.Graph;
 import lightout.graph.array2d.Array2DGraph;
 import lightout.graph.array2d.Array2DPosition;
 
-public class GraphApplyerTest {
+public class GraphDeltaApplyerTest {
 
 	@Test
 	public void test1() {

@@ -6,8 +6,6 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 import lightout.math.algebra.Z;
-import lightout.math.matrix.GaussianElimination;
-import lightout.math.matrix.Matrix;
 
 public class GaussianEliminationTest {
 

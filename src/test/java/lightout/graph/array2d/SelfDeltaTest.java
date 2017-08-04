@@ -3,15 +3,12 @@ package lightout.graph.array2d;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
 
 import lightout.game.delta.SelfDelta;
 import lightout.graph.Vertex;
-import lightout.graph.array2d.Array2DGraph;
-import lightout.graph.array2d.Array2DPosition;
 
 public class SelfDeltaTest {
 

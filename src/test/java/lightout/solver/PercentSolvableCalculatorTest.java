@@ -1,9 +1,5 @@
 package lightout.solver;
 
-import org.junit.Test;
-
-import lightout.game.delta.NeighberhoodDelta;
-
 public class PercentSolvableCalculatorTest {
 
 //	@Test

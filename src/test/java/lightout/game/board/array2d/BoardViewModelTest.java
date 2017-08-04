@@ -1,4 +1,4 @@
-package lightout.board.array2d;
+package lightout.game.board.array2d;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -8,7 +8,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import lightout.game.board.array2d.BoardViewModel;
 import lightout.graph.array2d.Array2DPosition;
 
 public class BoardViewModelTest {

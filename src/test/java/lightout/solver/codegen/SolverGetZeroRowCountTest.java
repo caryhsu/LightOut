@@ -8,7 +8,6 @@ import org.junit.Test;
 import lightout.game.delta.NeighberhoodDelta;
 import lightout.game.solver.matrix.Solver;
 import lightout.graph.array2d.Array2DGraph;
-import lightout.solver.codegen.SolverGetZeroRowCountTest.BoardConfig;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

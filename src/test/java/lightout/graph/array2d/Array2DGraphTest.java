@@ -15,8 +15,6 @@ import lightout.graph.Graph;
 import lightout.graph.Position;
 import lightout.graph.Rectangle;
 import lightout.graph.Vertex;
-import lightout.graph.array2d.Array2DGraph;
-import lightout.graph.array2d.Array2DPosition;
 
 public class Array2DGraphTest {
 

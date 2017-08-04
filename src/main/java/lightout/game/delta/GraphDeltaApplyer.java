@@ -1,7 +1,6 @@
 package lightout.game.delta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import lightout.graph.Graph;
