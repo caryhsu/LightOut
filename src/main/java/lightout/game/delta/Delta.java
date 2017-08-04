@@ -1,4 +1,4 @@
-package lightout.game;
+package lightout.game.delta;
 
 import lightout.graph.Graph;
 import lightout.graph.Position;

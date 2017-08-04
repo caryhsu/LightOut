@@ -8,8 +8,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import lightout.game.Vertex;
 import lightout.game.delta.SelfDelta;
+import lightout.graph.Vertex;
 import lightout.graph.array2d.Array2DGraph;
 import lightout.graph.array2d.Array2DPosition;
 

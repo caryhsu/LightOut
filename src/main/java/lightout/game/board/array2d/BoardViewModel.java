@@ -3,13 +3,13 @@ package lightout.game.board.array2d;
 import java.util.List;
 import java.util.Objects;
 
-import lightout.game.Vertex;
 import lightout.game.delta.NeighberhoodDelta;
 import lightout.game.delta.SelfDelta;
 import lightout.game.solver.grouping.PercentSolvableCalculator;
 import lightout.game.solver.matrix.Solver;
 import lightout.graph.Position;
 import lightout.graph.Rectangle;
+import lightout.graph.Vertex;
 import lightout.graph.array2d.Array2DGraph;
 import lightout.graph.array2d.Array2DPosition;
 import lombok.Getter;

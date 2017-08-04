@@ -3,8 +3,6 @@ package lightout.graph;
 import java.util.ArrayList;
 import java.util.List;
 
-import lightout.game.Vertex;
-
 public interface Graph {
 
 	default void reset() {

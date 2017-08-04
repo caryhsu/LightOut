@@ -10,6 +10,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
 
+import lightout.game.delta.Delta;
 import lightout.game.delta.GraphDeltaApplyer;
 import lightout.game.delta.NeighberhoodDelta;
 import lightout.graph.Graph;

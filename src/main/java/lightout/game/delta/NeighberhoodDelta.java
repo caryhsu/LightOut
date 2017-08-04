@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import lightout.game.Delta;
 import lightout.graph.Graph;
 import lightout.graph.Position;
 import lombok.Getter;

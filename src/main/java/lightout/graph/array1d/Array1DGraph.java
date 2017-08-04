@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import lightout.game.Vertex;
 import lightout.game.solver.foreach.GraphList;
 import lightout.graph.AbstractGraph;
 import lightout.graph.Graph;
 import lightout.graph.Position;
+import lightout.graph.Vertex;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

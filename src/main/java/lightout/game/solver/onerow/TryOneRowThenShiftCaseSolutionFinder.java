@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
-import lightout.game.Delta;
+import lightout.game.delta.Delta;
 import lightout.game.delta.GraphDeltaApplyer;
 import lightout.game.solver.SolutionFinder;
 import lightout.game.solver.foreach.GraphList;

@@ -1,6 +1,4 @@
-package lightout.game;
-
-import lightout.graph.Position;
+package lightout.graph;
 
 public interface Vertex {
 

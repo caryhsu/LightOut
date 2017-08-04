@@ -2,7 +2,6 @@ package lightout.game.delta;
 
 import java.util.Objects;
 
-import lightout.game.Delta;
 import lightout.graph.Graph;
 import lightout.graph.Position;
 import lombok.Getter;

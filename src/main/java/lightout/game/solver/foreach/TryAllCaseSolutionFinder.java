@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import lightout.game.Delta;
+import lightout.game.delta.Delta;
 import lightout.game.delta.GraphDeltaApplyer;
 import lightout.game.solver.SolutionFinder;
 import lightout.graph.Graph;
