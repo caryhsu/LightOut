@@ -39,16 +39,4 @@ public class Z implements FieldOperators<Integer> {
 		return null;
 	}
 
-	@Override
-	public boolean equals(Integer x, Integer y) {
-		return Objects.equals(x, y);
-	}
-
-	@Override
-	public Integer productEqsY(Integer x, Integer y) { // y/x
-		if (x == null || y == null) return null;
-		if (x != 0 && y % x == 0) return y/x;
-		return null;
-	}
-
 }

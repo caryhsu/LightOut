@@ -52,11 +52,6 @@ public class Expression<T> {
 		return this;
 	}
 
-	public Expression<T> productEqsY(T x) {
-		this.functions.add(T->{return op.productEqsY(target, x);});
-		return this;
-	}
-	
 	public T result() {
 		this.functions.forEach(f->{this.target = f.apply(this.target);});
 		return this.target;

@@ -11,70 +11,69 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 
-public final class Matrix implements Cloneable {
+public final class Matrix<T> implements Cloneable {
 	
 	@Getter private int rows;
 	@Getter private int columns;
-	@Getter private int[][] coefficients;
-	private int[][] constants; 
+	@Getter private T[][] coefficients;
+	@Getter private T[] constants; 
 
-	@Getter private FieldOperators<Integer> op;
+	@Getter private FieldOperators<T> op;
 	
-	@SuppressWarnings("unchecked")
-	public Matrix(int rows, int columns, FieldOperators<Integer> f) {
+	public Matrix(int rows, int columns, FieldOperators<T> op) {
 		this.rows = rows;
 		this.columns = columns;
-		this.op = f;
-		this.coefficients = new int[rows][columns];
-		this.constants = new int[rows][1];
+		this.op = op;
+//		this.coefficients = new int[rows][columns];
+//		this.constants = new int[rows][1];
 	}
 		
-	public int getCoefficient(int rowIndex, int columnIndex) {
+	public T getCoefficient(int rowIndex, int columnIndex) {
 		if (rowIndex < 0 || rowIndex >= this.rows || columnIndex < 0 || columnIndex >= this.columns)
 			throw new IndexOutOfBoundsException("Row or column index out of bounds");
 		return this.coefficients[rowIndex][columnIndex];
 	}
 	
-	public int getConstant(int rowIndex) {
+	public T getConstant(int rowIndex) {
 		if (rowIndex < 0 || rowIndex >= this.rows)
 			throw new IndexOutOfBoundsException("Row or column index out of bounds");
-		return this.constants[rowIndex][0];
+		return this.constants[rowIndex];
 	}
 	
-	public void setCoefficient(int rowIndex, int columnIndex, int value) {
+	public void setCoefficient(int rowIndex, int columnIndex, T value) {
 		if (rowIndex < 0 || rowIndex >= this.rows || columnIndex < 0 || columnIndex >= this.columns)
 			throw new IndexOutOfBoundsException("Row or column index out of bounds");
 		this.coefficients[rowIndex][columnIndex] = value;
 	}
 	
-	public void setCoefficientsRow(int rowIndex, int[] coefficients) {
+	public void setCoefficientsRow(int rowIndex, T[] coefficients) {
 		if (rowIndex < 0 || rowIndex >= this.rows || coefficients.length != this.columns)
 			throw new IndexOutOfBoundsException("Row or column index out of bounds");
 		this.coefficients[rowIndex] = coefficients;
 	}
 
-	public void setCoefficients(int[][] coefficients) {
+	public void setCoefficients(T[][] coefficients) {
 		if (coefficients.length != this.rows || coefficients[0].length != this.columns)
 			throw new IndexOutOfBoundsException("Row or column index out of bounds");
 		this.coefficients = coefficients;
 	}
 
-	public void setConstant(int rowIndex, int constant) {
+	public void setConstant(int rowIndex, T constant) {
 		if (rowIndex < 0 || rowIndex >= this.rows)
 			throw new IndexOutOfBoundsException("Row or column index out of bounds");
-		this.constants[rowIndex][0] = constant;
-	}
-
-	public void setContants(int[] constants) {
-		for(int index = 0; index < rows; index++) {
-			this.constants[index][0] = constants[index];
-		}
+		this.constants[rowIndex] = constant;
 	}
 	
-	public Matrix clone() {
+	public void setConstants(T[] constants) {
+		if (constants.length != this.rows)
+			throw new IndexOutOfBoundsException("Row or column index out of bounds");
+		this.constants = constants;
+	}
+
+	public Matrix<T> clone() {
 		int rows = this.rows;
 		int columns = this.columns;
-		Matrix result = new Matrix(rows, columns, op);
+		Matrix<T> result = new Matrix<T>(rows, columns, op);
 		for (int i = 0; i < coefficients.length; i++)
 			System.arraycopy(coefficients[i], 0, result.coefficients[i], 0, columns);
 		return result;
@@ -85,7 +84,7 @@ public final class Matrix implements Cloneable {
 	 * @param row0
 	 * @param row1
 	 */
-	public void swapRows(Row row0, Row row1) {
+	public void swapRows(Row<T> row0, Row<T> row1) {
 		swapRows(row0, row1);
 	}
 	
@@ -97,11 +96,11 @@ public final class Matrix implements Cloneable {
 	public void swapRows(int rowIndex0, int rowIndex1) {
 		if (rowIndex0 < 0 || rowIndex0 >= this.rows || rowIndex1 < 0 || rowIndex1 >= this.rows)
 			throw new IndexOutOfBoundsException("Row index out of bounds");
-		int[] temp = coefficients[rowIndex0];
+		T[] temp = coefficients[rowIndex0];
 		coefficients[rowIndex0] = coefficients[rowIndex1];
 		coefficients[rowIndex1] = temp;
 		// change identity matrix
-		int[] temp2 = constants[rowIndex0];
+		T temp2 = constants[rowIndex0];
 		constants[rowIndex0] = constants[rowIndex1];
 		constants[rowIndex1] = temp2;
 	}
@@ -111,7 +110,7 @@ public final class Matrix implements Cloneable {
 	 * @param rowIndex
 	 * @param factor
 	 */
-	public void multiplyRow(Row row, int factor) {
+	public void multiplyRow(Row<T> row, T factor) {
 		multiplyRow(row.rowIndex, factor);
 	}
 	
@@ -120,31 +119,31 @@ public final class Matrix implements Cloneable {
 	 * @param rowIndex
 	 * @param factor
 	 */
-	public void multiplyRow(int rowIndex, int factor) {
+	public void multiplyRow(int rowIndex, T factor) {
 		this.updateValues(rowIndex, cell -> {return op.multiply(cell.getValue(), factor);});
 	}
 	
-	public void _multiplyRow(int rowIndex, int factor) {
-		Row row = row(rowIndex);
+	public void _multiplyRow(int rowIndex, T factor) {
+		Row<T> row = row(rowIndex);
 		for (int j = 0, cols = this.columns; j < cols; j++) {
-			int newCoefficient = op.multiply(row.getCoefficient(j), factor);
+			T newCoefficient = op.multiply(row.getCoefficient(j), factor);
 			row.setCoefficient(j, newCoefficient);
 		}
 		row.setConstant(op.multiply(row.getConstant(), factor));
 	}
 	
-	public void updateValues(int rowIndex, Function<Cell,Integer> function) {
-		Row row = row(rowIndex);
+	public void updateValues(int rowIndex, Function<Cell<T>, T> function) {
+		Row<T> row = row(rowIndex);
 		row.getCells().forEach(cell-> {
-			int newCoef = function.apply(cell);
+			T newCoef = function.apply(cell);
 			cell.setValue(newCoef);
 		});
 	}
 	
-	public void updateValues(int srcRowIndex, int dstRowIndex, Function<PairCells,Integer> function) {
+	public void updateValues(int srcRowIndex, int dstRowIndex, Function<PairCells<T>, T> function) {
 		Objects.requireNonNull(function);
-		Row srcRow = row(srcRowIndex);
-		Row dstRow = row(dstRowIndex);
+		Row<T> srcRow = row(srcRowIndex);
+		Row<T> dstRow = row(dstRowIndex);
 		
 		if (dstRow == null) {
 			throw new NullPointerException();
@@ -153,9 +152,9 @@ public final class Matrix implements Cloneable {
 			throw new NullPointerException();
 		}
 		dstRow.getCells().forEach(dstCell-> {
-			Cell srcCell = srcRow.cell(dstCell.getCellIndex());
-			PairCells pair = new PairCells(srcCell, dstCell);
-			int newCoef = 0;
+			Cell<T> srcCell = srcRow.cell(dstCell.getCellIndex());
+			PairCells<T> pair = new PairCells<T>(srcCell, dstCell);
+			T newCoef = op.zero();
 			try {
 				newCoef = function.apply(pair);
 			}
@@ -168,11 +167,11 @@ public final class Matrix implements Cloneable {
 		});
 	}
 
-	public void addRows(int srcRowIndex, int dstRowIndex, int factor) {
+	public void addRows(int srcRowIndex, int dstRowIndex, T factor) {
 		updateValues(srcRowIndex, dstRowIndex, pair-> {
-			Cell srcCell = pair.srcCell;
-			Cell dstCell = pair.dstCell;
-			Integer result = new Expression<Integer>()
+			Cell<T> srcCell = pair.srcCell;
+			Cell<T> dstCell = pair.dstCell;
+			T result = new Expression<T>()
 					.setOp(this.op)
 					.setInitial(srcCell.getValue())
 					.multiply(factor)
@@ -182,48 +181,42 @@ public final class Matrix implements Cloneable {
 		});
 	}
 	
-	public void _addRows(int srcRowIndex, int dstRowIndex, int factor) {
-		for (int j = 0, cols = this.columns; j < cols; j++) {
-			setCoefficient(dstRowIndex, j, 
-					op.add(getCoefficient(dstRowIndex, j), op.multiply(getCoefficient(srcRowIndex, j), factor)));
-		}
-		setConstant(dstRowIndex, op.add(getConstant(dstRowIndex), 
-				op.multiply(getConstant(srcRowIndex), factor)));
-	}
+//	public void _addRows(int srcRowIndex, int dstRowIndex, T factor) {
+//		for (int j = 0, cols = this.columns; j < cols; j++) {
+//			setCoefficient(dstRowIndex, j, 
+//					op.add(getCoefficient(dstRowIndex, j), op.multiply(getCoefficient(srcRowIndex, j), factor)));
+//		}
+//		setConstant(dstRowIndex, op.add(getConstant(dstRowIndex), 
+//				op.multiply(getConstant(srcRowIndex), factor)));
+//	}
 	
 	/**
 	 * 矩陣相乘
 	 * @param other
 	 * @return
 	 */
-	public Matrix multiply(Matrix other) {
+	public Matrix<T> multiply(Matrix<T> other) {
 		if (this.columns != other.rows)
 			throw new IllegalArgumentException("Incompatible matrix sizes for multiplication");
 		int rows = this.rows;
 		int columns = other.columns;
 		int cells = this.columns;
-		Matrix result = new Matrix(rows, columns, op);
+		Matrix<T> result = new Matrix<T>(rows, columns, op);
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
-				int sum = op.zero();
-				for (int k = 0; k < cells; k++)
-					sum = op.add(op.multiply(getCoefficient(i, k), other.getCoefficient(k, j)), sum);
+				T sum = op.zero();
+				for (int k = 0; k < cells; k++) {
+					T mul = op.multiply(getCoefficient(i, k), (T) other.getCoefficient(k, j));
+					sum = op.add(mul, sum);
+				}
 				result.setCoefficient(i, j, sum);
 			}
 		}
 		return result;
 	}
 	
-	public void reducedRowEchelonForm() throws IllegalArgumentException {
+	public void reducedRowEchelonForm() {
 		new GaussianElimination(this).reduce();
-	}
-	
-	public int[] getConstants() {
-		int[] constants = new int[this.constants.length];
-		for(int i = 0; i < this.constants.length; i++) {
-			constants[i] = this.constants[i][0];
-		}
-		return constants;
 	}
 	
 	@Override
@@ -232,76 +225,78 @@ public final class Matrix implements Cloneable {
 		
 		String lineSeparator = System.lineSeparator();
 		for (int i = 0; i < coefficients.length; i++) {
-			int[] row1 = coefficients[i];
-			int[] rowB = this.constants == null? null : this.constants[i];
+			T[] row1 = coefficients[i];
+			T rowB = this.constants == null? null : this.constants[i];
 		    sb.append(Arrays.toString(row1))
-		      .append(rowB == null? "" : Arrays.toString(rowB))
+		      .append(rowB == null? "" : "[" + rowB + "]")
 		      .append(lineSeparator);
 		}
 		return sb.toString();
 	}
 	
-	public Row row(int rowIndex) {
-		return new Row(rowIndex);
+	public Row<T> row(int rowIndex) {
+		return new Row<T>(this, rowIndex);
 	}
 	
-	public class Row {
+	public static class Row<T> {
+		@Getter Matrix<T> matrix;
 		@Getter private int rowIndex;
 		
-		private Row(int rowIndex) {
+		private Row(Matrix<T> matrix, int rowIndex) {
+			this.matrix = matrix;
 			this.rowIndex = rowIndex;
 		}
 		
-		public int getCoefficient(int columnIndex) {
-			return Matrix.this.getCoefficient(this.rowIndex, columnIndex);
+		public T getCoefficient(int columnIndex) {
+			return matrix.getCoefficient(this.rowIndex, columnIndex);
 		}
 
-		public int getConstant() {
-			return Matrix.this.getConstant(this.rowIndex);
+		public T getConstant() {
+			return matrix.getConstant(this.rowIndex);
 		}
 		
-		public void setCoefficient(int columnIndex, int value) {
-			Matrix.this.setCoefficient(this.rowIndex, columnIndex, value);
+		public void setCoefficient(int columnIndex, T value) {
+			matrix.setCoefficient(this.rowIndex, columnIndex, value);
 		}
 		
-		public void setCoefficients(int[] coefficients) {
-			Matrix.this.setCoefficientsRow(this.rowIndex, coefficients);
+		public void setCoefficients(T[] coefficients) {
+			matrix.setCoefficientsRow(this.rowIndex, coefficients);
 		}
 		
-		public void setConstant(int constant) {
-			Matrix.this.setConstant(this.rowIndex, constant);
+		public void setConstant(T constant) {
+			matrix.setConstant(this.rowIndex, constant);
 		}
 		
 		/**
 		 * 和另一列互調
 		 * @param otherRow
 		 */
-		public void swap(Row otherRow) {
-			Matrix.this.swapRows(this, otherRow);
+		public void swap(Row<T> otherRow) {
+			matrix.swapRows(this, otherRow);
 		}
 		
 		/**
 		 * 乘以 factor
 		 * @param factor
 		 */
-		public void multiply(int factor) {
-			Matrix.this.multiplyRow(this, factor);
+		public void multiply(T factor) {
+			matrix.multiplyRow(this, factor);
 		}
 		
-		public List<Cell> getCells() {
-			List<Cell> cells = new ArrayList<>();
-			for (int cellIndex = -1; cellIndex < Matrix.this.columns; cellIndex++) {
+		public List<Cell<T>> getCells() {
+			List<Cell<T>> cells = new ArrayList<>();
+			for (int cellIndex = -1; cellIndex < matrix.columns; cellIndex++) {
 				cells.add(cell(cellIndex));
 			}
 			return cells;
 		}
 		
-		public Cell cell(int cellIndex) {
+		public Cell<T> cell(int cellIndex) {
 			if (cellIndex == -1) {
-				return new ConstantCell();
+				return new ConstantCell<T>(this);
 			}
 			else {
-				return new CoefficientCell(cellIndex);
+				return new CoefficientCell<T>(this, cellIndex);
 			}
 		}
 		
@@ -319,55 +314,13 @@ public final class Matrix implements Cloneable {
 //			}
 //			return sb.toString();
 //		}
-				
-		public class CoefficientCell implements Cell {
 
-			@Getter private int cellIndex;
-			
-			private CoefficientCell(int cellIndex) {
-				this.cellIndex = cellIndex;
-			}
-			
-			public int getValue() {
-				return Row.this.getCoefficient(this.cellIndex);
-			}
-			
-			public void setValue(int value) {
-				Row.this.setCoefficient(this.cellIndex, value);
-			}
-			
-		}
-
-		public class ConstantCell implements Cell {
-			
-			private ConstantCell() {
-			}
-			
-			public int getCellIndex() {
-				return -1;
-			}
-			
-			public int getValue() {
-				return Row.this.getConstant();
-			}
-			
-			public void setValue(int value) {
-				Row.this.setConstant(value);
-			}
-			
-		}
 	}
 	
 	@AllArgsConstructor
 	@Data
-	public static class PairCells {
-		private Cell srcCell;
-		private Cell dstCell;
-	}
-	
-	public static interface Cell {
-		public int getCellIndex();
-		public int getValue();
-		public void setValue(int value);
+	public static class PairCells<T> {
+		private Cell<T> srcCell;
+		private Cell<T> dstCell;
 	}
 }

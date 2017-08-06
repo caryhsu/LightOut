@@ -2,139 +2,108 @@ package lightout.math.algebra;
 
 import java.util.stream.IntStream;
 
+import com.google.common.base.Objects;
+
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-public class Zn implements FieldOperators<Integer> {
+@EqualsAndHashCode(of= {"n"})
+public class Zn implements FieldOperators<ZnElement> {
 
 	@Getter private int n;
 	
-	@Getter private Integer[][] addLookupTable;
-	@Getter private Integer[][] subtractLookupTable;
-	@Getter private Integer[][] multiplyLookupTable;
-	@Getter private Integer[][] divideLookupTable;
-	@Getter private Integer[]   nativeLookupTable;
-	@Getter private Integer[]   reciprocalLookupTable;
+	@Getter private ZnElement[]   elements;
+	@Getter private ZnElement[][] addLookupTable;
+	@Getter private ZnElement[][] subtractLookupTable;
+	@Getter private ZnElement[][] multiplyLookupTable;
+	@Getter private ZnElement[][] divideLookupTable;
+	@Getter private ZnElement[]   nativeLookupTable;
+	@Getter private ZnElement[]   reciprocalLookupTable;
 	
 	public Zn(int n) {
 		this.n = n;
+		IntStream.range(0, n).forEach(i->this.elements[i]=new ZnElement(this, i));
 		init();
 	}
 
 	private void init() {
-		this.addLookupTable = new Integer[n][n];
-		this.subtractLookupTable = new Integer[n][n];
-		this.multiplyLookupTable = new Integer[n][n];
-		this.divideLookupTable = new Integer[n][n];
-		this.nativeLookupTable = new Integer[n];
-		this.reciprocalLookupTable = new Integer[n];
+		this.addLookupTable = new ZnElement[n][n];
+		this.subtractLookupTable = new ZnElement[n][n];
+		this.multiplyLookupTable = new ZnElement[n][n];
+		this.divideLookupTable = new ZnElement[n][n];
+		this.nativeLookupTable = new ZnElement[n];
+		this.reciprocalLookupTable = new ZnElement[n];
 		IntStream.range(0, n).forEach(x->{
 			IntStream.range(0, n).forEach(y->{
-				Integer r1 = this._add(x, y);
+				ZnElement r1 = this.add(x, y);
 				this.addLookupTable[x][y] = r1;
-				this.subtractLookupTable[r1][x] = y;
-				this.subtractLookupTable[r1][y] = x;
-				if (equals(r1, zero())) {
-					this.nativeLookupTable[x] = y;
-					this.nativeLookupTable[y] = x;
+				this.subtractLookupTable[r1.value][x] = this.elements[y];
+				this.subtractLookupTable[r1.value][y] = this.elements[x];
+				if (Objects.equal(r1, zero())) {
+					this.nativeLookupTable[x] = this.elements[y];
+					this.nativeLookupTable[y] = this.elements[x];
 				}
 				
-				Integer r2 = this.multiply(x, y);
+				ZnElement r2 = this.multiply(x, y);
 				this.multiplyLookupTable[x][y] = r2;
-				this.divideLookupTable[r2][x] = y;
-				this.divideLookupTable[r2][y] = x;
-				if (equals(r2, one())) {
-					this.reciprocalLookupTable[x] = y;
-					this.reciprocalLookupTable[y] = x;
+				this.divideLookupTable[r2.value][x] = this.elements[y];
+				this.divideLookupTable[r2.value][y] = this.elements[x];
+				if (Objects.equal(r2, one())) {
+					this.reciprocalLookupTable[x] = this.elements[y];
+					this.reciprocalLookupTable[y] = this.elements[x];
 				}
 			});
 		});
 	}
 	
-	@Override
-	public Integer zero() {
-		return 0;
+	public ZnElement zero() {
+		return this.elements[0];
 	}
 
-	@Override
-	public Integer one() {
-		return 1;
+	public ZnElement one() {
+		return this.elements[1];
 	}
 
-	private Integer _add(Integer x, Integer y) {
-		return (x + y) % n;
+	private ZnElement add(int x, int y) {
+		int z = (x+y) % n;
+		if (z < 0) z += n;
+		return elements[z];
 	}
 	
-	@Override
-	public Integer add(Integer x, Integer y) {
-//		if (x == null || y == null) return null;
-		x %= n;
-		if (x < 0) x+= n;
-		y %= n;
-		if (y < 0) y+= n;
-//		System.out.println("add:" + addLookupTable[x][y]);
-//		return addLookupTable[x][y];
-		int result = (x + y) % n;
-		if (result < 0) result += n;
-		return result;
+	public ZnElement add(ZnElement x, ZnElement y) {
+		return this.addLookupTable[x.value][y.value];
 	}
 
-	@Override
-	public Integer multiply(Integer x, Integer y) {
+	public ZnElement multiply(ZnElement x, ZnElement y) {
 		if (x == null || y == null) return null;
-		int result = (x * y) % n;
-		if (result < 0) result += n;
-		return result;
+		return this.multiplyLookupTable[x.value][y.value];
 	}
 	
-	@Override
-	public Integer subtract(Integer x, Integer y) {
+	public ZnElement multiply(int x, int y) {
+		int z = (x * y) % n;
+		if (z < 0) z += n;
+		return elements[z];
+	}
+	
+	public ZnElement subtract(ZnElement x, ZnElement y) {
 		if (x == null || y == null) return null;
-		return add(x, negate(y));
+		return this.subtractLookupTable[x.value][y.value];
 	}
 	
-//	@Override
-//	public integer divide(Integer x, Integer y) {
-//		if (x == null || y == null) return null;
-//		return multiply(x, reciprocal(y));
-//	}
+	public ZnElement divide(ZnElement x, ZnElement y) {
+		if (x == null || y == null) return null;
+		return this.divideLookupTable[x.value][y.value];
+	}
 	
 
-	@Override
-	public Integer negate(Integer x) {
+	public ZnElement negate(ZnElement x) {
 		if (x == null) return null;
-		return multiply(x, n - 1);
+		return this.nativeLookupTable[x.value];
 	}
 
-	@Override
-	public Integer reciprocal(Integer x) {
+	public ZnElement reciprocal(ZnElement x) {
 		if (x == null) return null;
-		for (int i = n - 1; i >= 0; i--) {
-			if ((x * i) % n == 1) {
-				return i;
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public boolean equals(Integer x, Integer y) {
-		int px = x.intValue() % n;
-		if (px < 0) px += n;
-		int py = y.intValue() % n;
-		if (py < 0) py += n;
-		
-		return px == py;
-	}
-
-	// return y/x
-	@Override
-	public Integer productEqsY(Integer x, Integer y) {
-		if (x == null || y == null) return null;
-		for (int z = 0; z < n; z++) {
-			if (equals(multiply(x, z), y))
-				return z;
-		}
-		return null;
+		return this.reciprocalLookupTable[x.value];
 	}
 
 }

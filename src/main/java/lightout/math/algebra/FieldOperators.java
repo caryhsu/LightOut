@@ -47,7 +47,7 @@ public interface FieldOperators<T> {
 	 * @param y
 	 * @return
 	 */
-	default public T subtract(T x, T y) {
+	default T subtract(T x, T y) {
 		return add(x, negate(y));
 	}
 
@@ -57,11 +57,8 @@ public interface FieldOperators<T> {
 	 * @param y
 	 * @return
 	 */
-	default public T divide(T x, T y) {
+	default T divide(T x, T y) {
 		return multiply(x, reciprocal(y));
 	}
-	
-	boolean equals(T x, T y);
-	
-	T productEqsY(T x, T y);
+		
 }
