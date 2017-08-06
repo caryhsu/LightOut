@@ -34,16 +34,34 @@ public final class Matrix<T> implements Cloneable {
 		return this.coefficients[rowIndex][columnIndex];
 	}
 	
+	public int getCoefficientAsInt(int rowIndex, int columnIndex) {
+		if (rowIndex < 0 || rowIndex >= this.rows || columnIndex < 0 || columnIndex >= this.columns)
+			throw new IndexOutOfBoundsException("Row or column index out of bounds");
+		return op.convertToInt(this.coefficients[rowIndex][columnIndex]);
+	}
+	
 	public T getConstant(int rowIndex) {
 		if (rowIndex < 0 || rowIndex >= this.rows)
 			throw new IndexOutOfBoundsException("Row or column index out of bounds");
 		return this.constants[rowIndex];
 	}
 	
+	public int getConstantAsInt(int rowIndex) {
+		if (rowIndex < 0 || rowIndex >= this.rows)
+			throw new IndexOutOfBoundsException("Row or column index out of bounds");
+		return op.convertToInt(this.constants[rowIndex]);
+	}
+
 	public void setCoefficient(int rowIndex, int columnIndex, T value) {
 		if (rowIndex < 0 || rowIndex >= this.rows || columnIndex < 0 || columnIndex >= this.columns)
 			throw new IndexOutOfBoundsException("Row or column index out of bounds");
 		this.coefficients[rowIndex][columnIndex] = value;
+	}
+
+	public void setCoefficientsRow(int rowIndex, int[] coefficients) {
+		if (rowIndex < 0 || rowIndex >= this.rows || coefficients.length != this.columns)
+			throw new IndexOutOfBoundsException("Row or column index out of bounds");
+		this.coefficients[rowIndex] = op.convertFromIntArray(coefficients);
 	}
 	
 	public void setCoefficientsRow(int rowIndex, T[] coefficients) {
@@ -52,6 +70,12 @@ public final class Matrix<T> implements Cloneable {
 		this.coefficients[rowIndex] = coefficients;
 	}
 
+	public void setCoefficients(int[][] coefficients) {
+		if (coefficients.length != this.rows || coefficients[0].length != this.columns)
+			throw new IndexOutOfBoundsException("Row or column index out of bounds");
+		this.coefficients = op.convertFromIntArray(coefficients);
+	}
+	
 	public void setCoefficients(T[][] coefficients) {
 		if (coefficients.length != this.rows || coefficients[0].length != this.columns)
 			throw new IndexOutOfBoundsException("Row or column index out of bounds");
@@ -62,6 +86,12 @@ public final class Matrix<T> implements Cloneable {
 		if (rowIndex < 0 || rowIndex >= this.rows)
 			throw new IndexOutOfBoundsException("Row or column index out of bounds");
 		this.constants[rowIndex] = constant;
+	}
+
+	public void setConstants(int[] constants) {
+		if (constants.length != this.rows)
+			throw new IndexOutOfBoundsException("Row or column index out of bounds");
+		this.constants = op.convertFromIntArray(constants);
 	}
 	
 	public void setConstants(T[] constants) {
@@ -123,14 +153,50 @@ public final class Matrix<T> implements Cloneable {
 		this.updateValues(rowIndex, cell -> {return op.multiply(cell.getValue(), factor);});
 	}
 	
-	public void _multiplyRow(int rowIndex, T factor) {
-		Row<T> row = row(rowIndex);
-		for (int j = 0, cols = this.columns; j < cols; j++) {
-			T newCoefficient = op.multiply(row.getCoefficient(j), factor);
-			row.setCoefficient(j, newCoefficient);
-		}
-		row.setConstant(op.multiply(row.getConstant(), factor));
+	/**
+	 * 將某列乘以 factor
+	 * @param rowIndex
+	 * @param factor
+	 */
+	public void multiplyRow(int rowIndex, int factor) {
+		this.multiplyRow(rowIndex, op.convertFromInt(factor));
 	}
+
+	/**
+	 * 將某列除以 factor
+	 * @param rowIndex
+	 * @param factor
+	 */
+	public void divideRow(Row<T> row, T factor) {
+		divideRow(row.rowIndex, factor);
+	}
+	
+	/**
+	 * 將某列除以 factor
+	 * @param rowIndex
+	 * @param factor
+	 */
+	public void divideRow(int rowIndex, T factor) {
+		this.updateValues(rowIndex, cell -> {return op.divide(cell.getValue(), factor);});
+	}
+	
+	/**
+	 * 將某列除以 factor
+	 * @param rowIndex
+	 * @param factor
+	 */
+	public void divideRow(int rowIndex, int factor) {
+		this.divideRow(rowIndex, op.convertFromInt(factor));
+	}
+
+	//	private void _multiplyRow(int rowIndex, T factor) {
+//		Row<T> row = row(rowIndex);
+//		for (int j = 0, cols = this.columns; j < cols; j++) {
+//			T newCoefficient = op.multiply(row.getCoefficient(j), factor);
+//			row.setCoefficient(j, newCoefficient);
+//		}
+//		row.setConstant(op.multiply(row.getConstant(), factor));
+//	}
 	
 	public void updateValues(int rowIndex, Function<Cell<T>, T> function) {
 		Row<T> row = row(rowIndex);
@@ -167,6 +233,22 @@ public final class Matrix<T> implements Cloneable {
 		});
 	}
 
+	public boolean areMultipleOf(int rowIndex, int factor) {
+		return this.areMultipleOf(rowIndex, op.convertFromInt(factor));
+	}
+	
+	public boolean areMultipleOf(int rowIndex, T factor) {
+		Row<T> row = row(rowIndex);
+		boolean result = true;
+		for(Cell<T> cell : row.getCells()) {
+			if (op.divide(cell.getValue(), factor) == null) {
+				result = false;
+				break;
+			}
+		}
+		return result;
+	}
+	
 	public void addRows(int srcRowIndex, int dstRowIndex, T factor) {
 		updateValues(srcRowIndex, dstRowIndex, pair-> {
 			Cell<T> srcCell = pair.srcCell;
@@ -216,7 +298,7 @@ public final class Matrix<T> implements Cloneable {
 	}
 	
 	public void reducedRowEchelonForm() {
-		new GaussianElimination(this).reduce();
+		new GaussianElimination<T>(this).reduce();
 	}
 	
 	@Override
@@ -283,6 +365,14 @@ public final class Matrix<T> implements Cloneable {
 			matrix.multiplyRow(this, factor);
 		}
 		
+		/**
+		 * 除以 factor
+		 * @param factor
+		 */
+		public void divide(T factor) {
+			matrix.divideRow(this, factor);
+		}
+		
 		public List<Cell<T>> getCells() {
 			List<Cell<T>> cells = new ArrayList<>();
 			for (int cellIndex = -1; cellIndex < matrix.columns; cellIndex++) {
@@ -299,6 +389,7 @@ public final class Matrix<T> implements Cloneable {
 				return new CoefficientCell<T>(this, cellIndex);
 			}
 		}
+
 		
 //		@Override
 //		public String toString() {
@@ -323,4 +414,5 @@ public final class Matrix<T> implements Cloneable {
 		private Cell<T> srcCell;
 		private Cell<T> dstCell;
 	}
+
 }

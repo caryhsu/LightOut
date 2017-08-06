@@ -1,6 +1,5 @@
 package lightout.math.matrix;
 
-import lightout.math.matrix.Matrix.Row;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

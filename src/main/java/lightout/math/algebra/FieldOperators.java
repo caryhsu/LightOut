@@ -52,7 +52,7 @@ public interface FieldOperators<T> {
 	}
 
 	/**
-	 * 除法 相當於乘以y的反元素
+	 * 除法 x/y 相當於乘以y的反元素
 	 * @param x
 	 * @param y
 	 * @return
@@ -60,5 +60,11 @@ public interface FieldOperators<T> {
 	default T divide(T x, T y) {
 		return multiply(x, reciprocal(y));
 	}
+
+	T[][] convertFromIntArray(int[][] data);
+	T[] convertFromIntArray(int[] data);
+
+	int convertToInt(T t);
+	T convertFromInt(int factor);
 		
 }

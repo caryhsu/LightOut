@@ -9,4 +9,9 @@ import lombok.Getter;
 public class ZnElement {
 	@Getter private Zn zn;
 	@Getter int value;
+	
+	@Override
+	public String toString() {
+		return String.valueOf(this.value);
+	}
 }

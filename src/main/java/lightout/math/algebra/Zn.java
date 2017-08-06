@@ -1,5 +1,8 @@
 package lightout.math.algebra;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.IntStream;
 
 import com.google.common.base.Objects;
@@ -22,6 +25,7 @@ public class Zn implements FieldOperators<ZnElement> {
 	
 	public Zn(int n) {
 		this.n = n;
+		this.elements = new ZnElement[n];
 		IntStream.range(0, n).forEach(i->this.elements[i]=new ZnElement(this, i));
 		init();
 	}
@@ -56,10 +60,12 @@ public class Zn implements FieldOperators<ZnElement> {
 		});
 	}
 	
+	@Override
 	public ZnElement zero() {
 		return this.elements[0];
 	}
 
+	@Override
 	public ZnElement one() {
 		return this.elements[1];
 	}
@@ -70,40 +76,94 @@ public class Zn implements FieldOperators<ZnElement> {
 		return elements[z];
 	}
 	
+	@Override
 	public ZnElement add(ZnElement x, ZnElement y) {
 		return this.addLookupTable[x.value][y.value];
 	}
 
+	@Override
 	public ZnElement multiply(ZnElement x, ZnElement y) {
 		if (x == null || y == null) return null;
+		int xx = x.value % n;
+		if (xx < 0) xx+= n;
+		int yy = y.value % n;
+		if (yy < 0) yy+= n;
 		return this.multiplyLookupTable[x.value][y.value];
 	}
 	
-	public ZnElement multiply(int x, int y) {
+	private ZnElement multiply(int x, int y) {
 		int z = (x * y) % n;
 		if (z < 0) z += n;
 		return elements[z];
 	}
 	
+	@Override
 	public ZnElement subtract(ZnElement x, ZnElement y) {
 		if (x == null || y == null) return null;
-		return this.subtractLookupTable[x.value][y.value];
+		int xx = x.value % n;
+		if (xx < 0) xx+= n;
+		int yy = y.value % n;
+		if (yy < 0) yy+= n;
+		return this.subtractLookupTable[xx][yy];
 	}
 	
+	@Override
 	public ZnElement divide(ZnElement x, ZnElement y) {
 		if (x == null || y == null) return null;
-		return this.divideLookupTable[x.value][y.value];
+		int xx = x.value % n;
+		if (xx < 0) xx+= n;
+		int yy = y.value % n;
+		if (yy < 0) yy+= n;
+		return this.divideLookupTable[xx][yy];
 	}
 	
-
+	@Override
 	public ZnElement negate(ZnElement x) {
 		if (x == null) return null;
+		int xx = x.value % n;
+		if (xx < 0) xx += n;
 		return this.nativeLookupTable[x.value];
 	}
 
+	@Override
 	public ZnElement reciprocal(ZnElement x) {
 		if (x == null) return null;
 		return this.reciprocalLookupTable[x.value];
 	}
 
+	@Override
+	public int convertToInt(ZnElement value) {
+		return value.value;
+	}
+	
+	@Override
+	public ZnElement convertFromInt(int value) {
+		int index = value % n;
+		if (index < 0) index += n;
+		return this.elements[index];
+	}
+
+	@Override
+	public ZnElement[][] convertFromIntArray(int[][] data) {
+		ZnElement[][] result = new ZnElement[data.length][];
+		for(int i = 0; i < data.length; i++) {
+			result[i] = convertFromIntArray(data[i]);
+		}
+		return result;
+	}
+	
+	@Override 
+	public ZnElement[] convertFromIntArray(int[] data) {
+		List<ZnElement> elements = new ArrayList<>();
+		for(int d : data) {
+			elements.add(this.of(d));
+		}
+		return elements.toArray(new ZnElement[] {});
+	}
+	
+	public ZnElement of(int index) {
+		index = index % n;
+		if (index < 0) index += n;
+		return this.elements[index];
+	}
 }
