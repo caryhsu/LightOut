@@ -53,7 +53,7 @@ public class MatrixFactory {
 		this.initConstants(m);
 	}
 	
-	public Matrix newInstance() {
+	public Matrix<ZnElement> newInstance() {
 		Matrix<ZnElement> m = new Matrix<>(this.size, this.size, this.op);
 		initMatrix(m);
 		return m;

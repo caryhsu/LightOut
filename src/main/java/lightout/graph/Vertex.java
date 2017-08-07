@@ -1,14 +1,14 @@
 package lightout.graph;
 
-public interface Vertex {
+public interface Vertex<T> {
 
 	public Position getPosition();
 	
 	public int getPositionIndex();
 	
-	public int getValue();
+	public T getValue();
 	
-	public void setValue(int value);
+	public void setValue(T value);
 	
 	default public void increase() {
 		increase(1);

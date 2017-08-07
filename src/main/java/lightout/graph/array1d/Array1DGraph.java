@@ -9,6 +9,7 @@ import lightout.graph.AbstractGraph;
 import lightout.graph.Graph;
 import lightout.graph.Position;
 import lightout.graph.Vertex;
+import lightout.math.algebra.ZnElement;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,21 +48,21 @@ public class Array1DGraph extends AbstractGraph implements Graph  {
 	}
 	
 	@Override
-	public Vertex getVertex(Position position) {
+	public Vertex<ZnElement> getVertex(Position position) {
 		return new VertexImpl((Array1DPosition) position);
 	}
 	
-	public class VertexImpl implements Vertex {
+	public class VertexImpl implements Vertex<ZnElement> {
 		@Getter private Array1DPosition position;
 		public VertexImpl(Array1DPosition position) {
 			this.position = position;
 		}
 		@Override
-		public int getValue() {
+		public ZnElement getValue() {
 			return Array1DGraph.this.get((Array1DPosition) this.position);
 		}
 		@Override
-		public void setValue(int value) {
+		public void setValue(ZnElement value) {
 			Array1DGraph.this.set((Array1DPosition) this.position, value);
 		}
 		@Override

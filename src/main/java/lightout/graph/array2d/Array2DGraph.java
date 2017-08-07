@@ -11,6 +11,7 @@ import lightout.graph.Graph;
 import lightout.graph.Position;
 import lightout.graph.Rectangle;
 import lightout.graph.Vertex;
+import lightout.math.algebra.ZnElement;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,13 +22,18 @@ public class Array2DGraph extends AbstractGraph implements Graph, Rectangle, Clo
 
 	@Getter private int width;
 	@Getter private int height;
-	private int[][] values;
+	private ZnElement[][] values;
 	@Getter @Setter private boolean cycled = false;
 	
 	public Array2DGraph(int width, int height) {
 		this.width = width;
 		this.height = height;
-		this.values = new int[this.width][this.height];
+		this.values = new ZnElement[this.width][this.height];
+		for(int i = 0; i < this.width; i++) {
+			for(int j = 0; j < this.height; j++) {
+				this.values[i][j] = 
+			}
+		}
 		this.modularNumber = null;
 	}
 
@@ -35,7 +41,7 @@ public class Array2DGraph extends AbstractGraph implements Graph, Rectangle, Clo
 	public void setSize(int width, int height) {
 		this.width = width;
 		this.height = height;
-		this.values = new int[this.width][this.height];
+		this.values = new ZnElement[this.width][this.height];
 	}
 
 	@Override
@@ -66,8 +72,8 @@ public class Array2DGraph extends AbstractGraph implements Graph, Rectangle, Clo
 		return positions;
 	}
 
-	public List<Vertex> getVertexesForRow(int rowIndex) {
-		final List<Vertex> vertexes = new ArrayList<>();
+	public List<Vertex<ZnElement>> getVertexesForRow(int rowIndex) {
+		final List<Vertex<ZnElement>> vertexes = new ArrayList<>();
 		this.getPositionsForRow(rowIndex).forEach(position -> {
 			vertexes.add(new VertexImpl((Array2DPosition) position));
 		});
@@ -75,21 +81,21 @@ public class Array2DGraph extends AbstractGraph implements Graph, Rectangle, Clo
 	}
 		
 	@Override
-	public Vertex getVertex(Position position) {
+	public Vertex<ZnElement> getVertex(Position position) {
 		return new VertexImpl((Array2DPosition) position);
 	}
 	
-	public class VertexImpl implements Vertex {
+	public class VertexImpl implements Vertex<ZnElement> {
 		@Getter private Array2DPosition position;
 		public VertexImpl(Array2DPosition position) {
 			this.position = position;
 		}
 		@Override
-		public int getValue() {
+		public ZnElement getValue() {
 			return Array2DGraph.this.get(this.position);
 		}
 		@Override
-		public void setValue(int value) {
+		public void setValue(ZnElement value) {
 			Array2DGraph.this.set((Array2DPosition) this.position, value);
 		}
 		@Override
@@ -103,13 +109,13 @@ public class Array2DGraph extends AbstractGraph implements Graph, Rectangle, Clo
 	}
 	
 	@Override
-	public int get(Position position) {
+	public ZnElement get(Position position) {
 		int x = ((Array2DPosition) position).getX();
 		int y = ((Array2DPosition) position).getY();
 		return get(x, y);
 	}
 
-	public int get(int x, int y) {
+	public ZnElement get(int x, int y) {
 		return this.modularNumber == null? this.values[x][y] : mod(this.values[x][y]);
 	}
 
