@@ -9,13 +9,14 @@ public class ExpressionTest {
 
 	@Test
 	public void test1() {
-		Integer value = new Expression<Integer>()
-				.setOp(new Zn(100))
+		Zn zn = new Zn(100);
+		ZnElement value = new Expression<ZnElement>()
+				.setOp(zn)
 				.setInitial(10)
 				.add(3)
 				.subtract(5)
 				.multiply(4)
 				.result();
-		assertThat(value, equalTo(32));
+		assertThat(value, equalTo(zn.of(32)));
 	}
 }

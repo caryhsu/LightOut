@@ -50,8 +50,15 @@ public class Zn implements FieldOperators<ZnElement> {
 				
 				ZnElement r2 = this.multiply(x, y);
 				this.multiplyLookupTable[x][y] = r2;
-				this.divideLookupTable[r2.value][x] = this.elements[y];
-				this.divideLookupTable[r2.value][y] = this.elements[x];
+//				System.out.println(x + "x" + y + "=" + r2);
+				if (x != 0) {
+					this.divideLookupTable[r2.value][x] = this.of(y);
+//					System.out.println(r2 + "/" + x + "=" + y);
+				}
+				if (y != 0) {
+					this.divideLookupTable[r2.value][y] = this.elements[x];
+//					System.out.println(r2 + "/" + y + "=" + x);
+				}
 				if (Objects.equal(r2, one())) {
 					this.reciprocalLookupTable[x] = this.elements[y];
 					this.reciprocalLookupTable[y] = this.elements[x];

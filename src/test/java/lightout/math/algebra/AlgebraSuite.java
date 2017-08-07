@@ -8,7 +8,7 @@ import org.junit.runners.Suite;
 	ExpressionTest.class,
 	ZnTest.class,
 	ZTest.class,
-					})
+})
 public class AlgebraSuite {
   //nothing
 }

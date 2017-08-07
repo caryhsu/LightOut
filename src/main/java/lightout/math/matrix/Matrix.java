@@ -52,6 +52,12 @@ public final class Matrix<T> implements Cloneable {
 		return op.convertToInt(this.constants[rowIndex]);
 	}
 
+	public void setCoefficient(int rowIndex, int columnIndex, int value) {
+		if (rowIndex < 0 || rowIndex >= this.rows || columnIndex < 0 || columnIndex >= this.columns)
+			throw new IndexOutOfBoundsException("Row or column index out of bounds");
+		this.coefficients[rowIndex][columnIndex] = op.convertFromInt(value);
+	}
+	
 	public void setCoefficient(int rowIndex, int columnIndex, T value) {
 		if (rowIndex < 0 || rowIndex >= this.rows || columnIndex < 0 || columnIndex >= this.columns)
 			throw new IndexOutOfBoundsException("Row or column index out of bounds");

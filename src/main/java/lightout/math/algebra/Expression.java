@@ -17,21 +17,33 @@ public class Expression<T> {
 		return this;
 	}
 	
+	public Expression<T> setInitial(int initial) {
+		return this.setInitial(op.convertFromInt(initial));
+	}
+	
 	public Expression<T> setInitial(T initial) {
 		this.functions.add(T->{return initial;});
 		return this;
 	}
 
+	public Expression<T> add(int x) {
+		return this.add(op.convertFromInt(x));
+	}
+	
 	public Expression<T> add(T x) {
 		this.functions.add(T->{return op.add(target, x);});
 		return this;
 	}
 
+	public Expression<T> multiply(int x) {
+		return this.multiply(op.convertFromInt(x));
+	}
+	
 	public Expression<T> multiply(T x) {
 		this.functions.add(T->{return op.multiply(target, x);});
 		return this;
 	}
-
+	
 	public Expression<T> negate() {
 		this.functions.add(T->{return op.negate(target);});
 		return this;
@@ -42,9 +54,17 @@ public class Expression<T> {
 		return this;
 	}
 	
+	public Expression<T> subtract(int x) {
+		return this.subtract(op.convertFromInt(x));
+	}
+	
 	public Expression<T> subtract(T x) {
 		this.functions.add(T->{return op.subtract(target, x);});
 		return this;
+	}
+	
+	public Expression<T> divide(int x) {
+		return this.divide(op.convertFromInt(x));
 	}
 	
 	public Expression<T> divide(T x) {

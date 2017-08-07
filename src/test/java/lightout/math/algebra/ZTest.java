@@ -23,10 +23,10 @@ public class ZTest {
 		assertThat(z.negate(4), equalTo(-4));
 		assertThat(z.negate(7), equalTo(-7));
 		
-//		assertThat(z.reciprocal(3), equalTo(7));
-//		assertThat(z.reciprocal(7), equalTo(3));
+		assertThat(z.reciprocal(3), equalTo(null));
+		assertThat(z.reciprocal(7), equalTo(null));
 		
-		assertTrue(z.equals(3, 3));
+//		assertTrue(z.equals(3, 3));
 		
 	}
 }
