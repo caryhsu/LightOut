@@ -16,7 +16,7 @@ public class GaussianElimination<T> {
 	@Getter private FieldOperators<T> op;
 	@Getter private int rows;
 	@Getter private int columns;
-	@Getter @Setter private GaussianEliminationAuditor<T> auditor = new StandOutputAuditor<T>();
+	@Getter @Setter private GaussianEliminationAuditor<T> auditor = null;
 	
 	public GaussianElimination(Matrix<T> matrix) {
 		this.matrix = matrix;
@@ -50,7 +50,7 @@ public class GaussianElimination<T> {
 			T factor = op.negate(coef);
 			this.matrix.addRows(rowIndex, j, factor);
 			if (auditor != null) {
-				auditor.addRows(rowIndex, j, factor, this.matrix);
+				auditor.addRows(rowIndex, j, factor);
 			}
 		}
 	}
@@ -64,7 +64,7 @@ public class GaussianElimination<T> {
 		if (pivotRowIndex != numPivots) {
 			this.matrix.swapRows(numPivots, pivotRowIndex);
 			if (auditor != null) {
-				auditor.swapRows(numPivots, pivotRowIndex, this.matrix);
+				auditor.swapRows(numPivots, pivotRowIndex);
 			}
 			
 			pivotRowIndex = numPivots;
@@ -82,7 +82,7 @@ public class GaussianElimination<T> {
 				if (!Objects.equals(factor, op.zero())) {
 					this.matrix.addRows(pivotRowIndex, i, factor);
 					if (auditor != null) {
-						auditor.addRows(pivotRowIndex, i, factor, this.matrix);
+						auditor.addRows(pivotRowIndex, i, factor);
 					}
 				}
 			}
@@ -99,14 +99,14 @@ public class GaussianElimination<T> {
 				if (pivotRowIndex != rowIndex) {
 					this.matrix.swapRows(rowIndex, pivotRowIndex);
 					if (auditor != null) {
-						auditor.swapRows(rowIndex, pivotRowIndex, this.matrix);
+						auditor.swapRows(rowIndex, pivotRowIndex);
 					}
 				}
 				if (!Objects.equals(factor, op.one())) {
 					Row<T> pivotRow = this.matrix.row(pivotRowIndex);
 					pivotRow.multiply(factor); // try to turn pivot to one
 					if (auditor != null) {
-						auditor.multiply(pivotRowIndex, factor, this.matrix);
+						auditor.multiply(pivotRowIndex, factor);
 					}
 				}
 				break;
@@ -116,13 +116,13 @@ public class GaussianElimination<T> {
 				if (pivotRowIndex != rowIndex) {
 					this.matrix.swapRows(rowIndex, pivotRowIndex);
 					if (auditor != null) {
-						auditor.swapRows(rowIndex, pivotRowIndex, this.matrix);
+						auditor.swapRows(rowIndex, pivotRowIndex);
 					}
 				}
 				Row<T> pivotRow = this.matrix.row(pivotRowIndex);
 				pivotRow.divide(coef0); // try to turn pivot to one
 				if (auditor != null) {
-					auditor.divide(pivotRowIndex, coef0, this.matrix);
+					auditor.divide(pivotRowIndex, coef0);
 				}
 				break;
 			}

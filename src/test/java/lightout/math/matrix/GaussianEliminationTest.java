@@ -18,20 +18,26 @@ public class GaussianEliminationTest {
 			{ 0, 1,  3},
 			{-1, 0, -2}
 		});
-		m.setConstants(new int[] {9, 3, 2});
+		m.setConstants(new int[] {9, 3, 6});
 		
 		System.out.println(m);
 		GaussianElimination<Integer> g = new GaussianElimination<Integer>(m);
+		g.setAuditor(new StandOutputAuditor<>(g.getMatrix()));
 		g.reduceByColumn1(0);
 		g.reduceByColumn1(1);
+		g.reduceByColumn1(2);
+		
+		g.reduceByColumn2(2);
+		g.reduceByColumn2(1);
+		g.reduceByColumn2(0);
 		System.out.println(m);
 		
 		assertThat(m.getCoefficients(), equalTo(new int[][] {
-			{ 1, 1, -1},
-			{ 0, 1,  3},
-			{ 0, 1, -3}
+			{ 1, 0, 0},
+			{ 0, 1, 0},
+			{ 0, 0, 1}
 		}));
-		assertThat(m.getConstants(), equalTo(new int[] {9, 3, 11}));
+		assertThat(m.getConstants(), equalTo(new int[] {-2, 9, -2}));
 	}
 
 	// https://www.youtube.com/watch?v=CsTOUbeMPUo
@@ -47,6 +53,7 @@ public class GaussianEliminationTest {
 		
 		System.out.println(m);
 		GaussianElimination<Integer> g = new GaussianElimination<Integer>(m);
+		g.setAuditor(new StandOutputAuditor<>(g.getMatrix()));
 		g.reduceByColumn1(0);
 		g.reduceByColumn1(1);
 		g.reduceByColumn1(2);
@@ -72,6 +79,7 @@ public class GaussianEliminationTest {
 		
 		System.out.println(m);
 		GaussianElimination<Integer> g = new GaussianElimination<Integer>(m);
+		g.setAuditor(new StandOutputAuditor<>(g.getMatrix()));
 		g.reduceByColumn1(0);
 		g.reduceByColumn1(1);
 		g.reduceByColumn1(2);
@@ -103,6 +111,7 @@ public class GaussianEliminationTest {
 		
 		System.out.println(m);
 		GaussianElimination<Integer> g = new GaussianElimination<Integer>(m);
+		g.setAuditor(new StandOutputAuditor<>(g.getMatrix()));
 		g.reduceByColumn1(0);
 		g.reduceByColumn1(1);
 		g.reduceByColumn1(2);

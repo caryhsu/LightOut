@@ -39,7 +39,7 @@ public class ZnUtils {
 		Integer[] result = new Integer[row.length];
 		int index = 0;
 		for(ZnElement cell : row) {
-			result[index] = cell.getValue();
+			result[index] = cell == null ? null : cell.getValue();
 			index++;
 		}
 		return result;

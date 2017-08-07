@@ -111,38 +111,18 @@ public class ZnTest {
 	@Test
 	public void getReciprocalLookupTable() {
 		Zn zn = new Zn(10);
-//		assertThat(ZnUtils.toIntArray(zn.getReciprocalLookupTable()), equalTo(new Integer[][] {
-//			{9, 0, 5, 0, 5, 8, 5, 0, 5, 0},
-//			{null, 1, null, 7, null, null, null, 3, null, 9},
-//			{null, 2, 6, 4, 8, null, 7, 6, 9, 8},
-//			{null, 3, null, 1, null, null, null, 9, null, 7},
-//			{null, 4, 7, 8, 6, null, 9, 2, 8, 6},
-//			{null, 5, null, 5, null, 9, null, 5, null, 5},
-//			{null, 6, 8, 2, 9, null, 6, 8, 7, 4},
-//			{null, 7, null, 9, null, null, null, 1, null, 3},
-//			{null, 8, 9, 6, 7, null, 8, 4, 6, 2},
-//			{null, 9, null, 3, null, null, null, 7, null, 1},
-//		}));
-		System.out.println("getReciprocalLookupTable");
-		ZnUtils.outJavaArray(zn.getReciprocalLookupTable());
+		assertThat(ZnUtils.toIntegerArray(zn.getReciprocalLookupTable()), equalTo(
+				new Integer[] {null, 1, null, 7, null, null, null, 3, null, 9}));
+//		System.out.println("getReciprocalLookupTable");
+//		ZnUtils.outJavaArray(zn.getReciprocalLookupTable());
 	}
 	
 	@Test
 	public void getNativeLookupTable() {
 		Zn zn = new Zn(10);
-//		assertThat(ZnUtils.toIntArray(zn.getNativeLookupTable()), equalTo(new Integer[][] {
-//			{9, 0, 5, 0, 5, 8, 5, 0, 5, 0},
-//			{null, 1, null, 7, null, null, null, 3, null, 9},
-//			{null, 2, 6, 4, 8, null, 7, 6, 9, 8},
-//			{null, 3, null, 1, null, null, null, 9, null, 7},
-//			{null, 4, 7, 8, 6, null, 9, 2, 8, 6},
-//			{null, 5, null, 5, null, 9, null, 5, null, 5},
-//			{null, 6, 8, 2, 9, null, 6, 8, 7, 4},
-//			{null, 7, null, 9, null, null, null, 1, null, 3},
-//			{null, 8, 9, 6, 7, null, 8, 4, 6, 2},
-//			{null, 9, null, 3, null, null, null, 7, null, 1},
-//		}));
-		System.out.println("getNativeLookupTable");
-		ZnUtils.outJavaArray(zn.getNativeLookupTable());
+		assertThat(ZnUtils.toIntegerArray(zn.getNativeLookupTable()), equalTo(
+				new Integer[] {0, 9, 8, 7, 6, 5, 4, 3, 2, 1}));
+//		System.out.println("getNativeLookupTable");
+//		ZnUtils.outJavaArray(zn.getNativeLookupTable());
 	}
 }
