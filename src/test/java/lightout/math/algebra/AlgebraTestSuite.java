@@ -9,6 +9,6 @@ import org.junit.runners.Suite;
 	ZnTest.class,
 	ZTest.class,
 })
-public class AlgebraSuite {
+public class AlgebraTestSuite {
   //nothing
 }
